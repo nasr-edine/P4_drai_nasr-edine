@@ -19,13 +19,19 @@ def start():
         if choice == '1':
             loop = 1
             while loop:
-                name = input('Enter name : ')
-                age = input('Enter age: ')
-                # Player.setPlayer(name, age)
-                player = Player(name, age)
+                firstname = input('Enter your firstname : ')
+                lastname = input('Enter your lastname : ')
+                birth = input('Enter date of birth: ')
+                gender = input('Enter gender: ')
+                ranking = 0
+                player = Player(firstname, lastname,
+                                birth, gender, ranking)
                 serialized_player = {
-                    'name': player.name,
-                    'age': player.age
+                    'firstname': player.firstname,
+                    'lastname': player.lastname,
+                    'birth': player.birth,
+                    'gender': player.gender,
+                    'ranking': player.ranking
                 }
                 serialized_players.append(serialized_player)
                 response = input('Do you want to add a new player (y/n): ')
@@ -44,7 +50,6 @@ def start():
         else:
             # Any inputs other than values 1-4 we print an error message
             input("Wrong menu selection. Enter any key to try again..")
-        Player.setPlayers(serialized_players)
 
 
 if __name__ == "__main__":

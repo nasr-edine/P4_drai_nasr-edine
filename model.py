@@ -2,20 +2,24 @@ from tinydb import TinyDB, Query
 
 
 class Player(object):
-    def __init__(self, name=None, age=None):
-        self.name = name
-        self.age = age
+    def __init__(self, firstname, lastname, birth, gender, ranking):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.birth = birth
+        self.gender = gender
+        self.ranking = ranking
 
     def view_player(self):
-        return ("%s %s" % (self.name, self.age))
+        return ("%s %s %s %s %s" % (self.firstname, self.lastname, self.birth, self.gender, self.ranking))
 
     @classmethod
-    def setPlayer(self, name, age):
-        player = Player(name, age)
+    def setPlayer(self, firstname, lastname, birth, gender, ranking):
+        player = Player(firstname, lastname, birth, gender, ranking)
         db = TinyDB('db.json')
         players_table = db.table('players')
         players_table.truncate()  # clear the table first
-        serialized_player = {'name': player.name, 'age': player.age}
+        serialized_player = {'firstname': player.firstname, 'lastname': player.lastname,
+                             'birth': player.birth, 'gender': player.gender, 'ranking': player.ranking}
         players_table.insert(serialized_player)
 
     @classmethod
@@ -31,7 +35,8 @@ class Player(object):
         players_table = db.table('players')
         result = []
         for item in players_table:
-            player = Player(item['name'], item['age'])
+            player = Player(item['firstname'], item['lastname'],
+                            item['birth'], item['gender'], item['ranking'])
             result.append(player)
         return result
 
@@ -42,6 +47,7 @@ class Player(object):
         players_table = db.table('players')
         serialized_players = players_table.all()
         for item in serialized_players:
-            player = Player(item['name'], item['age'])
+            player = Player(item['firstname'], item['lastname'],
+                            item['birth'], item['gender'], item['ranking'])
             result.append(player)
         return result
