@@ -10,7 +10,7 @@ class Player(object):
         self.ranking = ranking
 
     def view_player(self):
-        return ("%s %s %s %s %s" % (self.firstname, self.lastname, self.birth, self.gender, self.ranking))
+        return ("%s %s %s %s %s" % (self.firstname.ljust(15), self.lastname.ljust(15), self.birth.ljust(15), self.gender.ljust(15), str(self.ranking).ljust(15)))
 
     @classmethod
     def setPlayer(self, firstname, lastname, birth, gender, ranking):
