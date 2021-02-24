@@ -2,6 +2,7 @@ from model import Player
 import view
 import simpleFaker
 from contests import Contest
+from tours import Tour
 
 
 def showAll():
@@ -27,11 +28,12 @@ def serialization_contest(contest):
     serialized_contest = {
         'name': contest.name,
         'location': contest.location,
-        'date': contest.date,
+        'date': str(contest.date),
         'nb_turns': contest.nb_turns,
         'players_index': contest.player_index,
         'time_control': contest.time_control,
-        'comments': contest.comments
+        'comments': contest.comments,
+        'rounds': contest.rounds
     }
     return serialized_contest
 
@@ -54,8 +56,11 @@ def start():
                 'choise a time control between 1: bullet, 2: blitz and 3: rapid rating:')
             comments = input('Do you want to add any comments: ')
             # print(list)
+            # rounds = [Rounds() for i in range(4)] # create a list of rounds
+
             contest = Contest(name, location, date, players_index,
-                              time_control, comments)
+                              time_control, comments, rounds)
+
             serialized_contest = serialization_contest(contest)
             print(serialized_contest)
             Contest.setContests(serialized_contest)
@@ -72,10 +77,18 @@ def start():
                 serialized_players.append(serialized_player)
             Player.setPlayers(serialized_players)
         elif choice == '3':
-            result = simpleFaker.faker_profiles()
-            for item in result:
-                serialized_players.append(serialization_player(item))
+            fake_contest = simpleFaker.faker_contest()
+            # rounds = [Tour() for i in range(4)]
+            # print(rounds)
+
+            # fake_contest.rounds = rounds
+            serialized_contest = serialization_contest(fake_contest)
+            Contest.setContests(serialized_contest)
+            fake_players = simpleFaker.faker_profiles()
+            for fake_player in fake_players:
+                serialized_players.append(serialization_player(fake_player))
                 Player.setPlayers(serialized_players)
+            # Contest.get_rounds()
         elif choice == '4':
             showAll()
         elif choice == '5':
