@@ -62,7 +62,7 @@ def start():
                               time_control, comments, rounds)
 
             serialized_contest = serialization_contest(contest)
-            print(serialized_contest)
+            # print(serialized_contest)
             Contest.setContests(serialized_contest)
         elif choice == '2':
             for n in range(0, 8):
@@ -77,18 +77,18 @@ def start():
                 serialized_players.append(serialized_player)
             Player.setPlayers(serialized_players)
         elif choice == '3':
+            # create a contest (un tournoi)
             fake_contest = simpleFaker.faker_contest()
-            # rounds = [Tour() for i in range(4)]
-            # print(rounds)
-
-            # fake_contest.rounds = rounds
             serialized_contest = serialization_contest(fake_contest)
             Contest.setContests(serialized_contest)
+
+            # create rounds
+
+            # create a list of 8 players
             fake_players = simpleFaker.faker_profiles()
             for fake_player in fake_players:
                 serialized_players.append(serialization_player(fake_player))
                 Player.setPlayers(serialized_players)
-            # Contest.get_rounds()
         elif choice == '4':
             showAll()
         elif choice == '5':

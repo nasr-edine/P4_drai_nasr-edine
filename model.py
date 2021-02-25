@@ -2,11 +2,11 @@ from tinydb import TinyDB, Query
 
 
 class Player(object):
-    def __init__(self, firstname, lastname, birth, gender, ranking):
+    def __init__(self, firstname, lastname, birthdate, sex, ranking):
         self.firstname = firstname
         self.lastname = lastname
-        self.birth = birth
-        self.gender = gender
+        self.birthdate = birthdate
+        self.sex = sex
         self.ranking = ranking
 
     def view_player(self):
