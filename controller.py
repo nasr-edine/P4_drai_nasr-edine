@@ -1,5 +1,5 @@
-from model import Player
-import view
+from model.model import Player
+import view.view as view
 import simpleFaker
 from contests import Contest
 from tours import Tour
@@ -13,15 +13,15 @@ def showAll():
     return view.showAllView(result)
 
 
-def serialization_player(player):
-    serialized_player = {
-        'firstname': player.firstname,
-        'lastname': player.lastname,
-        'birth': str(player.birthdate),
-        'gender': player.sex,
-        'ranking': player.ranking
-    }
-    return serialized_player
+# def serialization_player(player):
+#     serialized_player = {
+#         'firstname': player.firstname,
+#         'lastname': player.lastname,
+#         'birth': str(player.birthdate),
+#         'gender': player.sex,
+#         'ranking': player.ranking
+#     }
+#     return serialized_player
 
 
 def serialization_contest(contest):
@@ -65,15 +65,19 @@ def start():
             # print(serialized_contest)
             Contest.setContests(serialized_contest)
         elif choice == '2':
-            for n in range(0, 8):
+            for n in range(0, 2):
                 firstname = input('Enter your firstname : ')
                 lastname = input('Enter your lastname : ')
-                birth = input('Enter date of birth: ')
+                birthdate = input('Enter date of birth: ')
                 gender = input('Enter gender: ')
                 ranking = 0
                 player = Player(firstname, lastname,
-                                birth, gender, ranking)
-                serialized_player = serialization_player(player)
+                                birthdate, gender, ranking)
+
+                # serialize the player
+                serialized_player = player.serialization_player()
+
+                # serialized_player = serialization_player(player)
                 serialized_players.append(serialized_player)
             Player.setPlayers(serialized_players)
         elif choice == '3':
