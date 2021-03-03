@@ -12,9 +12,11 @@ class Contest(object):
         self.time_control = time_control
         self.comments = comments
         self.rounds = rounds
+        self.serialized_contest = {}
 
+    # Serialize a contest
     def serialization_contest(self):
-        serialized_contest = {
+        self.serialized_contest = {
             'name': self.name,
             'location': self.location,
             'date': str(self.date),
@@ -24,25 +26,10 @@ class Contest(object):
             'comments': self.comments,
             'rounds': self.rounds
         }
-        return serialized_contest
 
-    def save(self, serialized_contests):
+    # Save a contest in database
+    def save(self):
         db = TinyDB('db.json', indent=4)
         contests_table = db.table('contests')
         contests_table.truncate()  # clear the table first
-        contests_table.insert(serialized_contests)
-
-    @classmethod
-    def setContests(self, serialized_contests):
-        db = TinyDB('db.json', indent=4)
-        contests_table = db.table('contests')
-        contests_table.truncate()  # clear the table first
-        contests_table.insert(serialized_contests)
-
-    # @classmethod
-    # def get_rounds(self):
-
-    #     # for item in self.rounds:
-    #     # print(item)
-    #     # list.append(item)
-    #     return self.rounds
+        contests_table.insert(self.serialized_contest)

@@ -1,7 +1,7 @@
 from model.model import Player
 import view.view as view
 import simpleFaker
-from contests import Contest
+from model.contests import Contest
 from tours import Tour
 import re
 import datetime
@@ -25,7 +25,7 @@ def read_date(type_date):
             date = input(
                 'Enter your tournament date in  DD/MM/YEAR format: ')
         try:
-            date = datetime.datetime.strptime(date, '%d/%m/%Y')
+            date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
             switch = 0
         except ValueError:
             print('Unrecognized date format, please try again\n')
@@ -121,10 +121,10 @@ def start():
                               time_control, comments, rounds)
 
             # serialize a tournament
-            serialized_contest = contest.serialization_contest()
+            contest.serialization_contest()
 
             # Save a tournament in DataBase
-            contest.save(serialized_contest)
+            contest.save()
 
         elif choice == '2':
             for n in range(0, 1):
@@ -141,13 +141,16 @@ def start():
                                 birthdate, gender, ranking)
 
                 # serialize a player
-                serialized_player = player.serialization_player()
+                player.serialization_player()
 
-                # Add all players in a list
+                # get an serialized player
+                serialized_player = player.get_serialized_player()
+
+                # Add all serialized players in a list
                 serialized_players.append(serialized_player)
 
             # Save players list in tinyDB
-            Player.setPlayers(serialized_players)
+            Player.saveAllPlayers(serialized_players)
         elif choice == '3':
             # create a contest (un tournoi)
             fake_contest = simpleFaker.faker_contest()
