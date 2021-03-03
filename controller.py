@@ -1,10 +1,12 @@
-from model.player import Player
-import view.view as view
-import simpleFaker
-from model.contests import Contest
-from tours import Tour
 import re
 import datetime
+
+import simpleFaker
+import view.view as view
+
+from model.player import Player
+from model.contests import Contest
+from tours import Tour
 
 
 def showAll():
