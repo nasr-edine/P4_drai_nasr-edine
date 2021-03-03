@@ -1,4 +1,4 @@
-from model.model import Player
+from model.player import Player
 
 
 def view_function():
@@ -22,9 +22,13 @@ def showAllView(list):
           " |birthdate".ljust(15), "  |sex".ljust(15), "   |ranking".ljust(15), "    |", sep='', end='\n\n')
     for item in list:
         # print(item.view_player())
-        temp = vars(item)
-        for item2 in temp:
-            print(str(temp[item2]).ljust(15), '|', sep='', end='')
+        # temp = vars(item)
+        # for item2 in temp:
+        print(item.firstname.ljust(15), '|', sep='', end='')
+        print(item.lastname.ljust(15), '|', sep='', end='')
+        print(str(item.birthdate).ljust(15), '|', sep='', end='')
+        print(item.sex.ljust(15), '|', sep='', end='')
+        print(str(item.ranking).ljust(15), '|', sep='', end='')
         print()
 
 

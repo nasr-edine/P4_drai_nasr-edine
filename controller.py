@@ -1,4 +1,4 @@
-from model.model import Player
+from model.player import Player
 import view.view as view
 import simpleFaker
 from model.contests import Contest
