@@ -1,12 +1,15 @@
 import re
 import datetime
+from faker import Faker
+
+import json
 
 import simpleFaker
 import view.view as view
 
 from model.player import Player
 from model.contests import Contest
-from tours import Tour
+from model.tours import Tour
 
 
 def showAll():
@@ -25,7 +28,7 @@ def read_date(type_date):
                 'Enter player birth date in  DD/MM/YEAR format: ')
         else:
             date = input(
-                'Enter your tournament date in  DD/MM/YEAR format: ')
+                'Enter  contest date in  DD/MM/YEAR format: ')
         try:
             date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
             switch = 0
@@ -49,9 +52,8 @@ def read_time_control():
     switch = 1
     while switch == 1:
         try:
-            time_control = int(
-                input("Please enter a time control, a number between 1 and 3: "))
-            # 'choise a time control between 1: bullet, 2: blitz and 3: rapid rating:'
+            view.print_menu_time_control()
+            time_control = int(input())
             if time_control >= 1 and time_control <= 3:
                 switch = 0
             else:
@@ -97,6 +99,78 @@ def read_name(type_name):
     return name
 
 
+def read_comments():
+    switch = 1
+    while switch == 1:
+        comments = input(
+            'Do you want to add any comments \(max:1000 characters\): ')
+        if len(comments) > 1000:
+            print('Please try again the limit characters is 1000')
+        else:
+            switch = 0
+    return comments
+
+
+def create_pair_matches(list_players):
+    faker = Faker()
+    index_player = 0
+    list_matchs = []
+    for n in range(4):
+        score = faker.random_int(0, 2)
+        list1 = [index_player, score]
+        score = faker.random_int(0, 2)
+        list2 = [index_player + 1, score]
+
+        tuple_match = (list1, list2)
+        print("tuple_match: ", tuple_match)
+        list_matchs.append(tuple_match)
+        print("list_matchs:", list_matchs)
+        index_player += 2
+    return list_matchs
+
+
+def match_generator(list_players, rounds):
+    print("rounds size: ", len(rounds))
+
+    # rounds[0].matchs = list_matchs
+    # print("matchs in round 0: ", rounds[0].matchs)
+
+    for round in rounds:
+        list_matches = []
+        for n in range(4):
+            list_matches.append(create_pair_matches(list_players))
+            round.matchs = list_matches
+            print(round.matchs)
+    #     score = faker.random_int(0, 2)
+    #     list1 = [index_player, score]
+    #     score = faker.random_int(0, 2)
+    #     list2 = [index_player + 1, score]
+    #     round.matchs = (list1, list2)
+    #     print(round.matchs)
+    #     index_player += 2
+    # instance of player 1
+    # index_player = 1
+    # player1 = Player()
+    # player1.deserialize_player(index_player)
+    # print("deserialized player", index_player, ":", player1)
+    # score1 = 88
+    # list1 = [index_player, score1]
+
+    # instance of player 2
+    # index_player = 2
+    # player2 = Player()
+    # player2.deserialize_player(index_player)
+    # print("deserialized player", index_player, ":", player2)
+    # score2 = 99
+    # list2 = [index_player, score2]
+
+    # Create a match (pair of 2 players)
+    # rounds[0].matchs = (list1, list2)
+    # print(rounds[0].matchs)
+    # return None
+    return rounds
+
+
 def start():
     view.view_function()
     serialized_players = []
@@ -105,19 +179,38 @@ def start():
         choice = input("Enter your choice [1-5]: ")
         if choice == '1':
             # Input user for fill all informations about a tournament
-            name = read_name(3)
-            location = read_name(4)
-            date = input('Enter date of contest: ')
-            time_control = read_time_control()
-            comments = input('Do you want to add any comments: ')
+            # name = read_name(3)
+            # location = read_name(4)
+            # date = read_date(0)
+            # time_control = read_time_control()
+            # comments = read_comments()
+            players_index = Player.getPlayerIndex()
 
-            # nb_turns = input('Enter number of turns')
-            players_index = []
-            players_index += range(1, 9)
-            # print(list)
-            rounds = [i for i in range(4)]  # create a list of rounds
-            # rounds = [Rounds() for i in range(4)]  # create a list of rounds
+            faker = Faker()
+            name = faker.name()
+            location = faker.address()
+            date = faker.date_of_birth()
+            time_control = faker.random_int(1, 3)
+            comments = faker.text()
 
+            # Create a list of rounds
+            list_tours = []
+            # for i in range(4):
+            #     list_tours.append(Tour())
+            list_tours.append(Tour('a'))
+            list_tours.append(Tour('b'))
+            list_tours.append(Tour('c'))
+            list_tours.append(Tour('d'))
+            # print(list_tours)
+            # for item in list_tours:
+            #     print(item)
+            rounds = list_tours
+
+            list_players = Player.getPlayerIndex()
+            # print(list_players)
+            # generate a list of matchs
+            rounds = match_generator(list_players, rounds)
+            print("rounds value: ", rounds[0])
             # Create a tournament instance
             contest = Contest(name, location, date, players_index,
                               time_control, comments, rounds)
@@ -153,25 +246,48 @@ def start():
 
             # Save players list in tinyDB
             Player.saveAllPlayers(serialized_players)
+
         elif choice == '3':
+            faker = Faker()
+
             # create a contest (un tournoi)
-            fake_contest = simpleFaker.faker_contest()
-            serialized_contest = serialization_contest(fake_contest)
-            Contest.setContests(serialized_contest)
+            # fake_contest = simpleFaker.faker_contest()
+            # serialized_contest = serialization_contest(fake_contest)
+            # Contest.setContests(serialized_contest)
 
             # create rounds
+            for n in range(0, 8):
+                # create a list of 8 players
+                profile = faker.simple_profile()
+                name = profile['name'].split()
+                firstname = name[0]
+                lastname = name[1]
+                birthdate = profile['birthdate']
+                sex = profile['sex']
+                ranking = 0
 
-            # create a list of 8 players
-            fake_players = simpleFaker.faker_profiles()
-            for fake_player in fake_players:
-                serialized_players.append(
-                    Players.serialization_player(fake_player))
-                Player.setPlayers(serialized_players)
+                # Create an instance of a player
+                player = Player(firstname, lastname,
+                                birthdate, sex, ranking)
+
+                # serialize a player
+                player.serialization_player()
+
+                # get an serialized player
+                serialized_player = player.get_serialized_player()
+
+                # Add all serialized players in a list
+                serialized_players.append(serialized_player)
+
+            # Save players list in tinyDB
+            Player.saveAllPlayers(serialized_players)
         elif choice == '4':
             showAll()
         elif choice == '5':
             view.endView()
             exit()
+        elif choice == '6':
+            print(Player.get_index_number())
         else:
             input("Wrong menu selection. Enter any key to try again..")
 

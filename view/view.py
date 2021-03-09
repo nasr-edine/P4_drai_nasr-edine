@@ -17,13 +17,18 @@ def print_menu():       # Your menu design here
     print(73 * "-")
 
 
+def print_menu_time_control():       # Your menu design here
+    print(17 * "-", "Please choice the time control type: ", 17 * "-")
+    print("1. Rapid")
+    print("2. Bullet")
+    print("3. Blitz")
+    print(73 * "-")
+
+
 def showAllView(list):
     print("firstname".ljust(15), "|lastname".ljust(15),
           " |birthdate".ljust(15), "  |sex".ljust(15), "   |ranking".ljust(15), "    |", sep='', end='\n\n')
     for item in list:
-        # print(item.view_player())
-        # temp = vars(item)
-        # for item2 in temp:
         print(item.firstname.ljust(15), '|', sep='', end='')
         print(item.lastname.ljust(15), '|', sep='', end='')
         print(str(item.birthdate).ljust(15), '|', sep='', end='')
