@@ -1,6 +1,7 @@
+import json
 from tinydb import TinyDB, Query
 
-from tours import Tour
+from model.tours import Tour
 
 
 class Contest(object):
@@ -15,8 +16,12 @@ class Contest(object):
         self.rounds = rounds
         self.serialized_contest = {}
 
+    def __str__(self):
+        return '{self.name}'.format(self=self)
     # Serialize a contest
+
     def serialization_contest(self):
+        # print(self.rounds)
         self.serialized_contest = {
             'name': self.name,
             'location': self.location,
@@ -25,8 +30,15 @@ class Contest(object):
             'players_index': self.player_index,
             'time_control': self.time_control,
             'comments': self.comments,
-            'rounds': self.rounds
+            # 'rounds':  self.rounds
+
+            # "rounds": {self.rounds[0].round_name: self.rounds[0].serialization_round()}
+
+
+            "rounds":   {item.round_name: item.serialization_round() for item in self.rounds}
         }
+
+        # }
 
     # Save a contest in database
     def save(self):
