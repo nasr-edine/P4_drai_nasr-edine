@@ -112,77 +112,37 @@ def read_comments():
     return comments
 
 
-def create_pair_matches(list_players):
+def create_pair_matches(id_player1, id_player2):
     faker = Faker()
     index_player = 0
     list_matchs = []
-    # for n in range(4):
     score = faker.random_int(0, 2)
-    list1 = [index_player, score]
+    list1 = [id_player1, score]
     score = faker.random_int(0, 2)
-    list2 = [index_player + 1, score]
+    list2 = [id_player2, score]
 
     tuple_match = (list1, list2)
-    # print("tuple_match: ", tuple_match)
     list_matchs.append(tuple_match)
-    # print("list_matchs:", list_matchs)
     index_player += 2
     return list_matchs
 
 
 def match_generator(list_players, rounds):
-    print("rounds size: ", len(rounds))
-
-    # rounds[0].matchs = list_matchs
-    # print("matchs in round 0: ", rounds[0].matchs)
-
     for round in rounds:
-        print("round value: ", round)
         list_matches = []
         for n in range(4):
-            list_matches.append(create_pair_matches(list_players))
+
+            list_matches.append(create_pair_matches(
+                list_players[n], list_players[n + 4]))
             round.matchs = list_matches
-            print(round.matchs)
-    #     score = faker.random_int(0, 2)
-    #     list1 = [index_player, score]
-    #     score = faker.random_int(0, 2)
-    #     list2 = [index_player + 1, score]
-    #     round.matchs = (list1, list2)
-    #     print(round.matchs)
-    #     index_player += 2
-    # instance of player 1
-    # index_player = 1
-    # player1 = Player()
-    # player1.deserialize_player(index_player)
-    # print("deserialized player", index_player, ":", player1)
-    # score1 = 88
-    # list1 = [index_player, score1]
-
-    # instance of player 2
-    # index_player = 2
-    # player2 = Player()
-    # player2.deserialize_player(index_player)
-    # print("deserialized player", index_player, ":", player2)
-    # score2 = 99
-    # list2 = [index_player, score2]
-
-    # Create a match (pair of 2 players)
-    # rounds[0].matchs = (list1, list2)
-    # print(rounds[0].matchs)
-    # return None
     return rounds
 
 
 def create_players():
     serialized_players = []
     list1 = []
-    # list1.append(list(range(1, 9)))
     list1 = (list(range(1, 9)))
-    print(list1)
     random.shuffle(list1)
-    # ranking = list1
-
-    print(list1)
 
     faker = Faker()
     # create rounds
@@ -259,6 +219,7 @@ def start():
 
             # Save a tournament in DataBase
             contest.save()
+            Player.update_point_player()
             exit()
 
         elif choice == '2':

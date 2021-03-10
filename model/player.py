@@ -4,13 +4,14 @@ from tinydb import TinyDB, Query, where
 
 
 class Player(object):
-    def __init__(self, firstname=None, lastname=None, birthdate=None, sex=None, ranking=None):
+    def __init__(self, firstname=None, lastname=None, birthdate=None, sex=None, ranking=None, point=None):
         self.firstname = firstname
         self.lastname = lastname
         self.birthdate = birthdate
         self.sex = sex
         self.ranking = ranking
         self.serialized_player = {}
+        self.point = point
 
     def __str__(self):
         return "{self.firstname}, {self.lastname}, {self.birthdate}, {self.sex}, {self.ranking}".format(self=self)
@@ -47,27 +48,40 @@ class Player(object):
         # print(self)
         # return player
 
-    @classmethod
+    @ classmethod
+    def update_point_player(self):
+        db = TinyDB('db.json', indent=4)
+        table = db.table('players')
+        User = Query()
+        print(table.get(doc_id=2))
+        mySearch = table.get(doc_id=2)
+        print(mySearch['firstname'])
+
+        value = 99
+        table.update({'point': value}, where(
+            'firstname') == mySearch['firstname'])
+
+    @ classmethod
     def sort_players_by_ranking(self, serialized_players):
         serialized_players = (
             sorted(serialized_players, key=lambda i: i['ranking']))
         return (serialized_players)
 
-    @classmethod
+    @ classmethod
     def getPlayerIndex(self):
         db = TinyDB('db.json', indent=4)
         table = db.table('players')
         eids = list(table._read_table().keys())
         return eids
 
-    @classmethod
+    @ classmethod
     def saveAllPlayers(self, serialized_players):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
         players_table.truncate()  # clear the table first
         players_table.insert_multiple(serialized_players)
 
-    @classmethod
+    @ classmethod
     def getAll(self):
         db = TinyDB('db.json')
         players_table = db.table('players')
@@ -78,7 +92,7 @@ class Player(object):
             result.append(player)
         return result
 
-    @classmethod
+    @ classmethod
     def getAll2(self):
         result = []
         db = TinyDB('db.json')
