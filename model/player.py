@@ -48,6 +48,12 @@ class Player(object):
         # return player
 
     @classmethod
+    def sort_players_by_ranking(self, serialized_players):
+        serialized_players = (
+            sorted(serialized_players, key=lambda i: i['ranking']))
+        return (serialized_players)
+
+    @classmethod
     def getPlayerIndex(self):
         db = TinyDB('db.json', indent=4)
         table = db.table('players')
