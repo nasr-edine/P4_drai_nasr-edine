@@ -1,4 +1,6 @@
 import json
+import random
+
 from tinydb import TinyDB, Query
 
 from model.tours import Tour
@@ -66,3 +68,35 @@ class Contest(object):
     def display_round(self, nb_round, total_nb_matches):
         for match in range(total_nb_matches):
             print(self.rounds[nb_round].matches[match])
+
+    # save scores for matches in Round 0
+    def save_scores(self, nb_round, nb_matches):
+        win = 1
+        lose = 0
+        draw = 0.5
+        for nb_match in range(nb_matches):
+            # attribute score for player 1
+            score1 = random.choice([win, lose, draw])
+            self.rounds[nb_round].matches[nb_match][0][1] = score1
+            for x in self.players:
+                if x.id_player == self.rounds[nb_round].matches[nb_match][0][0]:
+                    if nb_round == 0:
+                        x.point = score1
+                    else:
+                        x.point += score1
+                    break
+            if score1 == win:
+                score2 = lose
+            elif score1 == lose:
+                score2 = win
+            else:
+                score2 = draw
+            # attribute score for player 2
+            self.rounds[nb_round].matches[nb_match][1][1] = score2
+            for y in self.players:
+                if y.id_player == self.rounds[nb_round].matches[nb_match][1][0]:
+                    if nb_round == 0:
+                        y.point = score2
+                    else:
+                        y.point += score2
+                    break

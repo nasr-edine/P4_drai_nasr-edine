@@ -20,6 +20,13 @@ def showAll():
 
 
 def start():
+
+    # Create a list of players
+    players = Player.create_players()
+    print("Create players list:\n")
+    print(players)
+    input()
+
     view.view_function()
 
     while True:
@@ -27,15 +34,9 @@ def start():
         choice = input("Enter your choice [1-5]: ")
         if choice == '1':
 
-            # Create a list of players
-            players = Player.create_players()
-            print("Create a random list of players")
-            print(players)
-            input()
-
-            # Sorting players list
+            # Sorting players list by ranking
             Player.Sorting_players_by_ranking(players)
-            print("Sorting list of players by ranking")
+            print("Sorting players by ranking:\n")
             print(players)
             input()
 
@@ -46,7 +47,7 @@ def start():
             # time_control = read_time_control()
             # comments = read_comments()
 
-            # Create a tournament
+            # Create a contest
             faker = Faker()
             name = faker.name()
             location = faker.address()
@@ -60,123 +61,78 @@ def start():
 
             # Create rounds
             nb_rounds = 4
-            nb_matches = 4
             contest.create_rounds(nb_rounds)
 
             # Create matches
+            nb_matches = 4
             contest.create_matches(nb_matches, nb_matches)
 
-            # tournament serialization
+            # serialize contest
             contest.serialization_contest()
 
-            # Save  tournament in DataBase
+            # Save  contest in DataBase
             contest.save()
 
             # Generate all matches for first round
             first_round = 0
-            print('generate first round')
+            print('generate first round:\n')
             contest.rounds[first_round].start_datetime = datetime.datetime.now()
             contest.rounds[first_round].end_datetime = contest.rounds[first_round].start_datetime + \
                 datetime.timedelta(hours=1)
             Tour.matches_generator(contest, first_round)
-
-            # display all matches for round 0
+            # display matches for first round
             contest.display_round(first_round, nb_matches)
+            input()
 
             contest.serialization_contest()
             contest.save()
 
-            # save scores for matches in Round 0
-            win = 1
-            lose = 0
-            draw = 0.5
-            # number_list = [win, lose, draw]
-            for nb_matches in range(nb_matches):
-                # attribute score for player 1
-                score1 = random.choice([win, lose, draw])
-                contest.rounds[0].matches[nb_matches][0][1] = score1
-                for x in contest.players:
-                    if x.id_player == contest.rounds[0].matches[nb_matches][0][0]:
-                        x.point = score1
-                        break
-                if score1 == win:
-                    score2 = lose
-                elif score1 == lose:
-                    score2 = win
-                else:
-                    score2 = draw
-                contest.rounds[0].matches[nb_matches][1][1] = score2
-                for y in contest.players:
-                    if y.id_player == contest.rounds[0].matches[nb_matches][1][0]:
-                        y.point = score2
-                        break
-            print("display scores for round 0")
-            contest.display_round(0, nb_matches)
+            # save scores for all matches in first round
+            contest.save_scores(first_round, nb_matches)
+            print("display scores for first round:\n")
+            contest.display_round(first_round, nb_matches)
+            input()
+
+            contest.serialization_contest()
+            contest.save()
+
+            print('display scores by player:\n')
+            print(contest.players)
+            input()
+            print("sorting players by point:\n")
+            contest.players = Player.sort_players_by_point(contest.players)
+            print(contest.players)
             input()
             contest.serialization_contest()
             contest.save()
 
-            print('display players after attrib scores:')
-            print(contest.players)
+            for nb_round in range(1, 4):
 
-            # sorting players by point
-            print("sorting players by point")
-            contest.players = Player.sort_players_by_point(contest.players)
-            print(contest.players)
-            contest.serialization_contest()
-            contest.save()
-
-            for nb_rounds in range(1, 4):
-                # Generate second round
-                print(f"Generate round: {nb_rounds}")
-                contest.rounds[nb_rounds].start_datetime = datetime.datetime.now()
-                contest.rounds[nb_rounds].end_datetime = contest.rounds[nb_rounds].start_datetime + \
+                # Generate next round
+                contest.rounds[nb_round].start_datetime = datetime.datetime.now()
+                contest.rounds[nb_round].end_datetime = contest.rounds[nb_round].start_datetime + \
                     datetime.timedelta(hours=1)
-                Tour.matches_generator(contest, nb_rounds)
-                print(contest.players)
-                contest.serialization_contest()
-                contest.save()
+                Tour.matches_generator(contest, nb_round)
+
+                print(f"Generate round: {nb_round}\n")
+                contest.display_round(nb_round, nb_matches)
                 input()
 
-                print(f"save scores for all matches in Round {nb_rounds}")
-                i = 0
-                for nb_matches in range(4):
-                    # attribute score for player 1
-                    score1 = random.choice([win, lose, draw])
+                contest.save_scores(nb_round, nb_matches)
 
-                    contest.rounds[nb_rounds].matches[nb_matches][0][1] = score1
-                    for x in contest.players:
-                        if x.id_player == contest.rounds[nb_rounds].matches[nb_matches][0][0]:
-                            x.point += score1
-                            # print(f'player 2: {y.id_player}, {y.point}')
-                            break
-                    # attribute score for player 2
-                    if score1 == win:
-                        score2 = lose
-                    elif score1 == lose:
-                        score2 = win
-                    else:
-                        score2 = draw
-                    contest.rounds[nb_rounds].matches[nb_matches][1][1] = score2
-                    for y in contest.players:
-                        if y.id_player == contest.rounds[nb_rounds].matches[nb_matches][1][0]:
-                            y.point += score2
-                        # print(f'player 2: {y.id_player}, {y.point}')
-                            break
-                    i += 2
                 contest.serialization_contest()
                 contest.save()
-                print(f'before sorting:\n{contest.players}')
-                input('after sorting:')
+
+                print(f'display scores for round: {nb_round}:\n')
+                contest.display_round(nb_round, nb_matches)
+                input()
+                print("display scores by player:\n")
+                print(contest.players)
+                input()
                 contest.players = Player.sort_players_by_point(contest.players)
-                input()
-                for n in range(4):
-                    print(contest.rounds[nb_rounds].matches[n])
+                print("Sorting players by point:\n")
                 print(contest.players)
                 input()
-
-            # sorting players by point
-            contest.players = Player.sort_players_by_point(contest.players)
             contest.serialization_contest()
             contest.save()
             exit()

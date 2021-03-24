@@ -3,6 +3,8 @@ from datetime import datetime
 from tinydb import TinyDB, Query, where
 from faker import Faker
 
+from controller.read_input import ReadInformation
+
 
 class Player(object):
     def __init__(self, id_player, firstname=None, lastname=None, birthdate=None, sex=None, ranking=None, point=0):
@@ -147,30 +149,37 @@ class Player(object):
 
     @ classmethod
     def create_players(self):
-        # serialized_players = []
+        read_input = ReadInformation()
         players = []
-        list1 = []
-        list1 = (list(range(1, 9)))
-        random.shuffle(list1)
+        random_list = []
+        random_list = (list(range(1, 9)))
+        random.shuffle(random_list)
 
         faker = Faker()
         # create rounds
         for n in range(0, 8):
-            # create a list of 8 players
-            profile = faker.simple_profile()
-            name = profile['name'].split()
-            firstname = name[0]
-            lastname = name[1]
-            birthdate = profile['birthdate']
-            sex = profile['sex']
-            ranking = list1[n]
+
+            # Enter informations about a player
+            # firstname = read_input.read_name(1)
+            # lastname = read_input.read_name(2)
+            # birthdate = read_input.read_date(1)
+            # sex = read_input.read_sex()
+            # ranking = read_input.read_ranking()
+
+            # create a fake list of 8 players
+            # profile = faker.simple_profile()
+            # name = profile['name'].split()
+            # firstname = name[0]
+            # lastname = name[1]
+            # birthdate = profile['birthdate']
+            # sex = profile['sex']
+            # ranking = random_list[n]
             # Create an instance of a player
             player = Player(n, firstname, lastname,
                             birthdate, sex, ranking)
             # serialize a player
             serialized_player = player.serialization_player()
             # Add all serialized players in a list
-            # Create a list of players
             players.append(player)
 
         # print("fake data users saved in DB")
