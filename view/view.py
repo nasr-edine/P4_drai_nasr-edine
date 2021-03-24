@@ -8,10 +8,10 @@ def view_function():
 
 def print_menu():       # Your menu design here
     print(30 * "-", "MENU", 30 * "-")
-    print("1. Add a contest ")
-    print("2.  Add 8 players")
-    print("3. Do you want to add a faker players ")
-    print("4. Do you want visualise all players  ")
+    print("1. Do you want to create a new round")
+    print("2. Do you want to save the current state of the contest ? ")
+    print("3. Do you want to update players ranking ?")
+    print("4. Do you want to see players statistics ?")
     # print("4. Use manually entered custom conf file ")
     print("5. Exit from the script ")
     print(73 * "-")

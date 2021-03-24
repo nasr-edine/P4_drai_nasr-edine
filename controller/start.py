@@ -10,6 +10,8 @@ from model.player import Player
 from model.contests import Contest
 from model.tours import Tour
 
+from controller.read_input import ReadInformation
+
 
 def showAll():
     result = Player.getAll()
@@ -22,91 +24,87 @@ def showAll():
 def start():
 
     # Create a list of players
+    print("Please enter informations about each player:\n")
     players = Player.create_players()
-    print("Create players list:\n")
     print(players)
     input()
 
-    view.view_function()
+    # Sorting players list by ranking
+    Player.Sorting_players_by_ranking(players)
+    print("Sorting players by ranking:\n")
+    print(players)
+    input()
 
+    print("Please enter informations about new contest:\n")
+    contest_list = ReadInformation.read_contest_information()
+    contest = Contest(contest_list[0], contest_list[1], contest_list[2],
+                      contest_list[3], contest_list[4], players)
+
+    # Create rounds
+    nb_rounds = 4
+    contest.create_rounds(nb_rounds)
+
+    # Create matches
+    nb_matches = 4
+    contest.create_matches(nb_matches, nb_matches)
+    # serialize contest
+    # contest.serialization_contest()
+    # Save  contest in DataBase
+    # contest.save()
+
+    current_round = 0
     while True:
         view.print_menu()
         choice = input("Enter your choice [1-5]: ")
         if choice == '1':
+            if current_round == 0:
+                # Generate all matches for first round
+                first_round = 0
+                print('generate first round:\n')
+                contest.rounds[first_round].start_datetime = datetime.datetime.now()
+                contest.rounds[first_round].end_datetime = contest.rounds[first_round].start_datetime + \
+                    datetime.timedelta(hours=1)
+                Tour.matches_generator(contest, first_round)
+                # display matches for first round
+                contest.display_round(first_round, nb_matches)
+                input()
 
-            # Sorting players list by ranking
-            Player.Sorting_players_by_ranking(players)
-            print("Sorting players by ranking:\n")
-            print(players)
-            input()
+                # contest.serialization_contest()
+                # contest.save()
 
-            # input players
-            # name = read_name(3)
-            # location = read_name(4)
-            # date = read_date(0)
-            # time_control = read_time_control()
-            # comments = read_comments()
+                print("Please enter results for each matches in round 0")
+                print("type 1: Player 1 wins")
+                print("type 2: Player 2 wins")
+                print("type 3: draw\n")
+                result_matches = []
+                for n in range(4):
+                    print(f'match {n}: ')
+                    result_matches.append(int(input("enter 1, 2 or 3: ")))
+                    print()
 
-            # Create a contest
-            faker = Faker()
-            name = faker.name()
-            location = faker.address()
-            date = faker.date_of_birth()
-            time_control = faker.random_int(1, 3)
-            comments = faker.text()
+                # save scores for all matches in first round
+                contest.save_scores2(first_round, nb_matches, result_matches)
+                # contest.save_scores(first_round, nb_matches)
+                # print("display scores for first round:\n")
+                # contest.display_round(first_round, nb_matches)
+                # input()
 
-            # Instance of contest
-            contest = Contest(name, location, date,
-                              time_control, comments, players)
+                # contest.serialization_contest()
+                # contest.save()
 
-            # Create rounds
-            nb_rounds = 4
-            contest.create_rounds(nb_rounds)
-
-            # Create matches
-            nb_matches = 4
-            contest.create_matches(nb_matches, nb_matches)
-
-            # serialize contest
-            contest.serialization_contest()
-
-            # Save  contest in DataBase
-            contest.save()
-
-            # Generate all matches for first round
-            first_round = 0
-            print('generate first round:\n')
-            contest.rounds[first_round].start_datetime = datetime.datetime.now()
-            contest.rounds[first_round].end_datetime = contest.rounds[first_round].start_datetime + \
-                datetime.timedelta(hours=1)
-            Tour.matches_generator(contest, first_round)
-            # display matches for first round
-            contest.display_round(first_round, nb_matches)
-            input()
-
-            contest.serialization_contest()
-            contest.save()
-
-            # save scores for all matches in first round
-            contest.save_scores(first_round, nb_matches)
-            print("display scores for first round:\n")
-            contest.display_round(first_round, nb_matches)
-            input()
-
-            contest.serialization_contest()
-            contest.save()
-
-            print('display scores by player:\n')
-            print(contest.players)
-            input()
-            print("sorting players by point:\n")
-            contest.players = Player.sort_players_by_point(contest.players)
-            print(contest.players)
-            input()
-            contest.serialization_contest()
-            contest.save()
-
-            for nb_round in range(1, 4):
+                # print('display scores by player:\n')
+                # print(contest.players)
+                # input()
+                # print("sorting players by point:\n")
+                contest.players = Player.sort_players_by_point(contest.players)
+                # print(contest.players)
+                # input()
+                # contest.serialization_contest()
+                # contest.save()
+                current_round += 1
+            elif current_round < 4:
+                nb_round = current_round
+            # for nb_round in range(1, 4):
 
                 # Generate next round
                 contest.rounds[nb_round].start_datetime = datetime.datetime.now()
@@ -118,50 +116,49 @@ def start():
                 contest.display_round(nb_round, nb_matches)
                 input()
 
-                contest.save_scores(nb_round, nb_matches)
+                # contest.save_scores(nb_round, nb_matches)
+                print(
+                    f"Please enter results for each matches in round {nb_round}")
+                print("type 1: Player 1 wins")
+                print("type 2: Player 2 wins")
+                print("type 3: draw\n")
+                result_matches = []
+                for n in range(4):
+                    print(f'match {n}: ')
+                    result_matches.append(int(input("enter 1, 2 or 3: ")))
+                    print()
+                # print(result_matches)
+                contest.save_scores2(nb_round, nb_matches, result_matches)
 
-                contest.serialization_contest()
-                contest.save()
+                # contest.serialization_contest()
+                # contest.save()
 
-                print(f'display scores for round: {nb_round}:\n')
-                contest.display_round(nb_round, nb_matches)
-                input()
-                print("display scores by player:\n")
-                print(contest.players)
-                input()
+                # print(f'display scores for round: {nb_round}:\n')
+                # contest.display_round(nb_round, nb_matches)
+                # input()
+                # print("display scores by player:\n")
+                # print(contest.players)
+                # input()
                 contest.players = Player.sort_players_by_point(contest.players)
-                print("Sorting players by point:\n")
-                print(contest.players)
-                input()
-            contest.serialization_contest()
-            contest.save()
-            exit()
+                # print("Sorting players by point:\n")
+                # print(contest.players)
+                # input()
+                # contest.serialization_contest()
+                # contest.save()
+                current_round += 1
+            else:
+                print('you have reached the maximum possible of round for a contest')
+            # exit()
 
         elif choice == '2':
-            serialized_players = []
-            for n in range(0, 1):
-                # Input user for fill all informations about a player
-                firstname = read_name(1)
-                lastname = read_name(2)
-                birthdate = read_date(1)
-                gender = read_sex()
-                ranking = read_ranking()
-                # Create an instance of a player
-                player = Player(firstname, lastname,
-                                birthdate, gender, ranking)
-                # serialize a player
-                player.serialization_player()
-                # get an serialized player
-                serialized_player = player.get_serialized_player()
-                # Add all serialized players in a list
-                serialized_players.append(serialized_player)
-            # Save players list in tinyDB
-            Player.saveAllPlayers(serialized_players)
+            contest.serialization_contest()
+            contest.save()
 
         elif choice == '3':
             create_players()
         elif choice == '4':
-            showAll()
+            print(contest.players)
+            # showAll()
         elif choice == '5':
             view.endView()
             exit()

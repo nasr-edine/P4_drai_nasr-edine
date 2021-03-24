@@ -100,3 +100,41 @@ class Contest(object):
                     else:
                         y.point += score2
                     break
+    # save scores for matches in Round 0
+
+    def save_scores2(self, nb_round, nb_matches, result_matches):
+        win = 1
+        lose = 0
+        draw = 0.5
+        for nb_match in range(nb_matches):
+            # attribute score for player 1
+            # score1 = random.choice([win, lose, draw])
+            if result_matches[nb_match] == 1:
+                score1 = win
+                score2 = lose
+            elif result_matches[nb_match] == 2:
+                score1 = lose
+                score2 = win
+            else:
+                score1 = draw
+                score2 = draw
+
+            self.rounds[nb_round].matches[nb_match][0][1] = score1
+            for x in self.players:
+                if x.id_player == self.rounds[nb_round].matches[nb_match][0][0]:
+                    if nb_round == 0:
+                        x.point = score1
+                    else:
+                        x.point += score1
+                    break
+            # attribute score for player 2
+            self.rounds[nb_round].matches[nb_match][1][1] = score2
+            for y in self.players:
+                if y.id_player == self.rounds[nb_round].matches[nb_match][1][0]:
+                    if nb_round == 0:
+                        y.point = score2
+                    else:
+                        y.point += score2
+                    break
+    # @ classmethod
+    # def input_contest()

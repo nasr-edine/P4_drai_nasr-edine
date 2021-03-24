@@ -99,3 +99,25 @@ class ReadInformation(object):
             else:
                 switch = 0
         return comments
+
+    @ classmethod
+    def read_contest_information(self):
+        # name = read_name(3)
+        # location = read_name(4)
+        # date = read_date(0)
+        # time_control = read_time_control()
+        # comments = read_comments()
+        contest_list = []
+        # Create a contest
+        faker = Faker()
+        name = faker.name()
+        contest_list.append(name)
+        location = faker.address()
+        contest_list.append(location)
+        date = faker.date_of_birth()
+        contest_list.append(date)
+        time_control = faker.random_int(1, 3)
+        contest_list.append(time_control)
+        comments = faker.text()
+        contest_list.append(comments)
+        return contest_list

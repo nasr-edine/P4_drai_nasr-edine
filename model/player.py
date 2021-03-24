@@ -167,13 +167,13 @@ class Player(object):
             # ranking = read_input.read_ranking()
 
             # create a fake list of 8 players
-            # profile = faker.simple_profile()
-            # name = profile['name'].split()
-            # firstname = name[0]
-            # lastname = name[1]
-            # birthdate = profile['birthdate']
-            # sex = profile['sex']
-            # ranking = random_list[n]
+            profile = faker.simple_profile()
+            name = profile['name'].split()
+            firstname = name[0]
+            lastname = name[1]
+            birthdate = profile['birthdate']
+            sex = profile['sex']
+            ranking = random_list[n]
             # Create an instance of a player
             player = Player(n, firstname, lastname,
                             birthdate, sex, ranking)
