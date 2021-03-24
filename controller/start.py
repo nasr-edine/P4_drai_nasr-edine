@@ -32,21 +32,19 @@ def start():
             print("Create a random list of players")
             print(players)
             input()
-            
-            # Sorting players list 
+
+            # Sorting players list
             Player.Sorting_players_by_ranking(players)
             print("Sorting list of players by ranking")
             print(players)
             input()
-            
+
             # input players
             # name = read_name(3)
             # location = read_name(4)
             # date = read_date(0)
             # time_control = read_time_control()
             # comments = read_comments()
-
-            players_index = 0
 
             # Create a tournament
             faker = Faker()
@@ -56,10 +54,8 @@ def start():
             time_control = faker.random_int(1, 3)
             comments = faker.text()
 
-            list_players = []
-
             # Instance of contest
-            contest = Contest(name, location, date, players_index,
+            contest = Contest(name, location, date,
                               time_control, comments, players)
 
             # Create rounds
@@ -77,26 +73,27 @@ def start():
             contest.save()
 
             # Generate all matches for first round
+            first_round = 0
             print('generate first round')
-            contest.rounds[0].start_datetime = datetime.datetime.now()
-            contest.rounds[0].end_datetime = contest.rounds[0].start_datetime + \
+            contest.rounds[first_round].start_datetime = datetime.datetime.now()
+            contest.rounds[first_round].end_datetime = contest.rounds[first_round].start_datetime + \
                 datetime.timedelta(hours=1)
-            Tour.match_generator_round1(
-                list_players, contest.rounds[0], contest, 0)
-            # display matches for round 0
-            for matches_nb in range(4):
-                print(contest.rounds[0].matches[matches_nb])
+            Tour.matches_generator(contest, first_round)
+
+            # display all matches for round 0
+            contest.display_round(first_round, nb_matches)
+
             contest.serialization_contest()
-            # contest.save()
+            contest.save()
 
             # save scores for matches in Round 0
             win = 1
             lose = 0
             draw = 0.5
-            number_list = [win, lose, draw]
-            for nb_matches in range(4):
+            # number_list = [win, lose, draw]
+            for nb_matches in range(nb_matches):
                 # attribute score for player 1
-                score1 = random.choice(number_list)
+                score1 = random.choice([win, lose, draw])
                 contest.rounds[0].matches[nb_matches][0][1] = score1
                 for x in contest.players:
                     if x.id_player == contest.rounds[0].matches[nb_matches][0][0]:
@@ -114,13 +111,14 @@ def start():
                         y.point = score2
                         break
             print("display scores for round 0")
-            for n in range(4):
-                print(contest.rounds[0].matches[n])
+            contest.display_round(0, nb_matches)
+            input()
             contest.serialization_contest()
             contest.save()
-            input()
+
             print('display players after attrib scores:')
             print(contest.players)
+
             # sorting players by point
             print("sorting players by point")
             contest.players = Player.sort_players_by_point(contest.players)
@@ -134,8 +132,7 @@ def start():
                 contest.rounds[nb_rounds].start_datetime = datetime.datetime.now()
                 contest.rounds[nb_rounds].end_datetime = contest.rounds[nb_rounds].start_datetime + \
                     datetime.timedelta(hours=1)
-                Tour.match_generator_round1(
-                    list_players, contest.rounds[nb_rounds], contest, nb_rounds)
+                Tour.matches_generator(contest, nb_rounds)
                 print(contest.players)
                 contest.serialization_contest()
                 contest.save()
@@ -145,7 +142,7 @@ def start():
                 i = 0
                 for nb_matches in range(4):
                     # attribute score for player 1
-                    score1 = random.choice(number_list)
+                    score1 = random.choice([win, lose, draw])
 
                     contest.rounds[nb_rounds].matches[nb_matches][0][1] = score1
                     for x in contest.players:

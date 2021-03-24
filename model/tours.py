@@ -21,26 +21,14 @@ class Tour(object):
 
     def serialize_match(self):
         pair = self.matches
-        # print("matches: ", pair)
-        # print("pair[0]: ", pair[0])
-        # print("pair: ", pair)
-        # print("match 1 value: ", pair[1])
-        # print("match 2 value: ", pair[2])
-        # print("match 3 value: ", pair[3])
         n = 0
         serialized_match = {
-            #     'match 1': pair[0],
-            #     'match 2': pair[1],
-            #     'match 3': pair[2],
-            #     'match 4': pair[3]
-            # }
             "match " + str(n): pair[n] for n in range(4)
         }
         return serialized_match
 
     def serialization_round(self):
         serialized_round = {
-            # "roundName": self.round_name,
             "matches": self.serialize_match(),
             "start_datetime": str(self.start_datetime),
             "end_datetime": str(self.end_datetime),
@@ -48,35 +36,36 @@ class Tour(object):
         return serialized_round
 
     @ classmethod
-    def create_pair_matches(self, id_player1, id_player2, nb_match, players, contest, round_nb):
-        faker = Faker()
+    def create_pair_matches(self, id_player1, id_player2, nb_match, contest, round_nb):
+        # faker = Faker()
         list_matchs = []
+        first_round = 0
+        init_score = 0
 
-        score1 = 0
-        score2 = 0
-        list1 = [id_player1, score1]
-        if round_nb == 0:
-            players[id_player1].point = score1
+        match_player1 = [id_player1, init_score]
+        match_player2 = [id_player2, init_score]
 
-        list2 = [id_player2, score2]
-        if round_nb == 0:
-            players[id_player2].point = score2
+        # Init scores for all players to 0 for first time
+        if round_nb == first_round:
+            contest.players[id_player1].point = init_score
+            contest.players[id_player2].point = init_score
 
-        tuple_match = (list1, list2)
-        contest.rounds[round_nb].matches[nb_match] = tuple_match
+        # Insert tuple match in  my contest object
+        contest.rounds[round_nb].matches[nb_match] = (
+            match_player1, match_player2)
 
     @ classmethod
-    def match_generator_round1(self, list_players, round, contest, round_nb):
+    def matches_generator(self, contest, round_nb):
         list_players = []
+        first_round = 0
         for player in contest.players:
             list_players.append(player.id_player)
-        # #print(list_players)
         i = 0
-        for n in range(4):
-            if round_nb == 0:
+        for nb_player in range(4):
+            if round_nb == first_round:
                 Tour.create_pair_matches(
-                    list_players[n], list_players[n + 4], n, contest.players, contest, round_nb)
+                    list_players[nb_player], list_players[nb_player + 4], nb_player, contest, round_nb)
             else:
                 Tour.create_pair_matches(
-                    list_players[i], list_players[i + 1], n, contest.players, contest, round_nb)
+                    list_players[i], list_players[i + 1], nb_player, contest, round_nb)
                 i += 2

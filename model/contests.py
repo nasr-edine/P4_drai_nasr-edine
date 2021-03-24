@@ -5,7 +5,7 @@ from model.tours import Tour
 
 
 class Contest(object):
-    def __init__(self, name, location, date, player_index, time_control, comments, players, nb_turns=4):
+    def __init__(self, name, location, date, time_control, comments, players, nb_turns=4):
         self.name = name
         self.location = location
         self.date = date
@@ -61,3 +61,8 @@ class Contest(object):
         contests_table = db.table('contests')
         contests_table.truncate()  # clear the table first
         contests_table.insert(self.serialized_contest)
+
+    # display matches
+    def display_round(self, nb_round, total_nb_matches):
+        for match in range(total_nb_matches):
+            print(self.rounds[nb_round].matches[match])
