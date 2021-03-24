@@ -5,40 +5,55 @@ from model.tours import Tour
 
 
 class Contest(object):
-    def __init__(self, name, location, date, player_index, time_control, comments, rounds, nb_turns=4):
+    def __init__(self, name, location, date, player_index, time_control, comments, players, nb_turns=4):
         self.name = name
         self.location = location
         self.date = date
         self.nb_turns = nb_turns
-        self.player_index = player_index
         self.time_control = time_control
         self.comments = comments
-        self.rounds = rounds
-        self.serialized_contest = {}
+        self.rounds = []
+        self.players = players
 
     def __str__(self):
         return '{self.name}'.format(self=self)
-    # Serialize a contest
 
+    def add_rounds(self, round):
+        self.rounds.append(round)
+
+    # Create a list of rounds
+    def create_rounds(self, nb_rounds):
+        for i in range(nb_rounds):
+            self.add_rounds(Tour('Round ' + str(i)))
+
+    def create_matches(self, nb_rounds, nb_matches):
+        for i in range(nb_matches):
+            for j in range(nb_matches):
+                self.rounds[i].add_matches([])
+
+    # get a list of serialized players
+    def serialization_players(self):
+        serialized_players = []
+        for player in self.players:
+            # serialize a player
+            serialized_player = player.serialization_player()
+            # Add all serialized players in a list
+            serialized_players.append(serialized_player)
+        return serialized_players
+
+    # Serialize a contest
     def serialization_contest(self):
-        # print(self.rounds)
         self.serialized_contest = {
             'name': self.name,
             'location': self.location,
             'date': str(self.date),
             'nb_turns': self.nb_turns,
-            'players_index': self.player_index,
             'time_control': self.time_control,
             'comments': self.comments,
-            # 'rounds':  self.rounds
-
-            # "rounds": {self.rounds[0].round_name: self.rounds[0].serialization_round()}
-
-
-            "rounds":   {item.round_name: item.serialization_round() for item in self.rounds}
+            # "rounds":   self.rounds.serialization_round(),
+            "rounds":   {round.round_name: round.serialization_round() for round in self.rounds},
+            'players': self.serialization_players()
         }
-
-        # }
 
     # Save a contest in database
     def save(self):

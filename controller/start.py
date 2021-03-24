@@ -1,13 +1,11 @@
 import re
 import datetime
 import random
-from faker import Faker
-
 import json
-
 import simpleFaker
+import controller.start
+from faker import Faker
 import view.view as view
-
 from model.player import Player
 from model.contests import Contest
 from model.tours import Tour
@@ -21,158 +19,6 @@ def showAll():
     return view.showAllView(result)
 
 
-def read_date(type_date):
-    switch = 1
-    while switch == 1:
-        if type_date == 1:
-            date = input(
-                'Enter player birth date in  DD/MM/YEAR format: ')
-        else:
-            date = input(
-                'Enter  contest date in  DD/MM/YEAR format: ')
-        try:
-            date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
-            switch = 0
-        except ValueError:
-            print('Unrecognized date format, please try again\n')
-    return date
-
-
-def read_sex():
-    switch = 1
-    while switch == 1:
-        sex = (input('Enter your gender M or F: ')).upper()
-        if sex == 'M' or sex == 'F':
-            switch = 0
-        else:
-            print('Unrecognized gender format, please try again\n')
-    return sex
-
-
-def read_time_control():
-    switch = 1
-    while switch == 1:
-        try:
-            view.print_menu_time_control()
-            time_control = int(input())
-            if time_control >= 1 and time_control <= 3:
-                switch = 0
-            else:
-                print("Oops!  the number is not between 1 and 3.  Try again...")
-                continue
-        except ValueError:
-            print("Oops!  That was no valid number.  Try again...")
-    return time_control
-
-
-def read_ranking():
-    switch = 1
-    while switch == 1:
-        try:
-            ranking = int(
-                input("Please enter ranking, a number between 1 and 8: "))
-            if ranking >= 1 and ranking <= 8:
-                switch = 0
-            else:
-                print("Oops!  the number is not between 1 and 8.  Try again...")
-                continue
-        except ValueError:
-            print("Oops!  That was no valid number.  Try again...")
-    return ranking
-
-
-def read_name(type_name):
-    while True:
-        if type_name == 1:
-            name = input("Enter player firstname: ")
-        elif type_name == 2:
-            name = input('Enter player lastname: ')
-        elif type_name == 3:
-            name = input('Enter tournament name: ')
-        else:
-            name = input('Enter the tournament location: ')
-        if not name.isalpha():
-            print("Please enter characters A-Z only")
-        elif len(name) > 40:
-            print("Error! Only 40 characters maximum allowed!")
-        else:
-            break
-    return name
-
-
-def read_comments():
-    switch = 1
-    while switch == 1:
-        comments = input(
-            'Do you want to add any comments \(max:1000 characters\): ')
-        if len(comments) > 1000:
-            print('Please try again the limit characters is 1000')
-        else:
-            switch = 0
-    return comments
-
-
-def create_pair_matches(id_player1, id_player2):
-    faker = Faker()
-    index_player = 0
-    list_matchs = []
-    score = faker.random_int(0, 2)
-    list1 = [id_player1, score]
-    score = faker.random_int(0, 2)
-    list2 = [id_player2, score]
-
-    tuple_match = (list1, list2)
-    list_matchs.append(tuple_match)
-    index_player += 2
-    return list_matchs
-
-
-def match_generator(list_players, rounds):
-    for round in rounds:
-        list_matches = []
-        for n in range(4):
-
-            list_matches.append(create_pair_matches(
-                list_players[n], list_players[n + 4]))
-            round.matchs = list_matches
-    return rounds
-
-
-def create_players():
-    serialized_players = []
-    list1 = []
-    list1 = (list(range(1, 9)))
-    random.shuffle(list1)
-
-    faker = Faker()
-    # create rounds
-    for n in range(0, 8):
-        # create a list of 8 players
-        profile = faker.simple_profile()
-        name = profile['name'].split()
-        firstname = name[0]
-        lastname = name[1]
-        birthdate = profile['birthdate']
-        sex = profile['sex']
-        ranking = list1[n]
-        # Create an instance of a player
-        player = Player(firstname, lastname,
-                        birthdate, sex, ranking)
-        # serialize a player
-        player.serialization_player()
-        # get an serialized player
-        serialized_player = player.get_serialized_player()
-        # Add all serialized players in a list
-        serialized_players.append(serialized_player)
-
-    # Sorting players by ranking
-    serialized_players = Player.sort_players_by_ranking(serialized_players)
-    print("Sorting players by ranking: ", serialized_players)
-
-    # Save players list in tinyDB
-    Player.saveAllPlayers(serialized_players)
-
-
 def start():
     view.view_function()
 
@@ -180,15 +26,29 @@ def start():
         view.print_menu()
         choice = input("Enter your choice [1-5]: ")
         if choice == '1':
-            create_players()
-            # Input user for fill all informations about a tournament
+
+            # Create a list of players
+            players = Player.create_players()
+            print("Create a random list of players")
+            print(players)
+            input()
+            
+            # Sorting players list 
+            Player.Sorting_players_by_ranking(players)
+            print("Sorting list of players by ranking")
+            print(players)
+            input()
+            
+            # input players
             # name = read_name(3)
             # location = read_name(4)
             # date = read_date(0)
             # time_control = read_time_control()
             # comments = read_comments()
-            players_index = Player.getPlayerIndex()
 
+            players_index = 0
+
+            # Create a tournament
             faker = Faker()
             name = faker.name()
             location = faker.address()
@@ -196,30 +56,132 @@ def start():
             time_control = faker.random_int(1, 3)
             comments = faker.text()
 
-            # Create a list of rounds
-            list_tours = []
-            for i in range(4):
-                date_start = datetime.datetime.now()
-                date_end = date_start + datetime.timedelta(hours=1)
-                list_tours.append(
-                    Tour('Round ' + str(i), None, date_start, date_end))
-            rounds = list_tours
+            list_players = []
 
-            list_players = Player.getPlayerIndex()
-            # print(list_players)
-            # generate a list of matchs
-            rounds = match_generator(list_players, rounds)
-            print("rounds value: ", rounds)
-            # Create a tournament instance
+            # Instance of contest
             contest = Contest(name, location, date, players_index,
-                              time_control, comments, rounds)
+                              time_control, comments, players)
 
-            # serialize a tournament
+            # Create rounds
+            nb_rounds = 4
+            nb_matches = 4
+            contest.create_rounds(nb_rounds)
+
+            # Create matches
+            contest.create_matches(nb_matches, nb_matches)
+
+            # tournament serialization
             contest.serialization_contest()
 
-            # Save a tournament in DataBase
+            # Save  tournament in DataBase
             contest.save()
-            Player.update_point_player()
+
+            # Generate all matches for first round
+            print('generate first round')
+            contest.rounds[0].start_datetime = datetime.datetime.now()
+            contest.rounds[0].end_datetime = contest.rounds[0].start_datetime + \
+                datetime.timedelta(hours=1)
+            Tour.match_generator_round1(
+                list_players, contest.rounds[0], contest, 0)
+            # display matches for round 0
+            for matches_nb in range(4):
+                print(contest.rounds[0].matches[matches_nb])
+            contest.serialization_contest()
+            # contest.save()
+
+            # save scores for matches in Round 0
+            win = 1
+            lose = 0
+            draw = 0.5
+            number_list = [win, lose, draw]
+            for nb_matches in range(4):
+                # attribute score for player 1
+                score1 = random.choice(number_list)
+                contest.rounds[0].matches[nb_matches][0][1] = score1
+                for x in contest.players:
+                    if x.id_player == contest.rounds[0].matches[nb_matches][0][0]:
+                        x.point = score1
+                        break
+                if score1 == win:
+                    score2 = lose
+                elif score1 == lose:
+                    score2 = win
+                else:
+                    score2 = draw
+                contest.rounds[0].matches[nb_matches][1][1] = score2
+                for y in contest.players:
+                    if y.id_player == contest.rounds[0].matches[nb_matches][1][0]:
+                        y.point = score2
+                        break
+            print("display scores for round 0")
+            for n in range(4):
+                print(contest.rounds[0].matches[n])
+            contest.serialization_contest()
+            contest.save()
+            input()
+            print('display players after attrib scores:')
+            print(contest.players)
+            # sorting players by point
+            print("sorting players by point")
+            contest.players = Player.sort_players_by_point(contest.players)
+            print(contest.players)
+            contest.serialization_contest()
+            contest.save()
+
+            for nb_rounds in range(1, 4):
+                # Generate second round
+                print(f"Generate round: {nb_rounds}")
+                contest.rounds[nb_rounds].start_datetime = datetime.datetime.now()
+                contest.rounds[nb_rounds].end_datetime = contest.rounds[nb_rounds].start_datetime + \
+                    datetime.timedelta(hours=1)
+                Tour.match_generator_round1(
+                    list_players, contest.rounds[nb_rounds], contest, nb_rounds)
+                print(contest.players)
+                contest.serialization_contest()
+                contest.save()
+                input()
+
+                print(f"save scores for all matches in Round {nb_rounds}")
+                i = 0
+                for nb_matches in range(4):
+                    # attribute score for player 1
+                    score1 = random.choice(number_list)
+
+                    contest.rounds[nb_rounds].matches[nb_matches][0][1] = score1
+                    for x in contest.players:
+                        if x.id_player == contest.rounds[nb_rounds].matches[nb_matches][0][0]:
+                            x.point += score1
+                            # print(f'player 2: {y.id_player}, {y.point}')
+                            break
+                    # attribute score for player 2
+                    if score1 == win:
+                        score2 = lose
+                    elif score1 == lose:
+                        score2 = win
+                    else:
+                        score2 = draw
+                    contest.rounds[nb_rounds].matches[nb_matches][1][1] = score2
+                    for y in contest.players:
+                        if y.id_player == contest.rounds[nb_rounds].matches[nb_matches][1][0]:
+                            y.point += score2
+                        # print(f'player 2: {y.id_player}, {y.point}')
+                            break
+                    i += 2
+                contest.serialization_contest()
+                contest.save()
+                print(f'before sorting:\n{contest.players}')
+                input('after sorting:')
+                contest.players = Player.sort_players_by_point(contest.players)
+                input()
+                for n in range(4):
+                    print(contest.rounds[nb_rounds].matches[n])
+                print(contest.players)
+                input()
+
+            # sorting players by point
+            contest.players = Player.sort_players_by_point(contest.players)
+            contest.serialization_contest()
+            contest.save()
             exit()
 
         elif choice == '2':
@@ -250,8 +212,8 @@ def start():
         elif choice == '5':
             view.endView()
             exit()
-        elif choice == '6':
-            print(Player.get_index_number())
+        # elif choice == '6':
+            # print(Player.get_index_number())
         else:
             input("Wrong menu selection. Enter any key to try again..")
 
