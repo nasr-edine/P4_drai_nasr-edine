@@ -30,7 +30,7 @@ def start():
     input()
 
     # Sorting players list by ranking
-    Player.Sorting_players_by_ranking(players)
+    Player.sort_players_by_ranking(players)
     print("Sorting players by ranking:\n")
     print(players)
     input()
@@ -76,10 +76,11 @@ def start():
                 print("type 1: Player 1 wins")
                 print("type 2: Player 2 wins")
                 print("type 3: draw\n")
-                result_matches = []
+                result_matches = [1, 2, 3, 1]
+                # result_matches = []
                 for n in range(4):
                     print(f"match {n}: ")
-                    result_matches.append(int(input("enter 1, 2 or 3: ")))
+                    # result_matches.append(int(input("enter 1, 2 or 3: ")))
                     print()
 
                 # save scores for all matches in first round
@@ -123,9 +124,10 @@ def start():
                 print("type 2: Player 2 wins")
                 print("type 3: draw\n")
                 result_matches = []
+                result_matches = [1, 2, 3, 1]
                 for n in range(4):
                     print(f'match {n}: ')
-                    result_matches.append(int(input("enter 1, 2 or 3: ")))
+                    # result_matches.append(int(input("enter 1, 2 or 3: ")))
                     print()
                 # print(result_matches)
                 contest.save_scores2(nb_round, nb_matches, result_matches)
@@ -170,8 +172,8 @@ def start():
         elif choice == '5':
             view.endView()
             exit()
-        # elif choice == '6':
-            # print(Player.get_index_number())
+        elif choice == '6':
+            print(contest.players)
         else:
             input("Wrong menu selection. Enter any key to try again..")
 

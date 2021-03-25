@@ -42,111 +42,15 @@ class Player(object):
         }
         return self.serialized_player
 
-    def deserialize_player(self, index):
-        db = TinyDB('db.json', indent=4)
-        table = db.table('players')
-        dict_player = table.get(doc_id=index)
-        # player = Player(dict_player['firstname'], dict_player['lastname'],
-        # datetime.strptime(dict_player['birthdate'], '%d/%m/%Y').date(), dict_player['sex'], dict_player['ranking'])
-
-        self.firstname = dict_player['firstname']
-        self.lastname = dict_player['lastname']
-        self.birthdate = datetime.strptime(
-            dict_player['birthdate'], '%d/%m/%Y').date()
-        self.sex = dict_player['sex']
-        self.ranking = dict_player['ranking']
-        self.serialized_player = {}
-        # print(self)
-        # return player
-
-    @ classmethod
-    def savePlayersInDb(self, players):
-        serialized_players = []
-        for player in players:
-            serialized_player = player.serialization_player()
-            # serialized_player = player.get_serialized_player()
-            serialized_players.append(serialized_player)
-        Player.saveAllPlayers(serialized_players)
-
-    @ classmethod
-    def update_point_player(self, index_player, score):
-        db = TinyDB('db.json', indent=4)
-        table = db.table('players')
-        # print(table.get(doc_id=index_player))
-        mySearch = table.get(doc_id=index_player)
-        # print(mySearch['firstname'])
-
-        table.update({'point': score}, where(
-            'firstname') == mySearch['firstname'])
-
-    @ classmethod
-    def getNamePlayer(self, index_player):
-        db = TinyDB('db.json', indent=4)
-        table = db.table('players')
-        mySearch = table.get(doc_id=index_player)
-        # print(mySearch['firstname'])
-        return mySearch['firstname']
-
-    @ classmethod
-    def sort_players_by_point(self):
-        db = TinyDB('db.json', indent=4)
-        players_table = db.table('players')
-        serialized_players = (
-            sorted(players_table, key=lambda i: i['point']))
-        return (serialized_players)
-
     @ classmethod
     def sort_players_by_point(self, players):
-        # db = TinyDB('db.json', indent=4)
-        # players_table = db.table('players')
         players.sort(key=lambda x: x.point, reverse=True)
-        # print(players)
         return (players)
-        # serialized_players = (
-        #     sorted(players_table, key=lambda i: i['point']))
-        # return (serialized_players)
 
     @ classmethod
     def sort_players_by_ranking(self, players):
         players.sort(key=lambda x: x.ranking)
         return (players)
-
-    @ classmethod
-    def getPlayerIndex(self):
-        db = TinyDB('db.json', indent=4)
-        table = db.table('players')
-        eids = list(table._read_table().keys())
-        return eids
-
-    @ classmethod
-    def saveAllPlayers(self, serialized_players):
-        db = TinyDB('db.json', indent=4)
-        players_table = db.table('players')
-        players_table.truncate()  # clear the table first
-        players_table.insert_multiple(serialized_players)
-
-    @ classmethod
-    def getAll(self):
-        db = TinyDB('db.json')
-        players_table = db.table('players')
-        result = []
-        for item in players_table:
-            player = Player(item['firstname'], item['lastname'],
-                            datetime.strptime(item['birthdate'], '%d/%m/%Y').date(), item['sex'], item['ranking'])
-            result.append(player)
-        return result
-
-    @ classmethod
-    def getAll2(self):
-        result = []
-        db = TinyDB('db.json')
-        players_table = db.table('players')
-        serialized_players = players_table.all()
-        for item in serialized_players:
-            player = Player(item['firstname'], item['lastname'],
-                            item['birth'], item['gender'], item['ranking'])
-            result.append(player)
-        return result
 
     @ classmethod
     def create_players(self):
@@ -182,17 +86,4 @@ class Player(object):
             serialized_player = player.serialization_player()
             # Add all serialized players in a list
             players.append(player)
-
-        # print("fake data users saved in DB")
-        # print(players)
-        # input()
         return(players)
-
-    @ classmethod
-    def Sorting_players_by_ranking(self, players):
-        # Sorting players by ranking
-        players = Player.sort_players_by_ranking(players)
-        # print("after sorting by ranking")
-        # print(players)
-        # input()
-        return players

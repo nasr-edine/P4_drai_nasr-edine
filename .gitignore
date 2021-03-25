@@ -5,3 +5,4 @@ db.json
 parsing.py
 *.pyc
 permutations.py
+old_code.py
