@@ -16,6 +16,7 @@ class Player(object):
         self.ranking = ranking
         self.serialized_player = {}
         self.point = point
+        self.history_match = []
 
     def __str__(self):
         return "{self.firstname}, {self.lastname}, {self.birthdate}, {self.sex}, {self.ranking}".format(self=self)

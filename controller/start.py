@@ -78,7 +78,7 @@ def start():
                 print("type 3: draw\n")
                 result_matches = []
                 for n in range(4):
-                    print(f'match {n}: ')
+                    print(f"match {n}: ")
                     result_matches.append(int(input("enter 1, 2 or 3: ")))
                     print()
 
@@ -146,6 +146,14 @@ def start():
                 # contest.serialization_contest()
                 # contest.save()
                 current_round += 1
+                print(f"{contest.players[0].history_match}")
+                print(f"{contest.players[1].history_match}")
+                print(f"{contest.players[2].history_match}")
+                print(f"{contest.players[3].history_match}")
+                print(f"{contest.players[4].history_match}")
+                print(f"{contest.players[5].history_match}")
+                print(f"{contest.players[6].history_match}")
+                print(f"{contest.players[7].history_match}")
             else:
                 print('you have reached the maximum possible of round for a contest')
             # exit()

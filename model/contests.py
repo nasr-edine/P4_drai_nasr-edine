@@ -118,10 +118,13 @@ class Contest(object):
             else:
                 score1 = draw
                 score2 = draw
-
+            id_player1 = 0
+            id_player2 = 0
             self.rounds[nb_round].matches[nb_match][0][1] = score1
             for x in self.players:
                 if x.id_player == self.rounds[nb_round].matches[nb_match][0][0]:
+                    # player1 = x
+                    # id_player1 = x.id_player
                     if nb_round == 0:
                         x.point = score1
                     else:
@@ -131,10 +134,14 @@ class Contest(object):
             self.rounds[nb_round].matches[nb_match][1][1] = score2
             for y in self.players:
                 if y.id_player == self.rounds[nb_round].matches[nb_match][1][0]:
+                    # player2 = y
+                    # id_player2 = y.id_player
                     if nb_round == 0:
                         y.point = score2
                     else:
                         y.point += score2
                     break
+            # player1.history_match.append(id_player2)
+            # player2.history_match.append(id_player1)
     # @ classmethod
     # def input_contest()
