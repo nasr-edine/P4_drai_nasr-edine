@@ -25,7 +25,7 @@ class Player(object):
         return "name: {:10} {:10} id: {}   ranking: {}   point: {}\n".format(self.firstname, self.lastname, self.id_player, self.ranking, self.point)
 
     def view_player(self):
-        return ("%s %s %s %s %s" % (self.firstname.ljust(15), self.lastname.ljust(15), self.birth.ljust(15), self.gender.ljust(15), str(self.ranking).ljust(15)))
+        return ("name: %s %s id: %s ranking: %s point: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.id_player).ljust(2), str(self.ranking).ljust(2), str(self.point).ljust(2)))
 
     def get_serialized_player(self):
         return self.serialized_player
@@ -50,6 +50,11 @@ class Player(object):
     @ classmethod
     def sort_players_by_ranking(self, players):
         players.sort(key=lambda x: x.ranking)
+        return (players)
+
+    @ classmethod
+    def sort_players_by_name(self, players):
+        players.sort(key=lambda x: x.lastname)
         return (players)
 
     @ classmethod

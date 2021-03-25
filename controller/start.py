@@ -173,7 +173,9 @@ def start():
             view.endView()
             exit()
         elif choice == '6':
-            print(contest.players)
+            # print(contest.players)
+            for player in contest.players:
+                print(player.view_player())
         else:
             input("Wrong menu selection. Enter any key to try again..")
 

@@ -143,5 +143,3 @@ class Contest(object):
                     break
             # player1.history_match.append(id_player2)
             # player2.history_match.append(id_player1)
-    # @ classmethod
-    # def input_contest()
