@@ -7,7 +7,7 @@ from controller.read_input import ReadInformation
 
 
 class Player(object):
-    def __init__(self, id_player, firstname=None, lastname=None, birthdate=None, sex=None, ranking=None, point=0):
+    def __init__(self, id_player=None, firstname=None, lastname=None, birthdate=None, sex=None, ranking=None, point=0):
         self.id_player = id_player
         self.firstname = firstname
         self.lastname = lastname
@@ -41,6 +41,15 @@ class Player(object):
             'point': self.point
         }
         return self.serialized_player
+
+    def deserializing_player(self, player):
+        self.id_player = player['id_player']
+        self.firstname = player['firstname']
+        self.lastname = player['lastname']
+        self.birthdate = player['birthdate']
+        self.sex = player['sex']
+        self.ranking = player['ranking']
+        self.point = player['point']
 
     @ classmethod
     def sort_players_by_point(self, players):

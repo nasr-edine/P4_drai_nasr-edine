@@ -4,10 +4,12 @@ import random
 from tinydb import TinyDB, Query
 
 from model.tours import Tour
+from model.player import Player
 
 
 class Contest(object):
-    def __init__(self, name, location, date, time_control, comments, players, nb_turns=4):
+    def __init__(self, name=None, location=None, date=None, time_control=None, comments=None, players=None, nb_turns=4):
+        # def __init__(self, name, location, date, time_control, comments, players, nb_turns=4):
         self.name = name
         self.location = location
         self.date = date
@@ -18,7 +20,10 @@ class Contest(object):
         self.players = players
 
     def __str__(self):
-        return '{self.name}'.format(self=self)
+        return "name: {self.name}, \nlocation: {self.location}, \ndate: {self.date}, \nnb turns: {self.nb_turns}, \ntime control: {self.time_control}, \ncomments: {self.comments}, \nplayers: \n {self.players}".format(self=self)
+
+    def __repr__(self):
+        return "name: {self.name},\nlocation: {self.location},\ndate: {self.date},\nnb turns: {self.nb_turns},\ntime control: {self.time_control},\ncomments: {self.comments},\nplayers:\n{self.players}\n\n".format(self=self)
 
     def add_rounds(self, round):
         self.rounds.append(round)
@@ -61,15 +66,51 @@ class Contest(object):
     def save(self):
         db = TinyDB('db.json', indent=4)
         contests_table = db.table('contests')
-        contests_table.truncate()  # clear the table first
+        # contests_table.truncate()  # clear the table first
         contests_table.insert(self.serialized_contest)
 
+    def deserializing_players_list(self, players_dict):
+        # print(players_dict)
+        self.players = []
+        for player_item in players_dict:
+            # print(player_item)
+            player = Player()
+            player.deserializing_player(player_item)
+            print(player)
+            self.players.append(player)
+
+    def deserializing_contest(self, contest):
+        self.name = contest['name']
+        self.location = contest['location']
+        self.date = contest['date']
+        self.nb_turns = contest['nb_turns']
+        self.time_control = contest['time_control']
+        self.comments = contest['comments']
+        self.deserializing_players_list(contest['players'])
+
+    def get_contest(self, id):
+        db = TinyDB('db.json', indent=4)
+        contests_table = db.table('contests')
+        deserialize_contest = contests_table.get(doc_id=id)
+
+    @ classmethod
+    def get_contests_data(self):
+        contests = []
+        db = TinyDB('db.json', indent=4)
+        contest_table = db.table('contests')
+        for item in contest_table:
+            contest = Contest()
+            contest.deserializing_contest(item)
+            contests.append(contest)
+        return contests
     # display matches
+
     def display_round(self, nb_round, total_nb_matches):
         for match in range(total_nb_matches):
             print(self.rounds[nb_round].matches[match])
 
     # save scores for matches in Round 0
+
     def save_scores(self, nb_round, nb_matches):
         win = 1
         lose = 0
