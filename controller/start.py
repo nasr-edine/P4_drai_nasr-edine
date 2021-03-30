@@ -3,13 +3,16 @@ import datetime
 import random
 import json
 import simpleFaker
-import controller.start
+
+from tinydb import TinyDB, Query, where
 from faker import Faker
+
+import controller.start
 import view.view as view
+
 from model.player import Player
 from model.contests import Contest
 from model.tours import Tour
-
 from controller.read_input import ReadInformation
 
 
@@ -173,7 +176,24 @@ def start():
             view.endView()
             exit()
         elif choice == '6':
-            Contest.display_contests()
+            # display all contests
+            contests_list = Contest.get_contests()
+            if not contests_list:
+                view.print_msg_error_1()
+            else:
+                view.print_contests_list(contests_list)
+
+            # display players list for a given contest
+            contest_query = Contest()
+            contest_name = input('Enter the contest name: ')
+            if contest_query.get_players_contest(contest_name) == 0:
+                # sorting by name
+                view.print_players_sorting_by_name(contest_query.players)
+                # sorting by ranking
+                view.print_players_sorting_by_ranking(contest_query.players)
+            else:
+                view.print_msg_error_2()
+
         else:
             input("Wrong menu selection. Enter any key to try again..")
 

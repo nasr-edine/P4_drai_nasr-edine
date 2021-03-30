@@ -19,13 +19,17 @@ class Player(object):
         self.history_match = []
 
     def __str__(self):
-        return "{self.firstname}, {self.lastname}, {self.birthdate}, {self.sex}, {self.ranking}".format(self=self)
+        # return "{self.firstname}, {self.lastname}, {self.birthdate}, {self.sex}, {self.ranking}".format(self=self)
+        return "|firstname: {:15} |laatname: {:10} |id: {}   |ranking: {}   |point: {}|".format(self.firstname, self.lastname, self.id_player, self.ranking, self.point)
 
     def __repr__(self):
         return "name: {:10} {:10} id: {}   ranking: {}   point: {}\n".format(self.firstname, self.lastname, self.id_player, self.ranking, self.point)
 
     def view_player(self):
         return ("name: %s %s id: %s ranking: %s point: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.id_player).ljust(2), str(self.ranking).ljust(2), str(self.point).ljust(2)))
+
+    def display_player(self):
+        return "|firstname: {:15} |lastname: {:10} |ranking: {}|".format(self.firstname, self.lastname, self.ranking)
 
     def get_serialized_player(self):
         return self.serialized_player

@@ -110,15 +110,22 @@ class Contest(object):
             contests.append(contest)
         return contests
 
+    def get_players_contest(self, contest_name):
+        db = TinyDB('db.json', indent=4)
+        contests_table = db.table('contests')
+        contest_doc = contests_table.search(
+            where('name') == contest_name)
+        if not contest_doc:
+            return -1
+        else:
+            self.deserializing_contest(contest_doc[0])
+            return 0
+            # return doc[0].doc_id
+
     @ classmethod
-    def display_contests(self):
+    def get_contests(self):
         contests = Contest.get_contests_data()
-        print()
-        print(12 * "-", "Contests list", 13 * "-")
-        for contest in contests:
-            print(f'| number: {contest.get_id()} '.ljust(3),
-                  f'| name: {contest.name}'.ljust(25), '|')
-        print(40 * "-", '\n')
+        return contests
 
     # display matches
     def display_round(self, nb_round, total_nb_matches):

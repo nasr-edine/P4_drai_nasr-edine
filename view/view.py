@@ -39,5 +39,38 @@ def showAllView(list):
         print()
 
 
+def print_contests_list(contests):
+    print()
+    print(12 * "-", "Contests list", 13 * "-")
+    for contest in contests:
+        print(f'| number: {contest.get_id()} '.ljust(3),
+              f'| name: {contest.name}'.ljust(25), '|')
+    print(40 * "-", '\n')
+
+
+def print_players_sorting_by_name(players):
+    Player.sort_players_by_name(players)
+    print(19 * "-", "PLAYERS SORTING BY NAME", 18 * "-")
+    for player in players:
+        print(player.display_player())
+    print(62 * "-", '\n')
+
+
+def print_players_sorting_by_ranking(players):
+    Player.sort_players_by_ranking(players)
+    print(16 * "-", "PLAYERS SORTING BY RANKING", 18 * "-")
+    for player in players:
+        print(player.display_player())
+    print(62 * "-", '\n')
+
+
+def print_msg_error_1():
+    print('there are none contests recorded !')
+
+
+def print_msg_error_2():
+    print("this name don't exists. Try again...")
+
+
 def endView():
     print('end')
