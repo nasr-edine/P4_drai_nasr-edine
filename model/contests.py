@@ -76,14 +76,18 @@ class Contest(object):
         contests_table.insert(self.serialized_contest)
 
     def deserializing_players_list(self, players_dict):
-        # print(players_dict)
         self.players = []
         for player_item in players_dict:
-            # print(player_item)
             player = Player()
             player.deserializing_player(player_item)
-            # print(player)
             self.players.append(player)
+
+    def deserializing_rounds(self, rounds):
+        self.rounds = []
+        print(rounds)
+        for round_item in rounds:
+            print(round_item)
+            round = Tour()
 
     def deserializing_contest(self, contest):
         self.name = contest['name']
@@ -92,6 +96,7 @@ class Contest(object):
         self.nb_turns = contest['nb_turns']
         self.time_control = contest['time_control']
         self.comments = contest['comments']
+        self.deserializing_rounds(contest['rounds'])
         self.deserializing_players_list(contest['players'])
 
     def get_contest(self, id):

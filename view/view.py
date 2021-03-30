@@ -64,6 +64,11 @@ def print_players_sorting_by_ranking(players):
     print(62 * "-", '\n')
 
 
+def print_rounds(rounds):
+    for round in rounds:
+        print(round)
+
+
 def print_msg_error_1():
     print('there are none contests recorded !')
 

@@ -187,10 +187,17 @@ def start():
             contest_query = Contest()
             contest_name = input('Enter the contest name: ')
             if contest_query.get_players_contest(contest_name) == 0:
-                # sorting by name
+                # playersList sorting by name
                 view.print_players_sorting_by_name(contest_query.players)
-                # sorting by ranking
+                # playersList sorting by ranking
                 view.print_players_sorting_by_ranking(contest_query.players)
+
+                # todo roundsList
+                print(contest_query.rounds)
+                view.print_rounds(contest_query.rounds)
+                # todo matchesList
+                # round_name = input('Enter the round name: ')
+                # view.print_matches(contest_query.players)
             else:
                 view.print_msg_error_2()
 
