@@ -1,7 +1,7 @@
 import json
 import random
 
-from tinydb import TinyDB, Query
+from tinydb import TinyDB, Query, where
 
 from model.tours import Tour
 from model.player import Player
@@ -62,6 +62,12 @@ class Contest(object):
             'players': self.serialization_players()
         }
 
+    def get_id(self):
+        db = TinyDB('db.json', indent=4)
+        contests_table = db.table('contests')
+        doc = contests_table.search(where('name') == self.name)
+        return doc[0].doc_id
+
     # Save a contest in database
     def save(self):
         db = TinyDB('db.json', indent=4)
@@ -76,7 +82,7 @@ class Contest(object):
             # print(player_item)
             player = Player()
             player.deserializing_player(player_item)
-            print(player)
+            # print(player)
             self.players.append(player)
 
     def deserializing_contest(self, contest):
@@ -103,8 +109,18 @@ class Contest(object):
             contest.deserializing_contest(item)
             contests.append(contest)
         return contests
-    # display matches
 
+    @ classmethod
+    def display_contests(self):
+        contests = Contest.get_contests_data()
+        print()
+        print(12 * "-", "Contests list", 13 * "-")
+        for contest in contests:
+            print(f'| number: {contest.get_id()} '.ljust(3),
+                  f'| name: {contest.name}'.ljust(25), '|')
+        print(40 * "-", '\n')
+
+    # display matches
     def display_round(self, nb_round, total_nb_matches):
         for match in range(total_nb_matches):
             print(self.rounds[nb_round].matches[match])

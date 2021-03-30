@@ -6,3 +6,6 @@ parsing.py
 *.pyc
 permutations.py
 old_code.py
+data.json
+db2.json
+deserialize.py
