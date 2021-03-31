@@ -30,13 +30,13 @@ def start():
     print("Please enter informations about each player:\n")
     players = Player.create_players()
     print(players)
-    input()
+    # input()
 
     # Sorting players list by ranking
     Player.sort_players_by_ranking(players)
     print("Sorting players by ranking:\n")
     print(players)
-    input()
+    # input()
 
     print("Please enter informations about new contest:\n")
     contest_list = ReadInformation.read_contest_information()
@@ -118,7 +118,7 @@ def start():
 
                 print(f"Generate round: {nb_round}\n")
                 contest.display_round(nb_round, nb_matches)
-                input()
+                # input()
 
                 # contest.save_scores(nb_round, nb_matches)
                 print(
@@ -193,7 +193,7 @@ def start():
                 view.print_players_sorting_by_ranking(contest_query.players)
 
                 # todo roundsList
-                print(contest_query.rounds)
+                # print(contest_query.rounds)
                 view.print_rounds(contest_query.rounds)
                 # todo matchesList
                 # round_name = input('Enter the round name: ')

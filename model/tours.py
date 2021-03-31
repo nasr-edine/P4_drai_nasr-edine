@@ -21,6 +21,10 @@ class Tour(object):
     def print_matches(self):
         return "{:10} {:10} {}\n".format(self.firstname, self.lastname, self.ranking)
 
+    def display_round(self):
+        return "|name: {:10} |start: {:10} |end: {}|".format(
+            self.round_name, self.start_datetime, self.end_datetime)
+
     def serialize_match(self):
         pair = self.matches
         n = 0

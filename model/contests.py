@@ -84,10 +84,41 @@ class Contest(object):
 
     def deserializing_rounds(self, rounds):
         self.rounds = []
-        print(rounds)
-        for round_item in rounds:
-            print(round_item)
-            round = Tour()
+        # print(type(rounds), ':\n')
+        print(rounds, '\n')
+        # print(rounds['Round 0']['matches'])
+        # print(rounds['Round 0']['matches']['match 1'])
+        # print(rounds['Round 0']['matches']['match 2'])
+        # print(rounds['Round 0']['matches']['match 3'])
+        for key, value in rounds.items():
+
+            print(f'name:    {key}')
+            print(f"matches: {value['matches']}")
+            print(f"start:   {value['start_datetime']}")
+            print(f"end:     {value['end_datetime']}")
+            print()
+            for key2, value2 in value['matches'].items():
+                print(key2)
+                print(value2)
+                print()
+                # self.rounds[0].matches[]
+            round = Tour(key, value['start_datetime'], value['end_datetime'])
+
+            self.rounds.append(round)
+        #     for key2, value2 in value.items():
+        #         print(f'[{key2}]: {value2}')
+        #         print()
+        #         for key3, value3 in value.items():
+        #             print(f'[{key3}]: {value3}')
+        #         print()
+        #     print()
+        # for round_item in rounds:
+        # print(type(round_item))
+        # print((round_item))
+        # round = Tour()
+        # print(type(round_item['start_datetime']))
+        # round.start_datetime = round_item['start_datetime']
+        # round.end_datetime = round_item['end_datetime']
 
     def deserializing_contest(self, contest):
         self.name = contest['name']
