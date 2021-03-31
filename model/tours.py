@@ -21,9 +21,23 @@ class Tour(object):
     def print_matches(self):
         return "{:10} {:10} {}\n".format(self.firstname, self.lastname, self.ranking)
 
+    def display_matches(self):
+        string = ""
+        match_nb = 0
+        for match in self.matches:
+            # print(match)
+            # string += f"|{9 * ' '}{match[0]} : {match[1]}{11 * ' '}|\n"
+            string += f"|match {match_nb}:{27 * ' '}|\n"
+            match_nb += 1
+            string += "|{}player id: {} score: {}{}|\n".format(
+                9 * ' ', match[0][0], match[0][1], 5 * ' ')
+            string += "|{}player id: {} score: {}{}|\n".format(
+                9 * ' ', match[1][0], match[1][1], 5 * ' ')
+        return string
+
     def display_round(self):
-        return "|name: {:10} |start: {:10} |end: {}|".format(
-            self.round_name, self.start_datetime, self.end_datetime)
+        return "|name   : {:25} |\n|{:35}|\n|start  : {:20}|\n|end    : {:24}|\n|matches:{:27}|\n{}|".format(
+            self.round_name, "", self.start_datetime, self.end_datetime, '', self.display_matches())
 
     def serialize_match(self):
         pair = self.matches

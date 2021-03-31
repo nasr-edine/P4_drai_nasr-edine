@@ -65,10 +65,11 @@ def print_players_sorting_by_ranking(players):
 
 
 def print_rounds(rounds):
-    print(35 * "-", "ROUNDS LIST", 38 * "-")
+    print(11 * "-", "ROUNDS LIST", 13 * "-")
     for round in rounds:
         print(round.display_round())
-    print(86 * "-", '\n')
+        print(36 * "-",)
+    print(36 * "-", '\n')
 
 
 def print_msg_error_1():

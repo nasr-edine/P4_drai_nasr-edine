@@ -85,24 +85,42 @@ class Contest(object):
     def deserializing_rounds(self, rounds):
         self.rounds = []
         # print(type(rounds), ':\n')
-        print(rounds, '\n')
+        # print(rounds, '\n')
         # print(rounds['Round 0']['matches'])
         # print(rounds['Round 0']['matches']['match 1'])
         # print(rounds['Round 0']['matches']['match 2'])
         # print(rounds['Round 0']['matches']['match 3'])
         for key, value in rounds.items():
 
-            print(f'name:    {key}')
-            print(f"matches: {value['matches']}")
-            print(f"start:   {value['start_datetime']}")
-            print(f"end:     {value['end_datetime']}")
-            print()
-            for key2, value2 in value['matches'].items():
-                print(key2)
-                print(value2)
-                print()
-                # self.rounds[0].matches[]
+            # print(f'name:    {key}')
+            # print(f"matches: {value['matches']}")
+            # print(f"start:   {value['start_datetime']}")
+            # print(f"end:     {value['end_datetime']}")
+            # print()
             round = Tour(key, value['start_datetime'], value['end_datetime'])
+            for key2, value2 in value['matches'].items():
+                list1 = []
+                list2 = []
+                # print(key2)
+                # print('type value: ', type(value2))
+                # print('value: ', value2)
+                if not value2:
+                    # print('there are no match in this contest')
+                    pass
+                else:
+                    # print('type: ', type(value2[0]))
+
+                    # print('player 1: ', value2[0][0])
+                    # print('score 1: ', value2[0][1])
+                    # print('player 2: ', value2[1][0])
+                    # print('score 2: ', value2[1][1])
+                    list1 = [value2[0][0], value2[0][1]]
+                    list2 = [value2[1][0], value2[1][1]]
+                    match_tuple = (list1, list2)
+                    round.matches.append(match_tuple)
+
+                # print()
+                # self.rounds[0].matches[]
 
             self.rounds.append(round)
         #     for key2, value2 in value.items():
