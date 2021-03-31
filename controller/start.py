@@ -192,12 +192,10 @@ def start():
                 # playersList sorting by ranking
                 view.print_players_sorting_by_ranking(contest_query.players)
 
-                # todo roundsList
-                # print(contest_query.rounds)
+                # display roundsList
                 view.print_rounds(contest_query.rounds)
                 # todo matchesList
-                # round_name = input('Enter the round name: ')
-                # view.print_matches(contest_query.players)
+                view.print_matches(contest_query.rounds)
             else:
                 view.print_msg_error_2()
 

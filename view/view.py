@@ -72,6 +72,14 @@ def print_rounds(rounds):
     print(36 * "-", '\n')
 
 
+def print_matches(rounds):
+    print(11 * "-", "MATCHES LIST", 13 * "-")
+    for round in rounds:
+        print(round.display_matches())
+        print(36 * "-",)
+    print(36 * "-", '\n')
+
+
 def print_msg_error_1():
     print('there are none contests recorded !')
 
