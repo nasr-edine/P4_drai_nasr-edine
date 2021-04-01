@@ -8,13 +8,17 @@ def view_function():
 
 def print_menu():       # Your menu design here
     print(30 * "-", "MENU", 30 * "-")
-    print("1. Create a new round")
+    print("1. Create a new contest")
     print("2. Save the current state of the contest ? ")
     print("3. Update players ranking ?")
     print("4. Display player statistics ?")
     # print("4. Use manually entered custom conf file ")
     print("5. Exit from the script ")
-    print("6. Display report")
+    print("6. Display all players")
+    print("7. Display players for a contest")
+    print("8. Display contests")
+    print("9. Display rounds for a contest")
+    print("10. Display matches for a contest")
 
     print(73 * "-")
 
@@ -85,7 +89,11 @@ def print_msg_error_1():
 
 
 def print_msg_error_2():
-    print("this name don't exists. Try again...")
+    print("this contest name don't exists. Try again...")
+
+
+def print_msg_error_3():
+    print("there are no players registered in the database.")
 
 
 def endView():

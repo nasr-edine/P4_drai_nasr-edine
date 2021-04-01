@@ -68,12 +68,51 @@ class Contest(object):
         doc = contests_table.search(where('name') == self.name)
         return doc[0].doc_id
 
-    # Save a contest in database
+    # Save players table in database
+    @ classmethod
+    def save_players2(self, serialized_players, players):
+        n = 0
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        for item in serialized_players:
+            # print(item)
+            id = players_table.insert(item)
+            players_table.update({'id_player': id}, doc_ids=[id])
+            item['id_player'] = id
+            for player in players:
+                if player.lastname == item['lastname']:
+                    player.id_player = id
+            n += 1
+
+    # Save players table in database
+
+    def save_players(self):
+        n = 0
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        for item in self.serialized_contest['players']:
+            print(item)
+            id = players_table.insert(item)
+            players_table.update({'id_player': id}, doc_ids=[id])
+            item['id_player'] = id
+            for player in self.players:
+                if player.lastname == item['lastname']:
+                    player.id_player = id
+            n += 1
+
+    # Save a contest table in database
     def save(self):
         db = TinyDB('db.json', indent=4)
         contests_table = db.table('contests')
         # contests_table.truncate()  # clear the table first
         contests_table.insert(self.serialized_contest)
+        # players_table = db.table('players')
+        # print(self.serialized_contest['players'][0])
+        # for item in self.serialized_contest['players']:
+        #     print(item)
+        #     # print(f"nb: {players_table.insert(item)}")
+        #     id = players_table.insert(item)
+        #     self.players
 
     def deserializing_players_list(self, players_dict):
         self.players = []
@@ -84,59 +123,21 @@ class Contest(object):
 
     def deserializing_rounds(self, rounds):
         self.rounds = []
-        # print(type(rounds), ':\n')
-        # print(rounds, '\n')
-        # print(rounds['Round 0']['matches'])
-        # print(rounds['Round 0']['matches']['match 1'])
-        # print(rounds['Round 0']['matches']['match 2'])
-        # print(rounds['Round 0']['matches']['match 3'])
         for key, value in rounds.items():
-
-            # print(f'name:    {key}')
-            # print(f"matches: {value['matches']}")
-            # print(f"start:   {value['start_datetime']}")
-            # print(f"end:     {value['end_datetime']}")
-            # print()
             round = Tour(key, value['start_datetime'], value['end_datetime'])
             for key2, value2 in value['matches'].items():
                 list1 = []
                 list2 = []
-                # print(key2)
-                # print('type value: ', type(value2))
-                # print('value: ', value2)
+
                 if not value2:
                     # print('there are no match in this contest')
                     pass
                 else:
-                    # print('type: ', type(value2[0]))
-
-                    # print('player 1: ', value2[0][0])
-                    # print('score 1: ', value2[0][1])
-                    # print('player 2: ', value2[1][0])
-                    # print('score 2: ', value2[1][1])
                     list1 = [value2[0][0], value2[0][1]]
                     list2 = [value2[1][0], value2[1][1]]
                     match_tuple = (list1, list2)
                     round.matches.append(match_tuple)
-
-                # print()
-                # self.rounds[0].matches[]
-
             self.rounds.append(round)
-        #     for key2, value2 in value.items():
-        #         print(f'[{key2}]: {value2}')
-        #         print()
-        #         for key3, value3 in value.items():
-        #             print(f'[{key3}]: {value3}')
-        #         print()
-        #     print()
-        # for round_item in rounds:
-        # print(type(round_item))
-        # print((round_item))
-        # round = Tour()
-        # print(type(round_item['start_datetime']))
-        # round.start_datetime = round_item['start_datetime']
-        # round.end_datetime = round_item['end_datetime']
 
     def deserializing_contest(self, contest):
         self.name = contest['name']

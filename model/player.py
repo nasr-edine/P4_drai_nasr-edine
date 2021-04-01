@@ -34,6 +34,32 @@ class Player(object):
     def get_serialized_player(self):
         return self.serialized_player
 
+    @ classmethod
+    def get_players_data(self):
+        players = []
+        db = TinyDB('db.json', indent=4)
+        player_table = db.table('players')
+        for item in player_table:
+            player = Player()
+            player.deserializing_player(item)
+            players.append(player)
+        return players
+
+    @ classmethod
+    def get_players(self):
+        players = Player.get_players_data()
+        return players
+
+    @ classmethod
+    def serialization_players(self, players):
+        serialized_players = []
+        for player in players:
+            # serialize a player
+            serialized_player = player.serialization_player()
+            # Add all serialized players in a list
+            serialized_players.append(serialized_player)
+        return serialized_players
+
     def serialization_player(self):
         self.serialized_player = {
             'id_player': self.id_player,
