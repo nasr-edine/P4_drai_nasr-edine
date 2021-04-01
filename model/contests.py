@@ -80,7 +80,7 @@ class Contest(object):
             players_table.update({'id_player': id}, doc_ids=[id])
             item['id_player'] = id
             for player in players:
-                if player.lastname == item['lastname']:
+                if player.lastname == item['lastname'] and player.firstname == item['firstname']:
                     player.id_player = id
             n += 1
 
@@ -96,7 +96,9 @@ class Contest(object):
             players_table.update({'id_player': id}, doc_ids=[id])
             item['id_player'] = id
             for player in self.players:
-                if player.lastname == item['lastname']:
+                # if player.lastname == item['lastname']:
+                if player.lastname == item['lastname'] and player.firstname == item['firstname']:
+
                     player.id_player = id
             n += 1
 

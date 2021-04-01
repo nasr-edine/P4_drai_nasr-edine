@@ -112,13 +112,27 @@ def start():
                 current_round += 1
             else:
                 print('you have reached the maximum possible of round for a contest')
+        print(contest.players)
+
+        def update_ranking(players):
+            for player in players:
+                print(f'player: {player.firstname} {player.lastname}')
+                player.ranking = int(input('Update rank: '))
+                db = TinyDB('db.json', indent=4)
+                players_table = db.table('players')
+                players_table.update(
+                    {'ranking': player.ranking}, doc_ids=[player.id_player])
+        update_ranking(contest.players)
+
+        print(contest.players)
+        input()
         return contest
     created_contest = 0
     contest_saved = 0
     while True:
 
         view.print_menu()
-        choice = input("Enter your choice [1-5]: ")
+        choice = input("Enter your choice [1-10]: ")
         if choice == '1':
             contest = create_contest()
             created_contest = 1
@@ -139,6 +153,7 @@ def start():
 
         elif choice == '3':
             # create_players()
+            input('')
             pass
 
         elif choice == '4':
