@@ -1,9 +1,9 @@
 import random
-from datetime import datetime
+import datetime
 from tinydb import TinyDB, Query, where
 from faker import Faker
 
-from controller.read_input import ReadInformation
+# from controller.read_input import ReadInformation
 
 
 class Player(object):
@@ -76,7 +76,8 @@ class Player(object):
         self.id_player = player['id_player']
         self.firstname = player['firstname']
         self.lastname = player['lastname']
-        self.birthdate = player['birthdate']
+        self.birthdate = datetime.datetime.strptime(
+            player['birthdate'], '%d/%m/%Y').date()
         self.sex = player['sex']
         self.ranking = player['ranking']
         self.point = player['point']
@@ -96,38 +97,38 @@ class Player(object):
         players.sort(key=lambda x: x.lastname)
         return (players)
 
-    @ classmethod
-    def create_players(self):
-        read_input = ReadInformation()
-        players = []
-        random_list = []
-        random_list = (list(range(1, 9)))
-        random.shuffle(random_list)
+    # @ classmethod
+    # def create_players(self):
+    #     read_input = ReadInformation()
+    #     players = []
+    #     random_list = []
+    #     random_list = (list(range(1, 9)))
+    #     random.shuffle(random_list)
 
-        faker = Faker()
-        # create rounds
-        for n in range(0, 8):
+    #     faker = Faker()
+    #     # create rounds
+    #     for n in range(0, 8):
 
-            # Enter informations about a player
-            # firstname = read_input.read_name(1)
-            # lastname = read_input.read_name(2)
-            # birthdate = read_input.read_date(1)
-            # sex = read_input.read_sex()
-            # ranking = read_input.read_ranking()
+    #         # Enter informations about a player
+    #         # firstname = read_input.read_name(1)
+    #         # lastname = read_input.read_name(2)
+    #         # birthdate = read_input.read_date(1)
+    #         # sex = read_input.read_sex()
+    #         # ranking = read_input.read_ranking()
 
-            # create a fake list of 8 players
-            profile = faker.simple_profile()
-            name = profile['name'].split()
-            firstname = name[0]
-            lastname = name[1]
-            birthdate = profile['birthdate']
-            sex = profile['sex']
-            ranking = random_list[n]
-            # Create an instance of a player
-            player = Player(n, firstname, lastname,
-                            birthdate, sex, ranking)
-            # serialize a player
-            serialized_player = player.serialization_player()
-            # Add all serialized players in a list
-            players.append(player)
-        return(players)
+    #         # create a fake list of 8 players
+    #         profile = faker.simple_profile()
+    #         name = profile['name'].split()
+    #         firstname = name[0]
+    #         lastname = name[1]
+    #         birthdate = profile['birthdate']
+    #         sex = profile['sex']
+    #         ranking = random_list[n]
+    #         # Create an instance of a player
+    #         player = Player(n, firstname, lastname,
+    #                         birthdate, sex, ranking)
+    #         # serialize a player
+    #         serialized_player = player.serialization_player()
+    #         # Add all serialized players in a list
+    #         players.append(player)
+    #     return(players)

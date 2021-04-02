@@ -9,8 +9,9 @@ def view_function():
 def print_menu():       # Your menu design here
     print(30 * "-", "MENU", 30 * "-")
     print("1. Create a new contest")
+    print("11. Create a player")
     print("2. Save the current state of the contest ? ")
-    print("3. Update players ranking ?")
+    # print("3. Update players ranking ?")
     print("4. Display player statistics ?")
     # print("4. Use manually entered custom conf file ")
     print("5. Exit from the script ")

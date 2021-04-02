@@ -6,9 +6,11 @@ from faker import Faker
 import json
 
 import simpleFaker
+from tinydb import TinyDB, Query, where
+
 # import view.view as view
 
-# from model.player import Player
+from model.player import Player
 # from model.contests import Contest
 # from model.tours import Tour
 
@@ -101,12 +103,49 @@ class ReadInformation(object):
         return comments
 
     @ classmethod
+    def create_players(self):
+        read_input = ReadInformation()
+        players = []
+        random_list = []
+        random_list = (list(range(1, 9)))
+        random.shuffle(random_list)
+
+        faker = Faker()
+        # create rounds
+        for n in range(0, 8):
+
+            # Enter informations about a player
+            # firstname = read_input.read_name(1)
+            # lastname = read_input.read_name(2)
+            # birthdate = read_input.read_date(1)
+            # sex = read_input.read_sex()
+            # ranking = read_input.read_ranking()
+
+            # create a fake list of 8 players
+            profile = faker.simple_profile()
+            name = profile['name'].split()
+            firstname = name[0]
+            lastname = name[1]
+            birthdate = profile['birthdate']
+            sex = profile['sex']
+            ranking = random_list[n]
+            # Create an instance of a player
+            player = Player(n, firstname, lastname,
+                            birthdate, sex, ranking)
+            # serialize a player
+            serialized_player = player.serialization_player()
+            # Add all serialized players in a list
+            players.append(player)
+        return(players)
+
+    @ classmethod
     def read_contest_information(self):
         # name = read_name(3)
         # location = read_name(4)
         # date = read_date(0)
         # time_control = read_time_control()
         # comments = read_comments()
+
         contest_list = []
         # Create a contest
         faker = Faker()
@@ -120,4 +159,27 @@ class ReadInformation(object):
         contest_list.append(time_control)
         comments = faker.text()
         contest_list.append(comments)
+
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+
+        players_ids = []
+        players_obj = []
+        while len(players_ids) != 8:
+            id = int(input('Enter player Id: '))
+            ret = players_table.contains(doc_id=id)
+            if(ret == False):
+                print("this player doesn't exist in dataBase. Please, try another Id !")
+            elif id in players_ids:
+                print("You can't to have the same player in the same contest")
+            else:
+                players_ids.append(id)
+                player_dict = players_table.get(doc_id=id)
+                print(
+                    f"{player_dict['firstname']} {player_dict['lastname']} is added to contest.")
+                player = Player()
+                player.deserializing_player(player_dict)
+                print(player)
+                players_obj.append(player)
+        contest_list.append(players_obj)
         return contest_list

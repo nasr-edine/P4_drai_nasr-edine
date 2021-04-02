@@ -26,14 +26,16 @@ def showAll():
 
 def start():
 
-    # create a contest
-    def create_contest():
+    # create a player
+    # TODO: create a player and save it in db
+    def add_player():
         # Create a list of players
         print("Please enter informations about each player:\n")
-        players = Player.create_players()
+        players = ReadInformation.create_players()
         print('list of players')
         print(players)
         input()
+
         ret = Player.serialization_players(players)
         Contest.save_players2(ret, players)
         # Sorting players list by ranking
@@ -42,10 +44,14 @@ def start():
         print(players)
         input()
 
+    # create a contest
+    def create_contest():
         print("Please enter informations about new contest:\n")
+        players = []
         contest_list = ReadInformation.read_contest_information()
+        print(type(contest_list[5][0].birthdate))
         contest = Contest(contest_list[0], contest_list[1], contest_list[2],
-                          contest_list[3], contest_list[4], players)
+                          contest_list[3], contest_list[4], contest_list[5])
 
         # Create rounds
         nb_rounds = 4
@@ -134,9 +140,16 @@ def start():
         view.print_menu()
         choice = input("Enter your choice [1-10]: ")
         if choice == '1':
+            # players_id = []
+            # for n in range(8):
+            #     nb = input('Enter player Id: ')
+            #     players_id.append(nb)
             contest = create_contest()
             created_contest = 1
             contest_saved = 0
+        elif choice == '11':
+            # TODO: create a player and save it in database
+            add_player()
         elif choice == '2':
             if created_contest == 0:
                 print('there is no contest created')
