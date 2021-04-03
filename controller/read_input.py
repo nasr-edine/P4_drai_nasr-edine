@@ -63,15 +63,31 @@ class ReadInformation(object):
         while switch == 1:
             try:
                 ranking = int(
-                    input("Please enter ranking, a number between 1 and 8: "))
-                if ranking >= 1 and ranking <= 8:
+                    input("Please enter ranking, a number between 1 and 100: "))
+                if ranking >= 1 and ranking <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between 1 and 8.  Try again...")
+                    print("Oops!  the number is not between 1 and 100.  Try again...")
                     continue
             except ValueError:
                 print("Oops!  That was no valid number.  Try again...")
         return ranking
+
+    @classmethod
+    def read_id(self):
+        switch = 1
+        while switch == 1:
+            try:
+                id = int(
+                    input("Please enter id player, a number between 1 and 100: "))
+                if id >= 1 and id <= 100:
+                    switch = 0
+                else:
+                    print("Oops!  the number is not between 1 and 100.  Try again...")
+                    continue
+            except ValueError:
+                print("Oops!  That was no valid number.  Try again...")
+        return id
 
     def read_name(self, type_name):
         while True:
@@ -148,7 +164,6 @@ class ReadInformation(object):
 
         contest_list = []
         # Create a contest
-        # TODO: if they are not 8 players you can't create a contest
         faker = Faker()
         name = faker.name()
         contest_list.append(name)
@@ -164,9 +179,9 @@ class ReadInformation(object):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
 
-        print(type(players_table))
-        print(len(players_table))
-        print(players_table)
+        # print(type(players_table))
+        # print(len(players_table))
+        # print(players_table)
         if len(players_table) < 8:
             print(
                 "you cannot create a contest because there are not enough registered players")
@@ -174,12 +189,13 @@ class ReadInformation(object):
         players_ids = []
         players_obj = []
         while len(players_ids) != 8:
-            id = int(input('Enter player Id: '))
+            # id = int(input('Enter player Id: '))
+            id = ReadInformation.read_id()
             ret = players_table.contains(doc_id=id)
             if(ret == False):
                 print("this player doesn't exist in dataBase. Please, try another Id !")
             elif id in players_ids:
-                print("You can't to have the same player in the same contest")
+                print("You have already saved this player for this tournament")
             else:
                 players_ids.append(id)
                 player_dict = players_table.get(doc_id=id)
@@ -187,7 +203,7 @@ class ReadInformation(object):
                     f"{player_dict['firstname']} {player_dict['lastname']} is added to contest.")
                 player = Player()
                 player.deserializing_player(player_dict)
-                print(player)
+                # print(player)
                 players_obj.append(player)
         contest_list.append(players_obj)
         return contest_list

@@ -49,15 +49,11 @@ def start():
         print("Please enter informations about new contest:\n")
         players = []
         contest_list = ReadInformation.read_contest_information()
-        print(type(contest_list))
-        print(contest_list)
-        print(contest_list[0])
         if not contest_list[0]:
             return None
         print(type(contest_list[5][0].birthdate))
         contest = Contest(contest_list[0], contest_list[1], contest_list[2],
                           contest_list[3], contest_list[4], contest_list[5])
-
         # Create rounds
         nb_rounds = 4
         contest.create_rounds(nb_rounds)
@@ -84,8 +80,8 @@ def start():
                 contest.display_round(first_round, nb_matches)
                 input()
 
-                # contest.serialization_contest()
-                # contest.save()
+                contest.serialization_contest()
+                contest.save()
 
                 print("Please enter results for each matches in round 0")
                 print("type 1: Player 1 wins")
@@ -124,6 +120,8 @@ def start():
             else:
                 print('you have reached the maximum possible of round for a contest')
         print(contest.players)
+        contest.serialization_contest()
+        contest.save()
 
         def update_ranking():
             db = TinyDB('db.json', indent=4)
