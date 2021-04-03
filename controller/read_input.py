@@ -112,7 +112,7 @@ class ReadInformation(object):
 
         faker = Faker()
         # create rounds
-        for n in range(0, 8):
+        for n in range(0, 1):
 
             # Enter informations about a player
             # firstname = read_input.read_name(1)
@@ -148,6 +148,7 @@ class ReadInformation(object):
 
         contest_list = []
         # Create a contest
+        # TODO: if they are not 8 players you can't create a contest
         faker = Faker()
         name = faker.name()
         contest_list.append(name)
@@ -163,6 +164,13 @@ class ReadInformation(object):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
 
+        print(type(players_table))
+        print(len(players_table))
+        print(players_table)
+        if len(players_table) < 8:
+            print(
+                "you cannot create a contest because there are not enough registered players")
+            return None,
         players_ids = []
         players_obj = []
         while len(players_ids) != 8:

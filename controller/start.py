@@ -49,6 +49,11 @@ def start():
         print("Please enter informations about new contest:\n")
         players = []
         contest_list = ReadInformation.read_contest_information()
+        print(type(contest_list))
+        print(contest_list)
+        print(contest_list[0])
+        if not contest_list[0]:
+            return None
         print(type(contest_list[5][0].birthdate))
         contest = Contest(contest_list[0], contest_list[1], contest_list[2],
                           contest_list[3], contest_list[4], contest_list[5])
@@ -140,17 +145,16 @@ def start():
         view.print_menu()
         choice = input("Enter your choice [1-10]: ")
         if choice == '1':
-            # players_id = []
-            # for n in range(8):
-            #     nb = input('Enter player Id: ')
-            #     players_id.append(nb)
             contest = create_contest()
+            if not contest:
+                continue
             created_contest = 1
             contest_saved = 0
-        elif choice == '11':
+        elif choice == '2':
             # TODO: create a player and save it in database
             add_player()
-        elif choice == '2':
+        elif choice == '3':
+            # TODO: create update a ranking player
             if created_contest == 0:
                 print('there is no contest created')
             else:
@@ -163,18 +167,12 @@ def start():
                     contest_saved = 1
                 else:
                     print('the contest has already been saved')
-
-        elif choice == '3':
-            # create_players()
-            input('')
-            pass
-
         elif choice == '4':
             if created_contest == 0:
                 print('there is no contest created')
             else:
                 print(contest.players)
-        elif choice == '5':
+        elif choice == '10':
             view.endView()
             exit()
         elif choice == '6':
@@ -203,14 +201,14 @@ def start():
                 # view.print_matches(contest_query.rounds)
             else:
                 view.print_msg_error_2()
-        elif choice == '8':
+        elif choice == '5':
             # display contests list
             contests_list = Contest.get_contests()
             if not contests_list:
                 view.print_msg_error_1()
             else:
                 view.print_contests_list(contests_list)
-        elif choice == '9':
+        elif choice == '8':
             contest_query = Contest()
             contest_name = input('Enter the contest name: ')
             if contest_query.get_players_contest(contest_name) == 0:
@@ -220,7 +218,7 @@ def start():
                 # view.print_matches(contest_query.rounds)
             else:
                 view.print_msg_error_2()
-        elif choice == '10':
+        elif choice == '9':
             contest_query = Contest()
             contest_name = input('Enter the contest name: ')
             if contest_query.get_players_contest(contest_name) == 0:
