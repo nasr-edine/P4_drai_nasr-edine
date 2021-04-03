@@ -125,15 +125,26 @@ def start():
                 print('you have reached the maximum possible of round for a contest')
         print(contest.players)
 
-        def update_ranking(players):
-            for player in players:
-                print(f'player: {player.firstname} {player.lastname}')
-                player.ranking = int(input('Update rank: '))
-                db = TinyDB('db.json', indent=4)
-                players_table = db.table('players')
-                players_table.update(
-                    {'ranking': player.ranking}, doc_ids=[player.id_player])
-        update_ranking(contest.players)
+        def update_ranking():
+            db = TinyDB('db.json', indent=4)
+            players_table = db.table('players')
+            # firstname = input('firstname: ')
+            # lastname = input('lastname: ')
+            id = int(input('Enter player Id: '))
+            # ret = players_table.contains(doc_id=id)
+            if(ret == False):
+                print("You can")
+            elif id in players_ids:
+                print("You can't to have the same player in the same contest")
+            else:
+                players_ids.append(id)
+                player_dict = players_table.get(doc_id=id)
+                print(
+                    f"{player_dict['firstname']} {player_dict['lastname']} is added to contest.")
+                player = Player()
+                player.deserializing_player(player_dict)
+                print(player)
+                players_obj.append(player)
 
         print(contest.players)
         input()
@@ -154,19 +165,54 @@ def start():
             # TODO: create a player and save it in database
             add_player()
         elif choice == '3':
-            # TODO: create update a ranking player
-            if created_contest == 0:
-                print('there is no contest created')
-            else:
-                if contest_saved == 0:
-                    contest.serialization_contest()
-                # contest.save_players()
-                # ret = Player.serialization_players(contest.players)
-                # Contest.save_players2(ret, contest.players)
-                    contest.save()
-                    contest_saved = 1
+            # TODO: update a ranking player
+
+            def update_ranking2():
+                # for player in players:
+                # print(f'player: {player.firstname} {player.lastname}')
+                # player.ranking = int(input('Update rank: '))
+                db = TinyDB('db.json', indent=4)
+                players_table = db.table('players')
+                # players_table.update(
+                # {'ranking': player.ranking}, doc_ids=[player.id_player])
+                # TODO: check is player exist in db
+                id = int(input('Enter player id: '))
+                # lastname = input('type player lastname: ')
+                User = Query()
+                # ret = players_table.contains(User.firstname.lower() ==
+                #                              firstname.lower() and User.lastname.lower() == lastname.lower())
+                ret = players_table.contains(doc_id=id)
+                if(ret == True):
+                    print("You can update this player")
+                    player_dict = players_table.get(doc_id=id)
+                    print('Information about player:')
+                    print(
+                        f"{player_dict['firstname']} {player_dict['lastname']}.")
+                    player = Player()
+                    player.deserializing_player(player_dict)
+                    print(player)
+                    ranking = int(input(
+                        'Enter a number to update ranking for this player: '))
+                    players_table.update({'ranking': ranking}, doc_ids=[id])
+                    # print(f'firstname: {}')
+                # elif id in players_ids:
+                    # print("You can't to have the same player in the same contest")
                 else:
-                    print('the contest has already been saved')
+                    print("this player don't exist in db")
+            update_ranking2()
+
+            # if created_contest == 0:
+            #     print('there is no contest created')
+            # else:
+            #     if contest_saved == 0:
+            #         contest.serialization_contest()
+            #     # contest.save_players()
+            #     # ret = Player.serialization_players(contest.players)
+            #     # Contest.save_players2(ret, contest.players)
+            #         contest.save()
+            #         contest_saved = 1
+            #     else:
+            #         print('the contest has already been saved')
         elif choice == '4':
             if created_contest == 0:
                 print('there is no contest created')
