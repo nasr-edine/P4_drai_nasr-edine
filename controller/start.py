@@ -80,8 +80,8 @@ def start():
                 contest.display_round(first_round, nb_matches)
                 input()
 
-                contest.serialization_contest()
-                contest.save()
+                # contest.serialization_contest()
+                # contest.save()
 
                 print("Please enter results for each matches in round 0")
                 print("type 1: Player 1 wins")
@@ -122,28 +122,39 @@ def start():
         print(contest.players)
         contest.serialization_contest()
         contest.save()
+        players_ids = []
+        players_obj = []
 
         def update_ranking():
             db = TinyDB('db.json', indent=4)
             players_table = db.table('players')
-            # firstname = input('firstname: ')
-            # lastname = input('lastname: ')
-            id = int(input('Enter player Id: '))
-            # ret = players_table.contains(doc_id=id)
-            if(ret == False):
-                print("You can")
-            elif id in players_ids:
-                print("You can't to have the same player in the same contest")
-            else:
-                players_ids.append(id)
-                player_dict = players_table.get(doc_id=id)
-                print(
-                    f"{player_dict['firstname']} {player_dict['lastname']} is added to contest.")
-                player = Player()
-                player.deserializing_player(player_dict)
-                print(player)
-                players_obj.append(player)
 
+            for player in contest.players:
+                print(player)
+                player_dict = players_table.get(doc_id=player.id_player)
+                print(f"{player_dict['firstname']} {player_dict['lastname']}")
+                player.ranking = int(
+                    input('Enter the new ranking for player: '))
+                players_table.update(
+                    {'ranking': player.ranking}, doc_ids=[player.id_player])
+                input()
+            # id = int(input('Enter player Id: '))
+            # ret = players_table.contains(doc_id=id)
+            # if(ret == False):
+            #     print("You can")
+            # # elif id in players_ids:
+            #     # print("You can't to have the same player in the same contest")
+            # else:
+            #     players_ids.append(id)
+            #     player_dict = players_table.get(doc_id=id)
+                # print(
+                # f"the ranking for the player: {player_dict['firstname']} {player_dict['lastname']} has been updated.")
+            #     players_table.update({'ranking': ranking}, doc_ids=[id])
+            #     player = Player()
+            #     player.deserializing_player(player_dict)
+            #     print(player)
+            #     players_obj.append(player)
+        update_ranking()
         print(contest.players)
         input()
         return contest
