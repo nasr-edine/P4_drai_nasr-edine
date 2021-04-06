@@ -12,7 +12,7 @@ def print_menu():       # Your menu design here
     print("2. Create a player")
     # print("2. Save the current state of the contest ? ")
     print("3. Update players ranking ?")
-    print("4. Display players statistics ?")
+    print("4. Display players statistics for current contest")
     # print("4. Use manually entered custom conf file ")
     print("5. Display contests")
     print("6. Display all players")

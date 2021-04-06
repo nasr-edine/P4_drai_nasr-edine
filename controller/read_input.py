@@ -1,6 +1,7 @@
 import re
 import datetime
 import random
+import os
 from faker import Faker
 
 import json
@@ -74,20 +75,36 @@ class ReadInformation(object):
         return ranking
 
     @classmethod
-    def read_id(self):
+    def read_id(self, number_player):
         switch = 1
         while switch == 1:
             try:
                 id = int(
-                    input("Please enter id player, a number between 1 and 100: "))
+                    input(f"Type id for player {number_player + 1}: "))
                 if id >= 1 and id <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between 1 and 100.  Try again...")
+                    print("Oops!  the number is not between 1 and 100.  Try again...\n")
                     continue
             except ValueError:
-                print("Oops!  That was no valid number.  Try again...")
+                print("Oops!  That was no valid number.  Try again...\n")
         return id
+
+    @classmethod
+    def read_score(self):
+        switch = 1
+        while switch == 1:
+            try:
+                result = float(
+                    input("Type 1, 2 or 3: "))
+                if result >= 1 and result <= 3:
+                    switch = 0
+                else:
+                    print("Oops!  the number is not between 1 and 3.  Try again...\n")
+                    continue
+            except ValueError:
+                print("Oops!  That was no valid number.  Try again...\n")
+        return result
 
     def read_name(self, type_name):
         while True:
@@ -131,20 +148,20 @@ class ReadInformation(object):
         for n in range(0, 1):
 
             # Enter informations about a player
-            # firstname = read_input.read_name(1)
-            # lastname = read_input.read_name(2)
-            # birthdate = read_input.read_date(1)
-            # sex = read_input.read_sex()
-            # ranking = read_input.read_ranking()
+            firstname = read_input.read_name(1)
+            lastname = read_input.read_name(2)
+            birthdate = read_input.read_date(1)
+            sex = read_input.read_sex()
+            ranking = read_input.read_ranking()
 
             # create a fake list of 8 players
-            profile = faker.simple_profile()
-            name = profile['name'].split()
-            firstname = name[0]
-            lastname = name[1]
-            birthdate = profile['birthdate']
-            sex = profile['sex']
-            ranking = random_list[n]
+            # profile = faker.simple_profile()
+            # name = profile['name'].split()
+            # firstname = name[0]
+            # lastname = name[1]
+            # birthdate = profile['birthdate']
+            # sex = profile['sex']
+            # ranking = random_list[n]
             # Create an instance of a player
             player = Player(n, firstname, lastname,
                             birthdate, sex, ranking)
@@ -190,20 +207,23 @@ class ReadInformation(object):
         players_obj = []
         while len(players_ids) != 8:
             # id = int(input('Enter player Id: '))
-            id = ReadInformation.read_id()
+            id = ReadInformation.read_id(len(players_ids))
             ret = players_table.contains(doc_id=id)
             if(ret == False):
-                print("this player doesn't exist in dataBase. Please, try another Id !")
+                print(
+                    "this player doesn't exist in dataBase. Please, try another Id !\n")
             elif id in players_ids:
-                print("You have already saved this player for this tournament")
+                print("You have already saved this player for this contest\n")
             else:
                 players_ids.append(id)
                 player_dict = players_table.get(doc_id=id)
                 print(
-                    f"{player_dict['firstname']} {player_dict['lastname']} is added to contest.")
+                    f"{player_dict['firstname']} {player_dict['lastname']} is added to contest.\n")
                 player = Player()
                 player.deserializing_player(player_dict)
-                # print(player)
                 players_obj.append(player)
+        print('The players are now full for this contest\n')
+        print('\nType enter to continue...')
+        os.system('clear')
         contest_list.append(players_obj)
         return contest_list

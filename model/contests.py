@@ -184,13 +184,41 @@ class Contest(object):
         contests = Contest.get_contests_data()
         return contests
 
+    def display_assignement_players(self, nb_round, total_nb_matches):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        User = Query()
+        print(50 * "-")
+        for match in range(total_nb_matches):
+            id_player = self.rounds[nb_round].matches[match][0][0]
+            player_dict = players_table.get(doc_id=id_player)
+            print(
+                f"|match: {match} | {player_dict['firstname']} {player_dict['lastname']} ".ljust(33), end='|')
+            id_player = self.rounds[nb_round].matches[match][1][0]
+            player_dict = players_table.get(doc_id=id_player)
+            print(
+                f" {player_dict['firstname']} {player_dict['lastname']}".ljust(15), end='|\n')
+            print(50 * "-")
+
     # display matches
     def display_round(self, nb_round, total_nb_matches):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        User = Query()
         for match in range(total_nb_matches):
-            print(self.rounds[nb_round].matches[match])
+            id_player = self.rounds[nb_round].matches[match][0][0]
+            player_dict = players_table.get(doc_id=id_player)
+            print(
+                f"{player_dict['firstname']} {player_dict['lastname']}: ".ljust(20), end=' ')
+            print(f'{self.rounds[nb_round].matches[match][0][1]}')
+
+            id_player = self.rounds[nb_round].matches[match][1][0]
+            player_dict = players_table.get(doc_id=id_player)
+            print(
+                f"{player_dict['firstname']} {player_dict['lastname']}: ".ljust(20), end=' ')
+            print(f'{self.rounds[nb_round].matches[match][1][1]}\n')
 
     # save scores for matches in Round 0
-
     def save_scores(self, nb_round, nb_matches):
         win = 1
         lose = 0

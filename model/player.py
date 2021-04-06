@@ -26,7 +26,8 @@ class Player(object):
         return "name: {:10} {:10} id: {}   ranking: {}   point: {}\n".format(self.firstname, self.lastname, self.id_player, self.ranking, self.point)
 
     def view_player(self):
-        return ("name: %s %s id: %s ranking: %s point: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.id_player).ljust(2), str(self.ranking).ljust(2), str(self.point).ljust(2)))
+        # return ("name: %s %s id: %s ranking: %s point: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.id_player).ljust(2), str(self.ranking).ljust(2), str(self.point).ljust(2)))
+        return ("name: %s %s birthdate: %s ranking: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.birthdate).ljust(2), str(self.ranking).ljust(2)))
 
     def display_player(self):
         return "|firstname: {:15} |lastname: {:10} |ranking: {}|".format(self.firstname, self.lastname, self.ranking)

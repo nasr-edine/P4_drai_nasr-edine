@@ -62,9 +62,12 @@ class Tour(object):
 
         score1 = 0
         score2 = 0
+        # print(f'player1: {players[id_player1].id_player}')
         list1 = [players[id_player1].id_player, score1]
         if round_nb == 0:
             players[id_player1].point = score1
+
+        # print(f'player2: {players[id_player2].id_player}')
 
         list2 = [players[id_player2].id_player, score2]
         if round_nb == 0:
@@ -78,16 +81,14 @@ class Tour(object):
         list_players = []
         for player in contest.players:
             list_players.append(player.id_player)
-        # print(f"list_players: {list_players}")
         i = 0
         for n in range(4):
             if round_nb == 0:
                 Tour.create_pair_matches(
-                    # list_players[n], list_players[n + 4], n, contest.players, contest, round_nb)
                     n, n + 4, n, contest.players, contest, round_nb)
             else:
+                print(contest.players)
                 Tour.create_pair_matches(
-                    # list_players[i], list_players[i + 1], n, contest.players, contest, round_nb)
                     i, i + 1, n, contest.players, contest, round_nb)
                 i += 2
 

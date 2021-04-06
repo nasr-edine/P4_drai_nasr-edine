@@ -3,7 +3,7 @@ import datetime
 import random
 import json
 import simpleFaker
-
+import os
 from tinydb import TinyDB, Query, where
 from faker import Faker
 
@@ -27,33 +27,43 @@ def showAll():
 def start():
 
     # create a player
-    # TODO: create a player and save it in db
     def add_player():
         # Create a list of players
-        print("Please enter informations about each player:\n")
+        print("Please enter informations about player:\n")
         players = ReadInformation.create_players()
-        print('list of players')
-        print(players)
-        input()
+
+        print(players[0].view_player())
+        print('Good, the player is added.')
+        input('Press any touch to continue.')
 
         ret = Player.serialization_players(players)
         Contest.save_players2(ret, players)
         # Sorting players list by ranking
         Player.sort_players_by_ranking(players)
-        print("Sorting players by ranking:\n")
-        print(players)
-        input()
 
     # create a contest
+
     def create_contest():
-        print("Please enter informations about new contest:\n")
+        print("Please enter id for each player, a number between 1 and 100:\n")
         players = []
         contest_list = ReadInformation.read_contest_information()
+        # print(f'contest list:\n{contest_list}')
         if not contest_list[0]:
             return None
         print(type(contest_list[5][0].birthdate))
         contest = Contest(contest_list[0], contest_list[1], contest_list[2],
                           contest_list[3], contest_list[4], contest_list[5])
+        print("Information about the contest:")
+        print(f"name:     {contest.name}")
+        print(f"date:     {contest.date}")
+        print(f"location: {contest.location}")
+        # print(f"round:    {contest.nb_round}")
+        print(f"comments: {contest.comments}")
+        print(f"players:")
+        for player in contest.players:
+            print(player.view_player())
+        input("\nType enter to continue...\n")
+        os.system('clear')
         # Create rounds
         nb_rounds = 4
         contest.create_rounds(nb_rounds)
@@ -61,39 +71,50 @@ def start():
         # Create matches
         nb_matches = 4
         contest.create_matches(nb_matches, nb_matches)
-        # serialize contest
-        # contest.serialization_contest()
-        # Save  contest in DataBase
-        # contest.save()
 
         current_round = 0
         for n in range(4):
             if current_round == 0:
                 # Generate all matches for first round
                 first_round = 0
-                print('creating first round:\n')
+                print('First round:')
                 contest.rounds[first_round].start_datetime = datetime.datetime.now()
                 contest.rounds[first_round].end_datetime = contest.rounds[first_round].start_datetime + \
                     datetime.timedelta(hours=1)
                 Tour.matches_generator(contest, first_round)
-                # display matches for first round
-                contest.display_round(first_round, nb_matches)
-                input()
 
-                # contest.serialization_contest()
-                # contest.save()
-
-                print("Please enter results for each matches in round 0")
-                print("type 1: Player 1 wins")
-                print("type 2: Player 2 wins")
+                contest.display_assignement_players(first_round, nb_matches)
+                input('\nType enter to continue...\n')
+                os.system('clear')
+                print("Fill in the scores")
+                print("type 1: First player wins")
+                print("type 2: Second player wins")
                 print("type 3: draw\n")
-                result_matches = [1, 2, 3, 1]
+                db = TinyDB('db.json', indent=4)
+                players_table = db.table('players')
+                result_matches = []
+                for n in range(4):
+                    print(f"match {n + 1}:")
+                    player1 = players_table.get(
+                        doc_id=contest.rounds[current_round].matches[n][0][0])
+                    player2 = players_table.get(
+                        doc_id=contest.rounds[current_round].matches[n][1][0])
+                    print(
+                        f"|1: {player1['firstname']} {player1['lastname']}".ljust(20), end='')
+                    print(
+                        f"|2: {player2['firstname']} {player2['lastname']}".ljust(20), "|")
+                    result_matches.append(ReadInformation.read_score())
+                    print('')
+                input('Type enter to continue...')
                 # save scores for all matches in first round
                 contest.save_scores2(first_round, nb_matches, result_matches)
-                print(f'results for round {first_round}')
+                print(30 * "-", f"Round {first_round + 1}", 30 * "-")
                 contest.display_round(first_round, nb_matches)
+                print(73 * "-")
                 input()
                 contest.players = Player.sort_players_by_point(contest.players)
+                print(contest.players)
+                input()
                 current_round += 1
             elif current_round < 4:
                 nb_round = current_round
@@ -102,8 +123,10 @@ def start():
                     datetime.timedelta(hours=1)
                 Tour.matches_generator(contest, nb_round)
 
-                print(f"Generate round: {nb_round}\n")
-                contest.display_round(nb_round, nb_matches)
+                print(30 * "-", f"Round {nb_round}", 30 * "-")
+                contest.display_assignement_players(nb_round, nb_matches)
+
+                print(73 * "-")
                 input()
                 print(
                     f"Please enter results for each matches in round {nb_round}")
@@ -113,7 +136,9 @@ def start():
                 result_matches = []
                 result_matches = [1, 2, 3, 1]
                 contest.save_scores2(nb_round, nb_matches, result_matches)
+                print(30 * "-", f"Round {nb_round}", 30 * "-")
                 contest.display_round(nb_round, nb_matches)
+                print(73 * "-")
                 input()
                 contest.players = Player.sort_players_by_point(contest.players)
                 current_round += 1
@@ -130,33 +155,22 @@ def start():
             players_table = db.table('players')
 
             for player in contest.players:
-                print(player)
+                # print(player)
                 player_dict = players_table.get(doc_id=player.id_player)
-                print(f"{player_dict['firstname']} {player_dict['lastname']}")
-                player.ranking = int(
-                    input('Enter the new ranking for player: '))
+                print(
+                    f"player: {player_dict['firstname']} {player_dict['lastname']} current ranking: {player_dict['ranking']}")
+
+                input_control = ReadInformation()
+                player.ranking = input_control.read_ranking()
+                print(
+                    f"The new ranking for player: {player_dict['firstname']} {player_dict['lastname']} is updated")
+                print(player.view_player())
                 players_table.update(
                     {'ranking': player.ranking}, doc_ids=[player.id_player])
-                input()
-            # id = int(input('Enter player Id: '))
-            # ret = players_table.contains(doc_id=id)
-            # if(ret == False):
-            #     print("You can")
-            # # elif id in players_ids:
-            #     # print("You can't to have the same player in the same contest")
-            # else:
-            #     players_ids.append(id)
-            #     player_dict = players_table.get(doc_id=id)
-                # print(
-                # f"the ranking for the player: {player_dict['firstname']} {player_dict['lastname']} has been updated.")
-            #     players_table.update({'ranking': ranking}, doc_ids=[id])
-            #     player = Player()
-            #     player.deserializing_player(player_dict)
-            #     print(player)
-            #     players_obj.append(player)
+                input("Type enter to continue...\n")
+                os.system('clear')
         update_ranking()
-        print(contest.players)
-        input()
+        # print(contest.players)
         return contest
     created_contest = 0
     contest_saved = 0
@@ -164,6 +178,7 @@ def start():
 
         view.print_menu()
         choice = input("Enter your choice [1-10]: ")
+        os.system('clear')
         if choice == '1':
             contest = create_contest()
             if not contest:
@@ -171,41 +186,33 @@ def start():
             created_contest = 1
             contest_saved = 0
         elif choice == '2':
-            # TODO: create a player and save it in database
             add_player()
         elif choice == '3':
-            # TODO: update a ranking player
-
             def update_ranking2():
-                # for player in players:
-                # print(f'player: {player.firstname} {player.lastname}')
-                # player.ranking = int(input('Update rank: '))
                 db = TinyDB('db.json', indent=4)
                 players_table = db.table('players')
-                # players_table.update(
-                # {'ranking': player.ranking}, doc_ids=[player.id_player])
                 # TODO: check is player exist in db
                 id = int(input('Enter player id: '))
-                # lastname = input('type player lastname: ')
                 User = Query()
-                # ret = players_table.contains(User.firstname.lower() ==
-                #                              firstname.lower() and User.lastname.lower() == lastname.lower())
                 ret = players_table.contains(doc_id=id)
                 if(ret == True):
-                    print("You can update this player")
+                    print("You can now update the player:", end=' ')
                     player_dict = players_table.get(doc_id=id)
-                    print('Information about player:')
                     print(
                         f"{player_dict['firstname']} {player_dict['lastname']}.")
                     player = Player()
                     player.deserializing_player(player_dict)
-                    print(player)
-                    ranking = int(input(
-                        'Enter a number to update ranking for this player: '))
-                    players_table.update({'ranking': ranking}, doc_ids=[id])
-                    # print(f'firstname: {}')
-                # elif id in players_ids:
-                    # print("You can't to have the same player in the same contest")
+
+                    input_control = ReadInformation()
+                    player.ranking = input_control.read_ranking()
+                    # print("ranking", player.ranking)
+                    print(
+                        f"The new ranking for player {player_dict['firstname']} {player_dict['lastname']} is updated")
+                    print(player.view_player())
+                    players_table.update(
+                        {'ranking': player.ranking}, doc_ids=[id])
+                    input('Type enter to continue...')
+                    os.system('clear')
                 else:
                     print("this player don't exist in db")
             update_ranking2()
@@ -224,7 +231,8 @@ def start():
             #         print('the contest has already been saved')
         elif choice == '4':
             if created_contest == 0:
-                print('there is no contest created')
+                print('there is no current contest')
+                input('Press any touch to continue.')
             else:
                 print(contest.players)
         elif choice == '10':
@@ -263,6 +271,7 @@ def start():
                 view.print_msg_error_1()
             else:
                 view.print_contests_list(contests_list)
+                input('Press any touch to continue.')
         elif choice == '8':
             contest_query = Contest()
             contest_name = input('Enter the contest name: ')
