@@ -31,7 +31,7 @@ class Contest(object):
     # Create a list of rounds
     def create_rounds(self, nb_rounds):
         for i in range(nb_rounds):
-            self.add_rounds(Tour('Round ' + str(i)))
+            self.add_rounds(Tour('Round ' + str(i + 1)))
 
     def create_matches(self, nb_rounds, nb_matches):
         for i in range(nb_matches):
@@ -184,6 +184,35 @@ class Contest(object):
         contests = Contest.get_contests_data()
         return contests
 
+    def display_scores_matches(self, nb_round, total_nb_matches, cond):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        User = Query()
+        print(f'Round {nb_round + 1}:\n')
+
+        if cond == 1:
+            print(f"start: {self.rounds[nb_round].start_datetime}\n")
+            print(f"end  : {self.rounds[nb_round].end_datetime}")
+        print()
+        print(65 * "-")
+        print(
+            f"| match{3 * ' '}| Player 1{11 * ' '}| Player 2{10 * ' '}| scores{5 * ' '}|")
+        print(65 * "-")
+        for match in range(total_nb_matches):
+            id_player = self.rounds[nb_round].matches[match][0][0]
+            score1 = self.rounds[nb_round].matches[match][0][1]
+            player_dict = players_table.get(doc_id=id_player)
+            print(
+                f"| {match + 1} {6 * ' '}| {player_dict['firstname']} {player_dict['lastname']} ".ljust(31), end='|')
+
+            id_player = self.rounds[nb_round].matches[match][1][0]
+            score2 = self.rounds[nb_round].matches[match][1][1]
+            player_dict = players_table.get(doc_id=id_player)
+            print(
+                f" {player_dict['firstname']} {player_dict['lastname']}".ljust(19), end='|')
+            print(f" {score1}".ljust(4),   f"- {score2}".ljust(6), "|")
+            print(65 * "-")
+
     def display_assignement_players(self, nb_round, total_nb_matches):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
@@ -193,7 +222,8 @@ class Contest(object):
             id_player = self.rounds[nb_round].matches[match][0][0]
             player_dict = players_table.get(doc_id=id_player)
             print(
-                f"|match: {match} | {player_dict['firstname']} {player_dict['lastname']} ".ljust(33), end='|')
+                f"|match: {match + 1} | {player_dict['firstname']} {player_dict['lastname']} ".ljust(33), end='|')
+
             id_player = self.rounds[nb_round].matches[match][1][0]
             player_dict = players_table.get(doc_id=id_player)
             print(

@@ -2,7 +2,6 @@ import random
 import datetime
 from tinydb import TinyDB, Query, where
 from faker import Faker
-
 # from controller.read_input import ReadInformation
 
 
@@ -27,6 +26,8 @@ class Player(object):
 
     def view_player(self):
         # return ("name: %s %s id: %s ranking: %s point: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.id_player).ljust(2), str(self.ranking).ljust(2), str(self.point).ljust(2)))
+        # print(f'+Player{10 * "-"}+{10 * "-"}+{10 * "-"}+')
+        # print("|name".ljust(16), "|birthdate".ljust(10), "|ranking|".ljust(10))
         return ("name: %s %s birthdate: %s ranking: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.birthdate).ljust(2), str(self.ranking).ljust(2)))
 
     def display_player(self):
@@ -34,6 +35,22 @@ class Player(object):
 
     def get_serialized_player(self):
         return self.serialized_player
+
+    # @ classmethod
+    # # create a player
+    # def add_player(self):
+    #     # Create a list of players
+    #     print("Please enter informations about player:\n")
+    #     players = ReadInformation.create_players()
+    #     os.system('clear')
+    #     print(players[0].view_player())
+    #     print('Good, the player is added.')
+    #     input('Press any touch to continue.')
+
+    #     ret = Player.serialization_players(players)
+    #     Contest.save_players2(ret, players)
+    #     # Sorting players list by ranking
+    #     Player.sort_players_by_ranking(players)
 
     @ classmethod
     def get_players_data(self):

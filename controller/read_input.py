@@ -96,7 +96,7 @@ class ReadInformation(object):
         while switch == 1:
             try:
                 result = float(
-                    input("Type 1, 2 or 3: "))
+                    input("Type a number: "))
                 if result >= 1 and result <= 3:
                     switch = 0
                 else:

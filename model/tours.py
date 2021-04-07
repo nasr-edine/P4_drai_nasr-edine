@@ -27,7 +27,7 @@ class Tour(object):
         for match in self.matches:
             # print(match)
             # string += f"|{9 * ' '}{match[0]} : {match[1]}{11 * ' '}|\n"
-            string += f"|match {match_nb}:{27 * ' '}|\n"
+            string += f"|match {match_nb+1}:{27 * ' '}|\n"
             match_nb += 1
             string += "|{}player id: {} score: {}{}|\n".format(
                 9 * ' ', match[0][0], match[0][1], 5 * ' ')
@@ -36,7 +36,7 @@ class Tour(object):
         return string
 
     def display_round(self):
-        return "|name   : {:25} |\n|{:35}|\n|start  : {:20}|\n|end    : {:24}|\n|matches:{:27}|\n{}|".format(
+        return "|name   : {:25} |\n\n|{:35}|\n\n|start  : {:20}|\n\n|end    : {:24}|\n\n|matches:{:27}|\n{}|".format(
             self.round_name, "", self.start_datetime, self.end_datetime, '', self.display_matches())
 
     def serialize_match(self):
@@ -57,7 +57,7 @@ class Tour(object):
 
     @ classmethod
     def create_pair_matches(self, id_player1, id_player2, nb_match, players, contest, round_nb):
-        faker = Faker()
+        # faker = Faker()
         list_matchs = []
 
         score1 = 0
@@ -87,7 +87,7 @@ class Tour(object):
                 Tour.create_pair_matches(
                     n, n + 4, n, contest.players, contest, round_nb)
             else:
-                print(contest.players)
+                # print(contest.players)
                 Tour.create_pair_matches(
                     i, i + 1, n, contest.players, contest, round_nb)
                 i += 2

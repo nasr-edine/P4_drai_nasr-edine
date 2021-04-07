@@ -1,9 +1,15 @@
 from model.player import Player
+import os
 
 
-def view_function():
-    print('beginning')
-    print('')
+def clear_screen():
+    input('\nType enter to continue...')
+    os.system('clear')
+
+
+def wrong_menu():
+    input("Wrong menu selection. Type enter to try again..")
+    os.system('clear')
 
 
 def print_menu():       # Your menu design here
@@ -69,12 +75,30 @@ def print_players_sorting_by_ranking(players):
     print(62 * "-", '\n')
 
 
+def infos_contest(contest):
+    print("Information about the contest:\n")
+    print(f"name:     {contest.name}\n")
+    print(f"date:     {contest.date}\n")
+    print(f"location: {contest.location}\n")
+    print(f"comments: {contest.comments}\n")
+    print(f"players:")
+    for player in contest.players:
+        print(player.view_player())
+
+
+def infos_round(round):
+    print(f"start: {round.start_datetime}")
+    print(f"end  : {round.end_datetime}")
+
+
 def print_rounds(rounds):
-    print(11 * "-", "ROUNDS LIST", 13 * "-")
+    # print(11 * "-", "ROUNDS LIST", 13 * "-")
     for round in rounds:
+        print(36 * "-",)
         print(round.display_round())
         print(36 * "-",)
-    print(36 * "-", '\n')
+        clear_screen()
+    # print(36 * "-", '\n')
 
 
 def print_matches(rounds):
