@@ -18,8 +18,25 @@ class Player(object):
         self.history_match = []
 
     def __str__(self):
-        # return "{self.firstname}, {self.lastname}, {self.birthdate}, {self.sex}, {self.ranking}".format(self=self)
-        return "|firstname: {:15} |laatname: {:10} |id: {}   |ranking: {}   |point: {}|".format(self.firstname, self.lastname, self.id_player, self.ranking, self.point)
+        string = ""
+        row = 81 * "-"
+        string += row + "\n"
+        b = "| firstname".ljust(20)
+        c = "| lastname".ljust(20)
+        d = "| birthdate".ljust(20)
+        e = "| ranking".ljust(20)
+        f = "|"
+        string += b + c + d + e + f
+        string += "\n" + row + "\n"
+
+        b = "| "+self.firstname.ljust(18)
+        c = "| "+self.lastname.ljust(18)
+        d = "| "+str(self.birthdate).ljust(18)
+        e = "| "+str(self.ranking).ljust(18)
+        f = "|"
+        string += b + c + d + e + f
+        string += "\n" + row + "\n"
+        return string
 
     def __repr__(self):
         return "name: {:10} {:10} id: {}   ranking: {}   point: {}\n".format(self.firstname, self.lastname, self.id_player, self.ranking, self.point)
@@ -36,6 +53,20 @@ class Player(object):
     def get_serialized_player(self):
         return self.serialized_player
 
+    def update_ranking2(self, id, ranking):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        print()
+        ret = players_table.contains(doc_id=id)
+        if(ret == True):
+            player_dict = players_table.get(doc_id=id)
+            self.deserializing_player(player_dict)
+            self.ranking = ranking
+            players_table.update(
+                {'ranking': self.ranking}, doc_ids=[id])
+            return 1
+        else:
+            return 0
     # @ classmethod
     # # create a player
     # def add_player(self):
@@ -112,7 +143,7 @@ class Player(object):
 
     @ classmethod
     def sort_players_by_name(self, players):
-        players.sort(key=lambda x: x.lastname)
+        players.sort(key=lambda x: x.lastname.lower())
         return (players)
 
     # @ classmethod

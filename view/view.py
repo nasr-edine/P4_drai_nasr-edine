@@ -13,21 +13,19 @@ def wrong_menu():
 
 
 def print_menu():       # Your menu design here
+    print()
     print(30 * "-", "MENU", 30 * "-")
-    print("1. Create a new contest")
-    print("2. Create a player")
-    # print("2. Save the current state of the contest ? ")
-    print("3. Update players ranking ?")
-    print("4. Display players statistics for current contest")
-    # print("4. Use manually entered custom conf file ")
-    print("5. Display contests")
-    print("6. Display all players")
-    print("7. Display players for a contest")
-    print("8. Display rounds for a contest")
-    print("9. Display matches for a contest")
-    print("10. Exit from the script ")
-
-    print(73 * "-")
+    print("| 1. Create a new contest".ljust(64), "|")
+    print("| 2. Create a player".ljust(64), "|")
+    print("| 3. Update players ranking".ljust(64), "|")
+    print("| 4. Display players statistics for current contest".ljust(64), "|")
+    print("| 5. Display contests".ljust(64), "|")
+    print("| 6. Display all players".ljust(64), "|")
+    print("| 7. Display players for a contest".ljust(64), "|")
+    print("| 8. Display rounds for a contest".ljust(64), "|")
+    print("| 9. Display matches for a contest".ljust(64), "|")
+    print("| 10. Exit from the script ".ljust(64), "|")
+    print(66 * "-", "\n")
 
 
 def print_menu_time_control():       # Your menu design here
@@ -52,27 +50,38 @@ def showAllView(list):
 
 def print_contests_list(contests):
     print()
-    print(12 * "-", "Contests list", 13 * "-")
+    # print(12 * "-", "Contests list", 13 * "-")
+    newline = "\n"
+    row = newline + 41 * "-" + newline
+    # string = row
+    string = "- Contest list " + 26 * "-"
+    string += newline
+    # string += row
+    # print(string)
+    a = f'| number'.ljust(15)
+    b = f'| name'.ljust(25)+'|'
+    string += a + b + row
+    # print(string)
     for contest in contests:
-        print(f'| number: {contest.get_id()} '.ljust(3),
-              f'| name: {contest.name}'.ljust(25), '|')
-    print(40 * "-", '\n')
+        c = f'| {contest.get_id()}'.ljust(15)
+        d = f'| {contest.name}'.ljust(25) + '|'
+        # print(f'| {contest.get_id()}'.ljust(15),
+        #   f'| {contest.name}'.ljust(25) + '|')
+        string += c + d + row
+    print(string)
+    # print(40 * "-", '\n')
 
 
 def print_players_sorting_by_name(players):
     Player.sort_players_by_name(players)
-    print(19 * "-", "PLAYERS SORTING BY NAME", 18 * "-")
-    for player in players:
-        print(player.display_player())
-    print(62 * "-", '\n')
+    print("PLAYERS SORTING BY NAME\n")
+    print_players_list(players)
 
 
 def print_players_sorting_by_ranking(players):
     Player.sort_players_by_ranking(players)
-    print(16 * "-", "PLAYERS SORTING BY RANKING", 18 * "-")
-    for player in players:
-        print(player.display_player())
-    print(62 * "-", '\n')
+    print("PLAYERS SORTING BY RANKING\n")
+    print_players_list(players)
 
 
 def infos_contest(contest):
@@ -82,13 +91,53 @@ def infos_contest(contest):
     print(f"location: {contest.location}\n")
     print(f"comments: {contest.comments}\n")
     print(f"players:")
-    for player in contest.players:
-        print(player.view_player())
+    print_players_list(contest.players)
+    # for player in contest.players:
+    # print(player.view_player())
 
 
 def infos_round(round):
     print(f"start: {round.start_datetime}")
     print(f"end  : {round.end_datetime}")
+
+
+def print_player_updated(player):
+    string = f"The new ranking for player {player.firstname} {player.lastname} is updated\n"
+    string += player.__str__()
+    print(string)
+
+
+def print_players_list(players):
+
+    # def list_players(players):
+    string = ""
+    row = 81 * "-"
+    string += row + "\n"
+    b = "| firstname".ljust(20)
+    c = "| lastname".ljust(20)
+    d = "| birthdate".ljust(20)
+    e = "| ranking".ljust(20)
+    f = "|"
+    string += b + c + d + e + f
+    string += "\n" + row + "\n"
+    for player in players:
+        b = "| "+player.firstname.ljust(18)
+        c = "| "+player.lastname.ljust(18)
+        d = "| "+str(player.birthdate).ljust(18)
+        e = "| "+str(player.ranking).ljust(18)
+        f = "|"
+        string += b + c + d + e + f
+        string += "\n" + row + "\n"
+    print(string)
+    # print(player.__str__())
+
+
+def print_msg_error_4():
+    print("this player don't exist in db")
+
+
+def print_msg_error_5():
+    print('there is no current contest')
 
 
 def print_rounds(rounds):

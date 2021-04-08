@@ -1,5 +1,6 @@
 import json
 import random
+import datetime
 
 from tinydb import TinyDB, Query, where
 
@@ -189,10 +190,15 @@ class Contest(object):
         players_table = db.table('players')
         User = Query()
         print(f'Round {nb_round + 1}:\n')
-
         if cond == 1:
-            print(f"start: {self.rounds[nb_round].start_datetime}\n")
-            print(f"end  : {self.rounds[nb_round].end_datetime}")
+            string = self.rounds[nb_round].start_datetime
+            date = datetime.datetime.strptime(string, "%Y-%m-%d  %H:%M:%S.%f")
+            print(
+                f"start: {date.year}/{date.month}/{date.day} {date.hour}:{date.minute}:{date.second}\n")
+            string = self.rounds[nb_round].end_datetime
+            date = datetime.datetime.strptime(string, "%Y-%m-%d  %H:%M:%S.%f")
+            print(
+                f"end  : {date.year}/{date.month}/{date.day} {date.hour}:{date.minute}:{date.second}\n")
         print()
         print(65 * "-")
         print(

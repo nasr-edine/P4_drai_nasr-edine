@@ -31,7 +31,12 @@ def start():
         print("Please enter informations about player:\n")
         players = ReadInformation.create_players()
         os.system('clear')
-        print(players[0].view_player())
+        # print(players[0].view_player())
+        print("New player:\n")
+        print(players[0].__str__())
+        # print(players[0].view_player())
+        # print(players[0].view_player())
+
         print('Good, the player is added.')
         view.clear_screen()
         ret = Player.serialization_players(players)
@@ -42,7 +47,6 @@ def start():
     # create a contest
     def create_contest():
         print("Please enter id for each player, a number between 1 and 100:\n")
-        # players = []
         contest_list = ReadInformation.read_contest_information()
         if not contest_list[0]:
             return None
@@ -143,7 +147,6 @@ def start():
                 current_round += 1
             else:
                 print('you have reached the maximum possible of round for a contest')
-        # print(contest.players)
         contest.serialization_contest()
         contest.save()
         players_ids = []
@@ -163,7 +166,8 @@ def start():
                 player.ranking = input_control.read_ranking()
                 print(
                     f"The new ranking for player: {player_dict['firstname']} {player_dict['lastname']} is updated")
-                print(player.view_player())
+                # print(player.view_player())
+                print(player.__str__())
                 print('\n')
                 players_table.update(
                     {'ranking': player.ranking}, doc_ids=[player.id_player])
@@ -186,39 +190,31 @@ def start():
         elif choice == '2':
             add_player()
         elif choice == '3':
-            def update_ranking2():
-                db = TinyDB('db.json', indent=4)
-                players_table = db.table('players')
-                # TODO: check is player exist in db
-                id = int(input('Enter player id: '))
-                User = Query()
-                ret = players_table.contains(doc_id=id)
-                if(ret == True):
-                    print("You can now update the player:", end=' ')
-                    player_dict = players_table.get(doc_id=id)
-                    print(
-                        f"{player_dict['firstname']} {player_dict['lastname']}.")
-                    player = Player()
-                    player.deserializing_player(player_dict)
-
-                    input_control = ReadInformation()
-                    player.ranking = input_control.read_ranking()
-                    print(
-                        f"The new ranking for player {player_dict['firstname']} {player_dict['lastname']} is updated")
-                    print(player.view_player())
-                    players_table.update(
-                        {'ranking': player.ranking}, doc_ids=[id])
-                    view.clear_screen()
-                else:
-                    print("this player don't exist in db")
-            update_ranking2()
+            input_control = ReadInformation()
+            id_player = input_control.read_id2()
+            ranking = input_control.read_ranking()
+            player = Player()
+            ret = player.update_ranking2(id_player, ranking)
+            if ret == 1:
+                view.print_player_updated(player)
+            else:
+                view.print_msg_error_4()
+            view.clear_screen()
         elif choice == '4':
             if created_contest == 0:
-                print('there is no current contest')
-                # input('Press any touch to continue.')
+                view.print_msg_error_5()
                 view.clear_screen()
             else:
-                print(contest.players)
+                view.print_players_list(contest.players)
+            view.clear_screen()
+        elif choice == '5':
+            # display contests list
+            contests_list = Contest.get_contests()
+            if not contests_list:
+                view.print_msg_error_1()
+            else:
+                view.print_contests_list(contests_list)
+                view.clear_screen()
         elif choice == '6':
             # display playersList
             players_list = Player.get_players()
@@ -233,6 +229,7 @@ def start():
             # display players list for a given contest
             contest_query = Contest()
             contest_name = input('Enter the contest name: ')
+            os.system('clear')
             if contest_query.get_players_contest(contest_name) == 0:
                 view.print_players_sorting_by_name(contest_query.players)
                 view.clear_screen()
@@ -240,32 +237,18 @@ def start():
                 view.clear_screen()
             else:
                 view.print_msg_error_2()
-        elif choice == '5':
-            # display contests list
-            contests_list = Contest.get_contests()
-            if not contests_list:
-                view.print_msg_error_1()
-            else:
-                view.print_contests_list(contests_list)
-                view.clear_screen()
         elif choice == '8':
             contest_query = Contest()
             contest_name = input('Enter the contest name: ')
             os.system('clear')
-
             if contest_query.get_players_contest(contest_name) == 0:
                 # display roundsList
-                # view.print_rounds(contest_query.rounds)
                 for round in range(4):
-                    # view.infos_round(contest_query.rounds[round])
                     contest_query.display_scores_matches(round, 4, 1)
                     view.clear_screen()
-                # view.clear_screen()
-
             else:
                 view.print_msg_error_2()
                 view.clear_screen()
-
         elif choice == '9':
             contest_query = Contest()
             contest_name = input('Enter the contest name: ')

@@ -65,14 +65,35 @@ class ReadInformation(object):
             try:
                 ranking = int(
                     input("Please enter ranking, a number between 1 and 100: "))
+                print()
                 if ranking >= 1 and ranking <= 100:
                     switch = 0
                 else:
                     print("Oops!  the number is not between 1 and 100.  Try again...")
+                    os.system('clear')
                     continue
             except ValueError:
                 print("Oops!  That was no valid number.  Try again...")
+                os.system('clear')
         return ranking
+
+    def read_id2(self):
+        switch = 1
+        while switch == 1:
+            try:
+                # os.system('clear')
+                id = int(
+                    input(f"Enter player id: "))
+                if id >= 1 and id <= 100:
+                    switch = 0
+                else:
+                    print("Oops!  the number is not between 1 and 100.  Try again...\n")
+                    # os.system('clear')
+                    continue
+            except ValueError:
+                print("Oops!  That was no valid number.  Try again...\n")
+                # os.system('clear')
+        return id
 
     @classmethod
     def read_id(self, number_player):
@@ -149,9 +170,13 @@ class ReadInformation(object):
 
             # Enter informations about a player
             firstname = read_input.read_name(1)
+            print()
             lastname = read_input.read_name(2)
+            print()
             birthdate = read_input.read_date(1)
+            print()
             sex = read_input.read_sex()
+            print()
             ranking = read_input.read_ranking()
 
             # create a fake list of 8 players
@@ -208,6 +233,7 @@ class ReadInformation(object):
         while len(players_ids) != 8:
             # id = int(input('Enter player Id: '))
             id = ReadInformation.read_id(len(players_ids))
+            # os.system('clear')
             ret = players_table.contains(doc_id=id)
             if(ret == False):
                 print(
