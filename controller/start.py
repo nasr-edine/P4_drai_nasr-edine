@@ -31,11 +31,8 @@ def start():
         print("Please enter informations about player:\n")
         players = ReadInformation.create_players()
         os.system('clear')
-        # print(players[0].view_player())
         print("New player:\n")
         print(players[0].__str__())
-        # print(players[0].view_player())
-        # print(players[0].view_player())
 
         print('Good, the player is added.')
         view.clear_screen()
@@ -46,7 +43,6 @@ def start():
 
     # create a contest
     def create_contest():
-        print("Please enter id for each player, a number between 1 and 100:\n")
         contest_list = ReadInformation.read_contest_information()
         if not contest_list[0]:
             return None

@@ -144,7 +144,9 @@ class ReadInformation(object):
                 name = input('Enter tournament name: ')
             else:
                 name = input('Enter the tournament location: ')
-            if not name.isalpha():
+            if not all(x.isalpha() or x.isspace() for x in name):
+
+                # if not name.isalpha():
                 print("Please enter characters A-Z only")
             elif len(name) > 40:
                 print("Error! Only 40 characters maximum allowed!")
@@ -155,9 +157,9 @@ class ReadInformation(object):
     def read_comments(self):
         switch = 1
         while switch == 1:
-            comments = input(
-                'Do you want to add any comments \
-                    (max:1000 characters): ')
+            comments = input('Do you want to add any comments'
+                             '(max: 1000 characters): ')
+            # = input(')
             if len(comments) > 1000:
                 print('Please try again the limit characters is 1000')
             else:
@@ -186,8 +188,6 @@ class ReadInformation(object):
             sex = read_input.read_sex()
             print()
             ranking = read_input.read_ranking()
-
-            # create a fake list of 8 players
             # profile = faker.simple_profile()
             # name = profile['name'].split()
             # firstname = name[0]
@@ -198,32 +198,32 @@ class ReadInformation(object):
             # Create an instance of a player
             player = Player(n, firstname, lastname,
                             birthdate, sex, ranking)
-            # serialize a player
-            # serialized_player = player.serialization_player()
-            # Add all serialized players in a list
             players.append(player)
         return(players)
 
     @ classmethod
     def read_contest_information(self):
-        # name = read_name(3)
-        # location = read_name(4)
-        # date = read_date(0)
-        # time_control = read_time_control()
-        # comments = read_comments()
+        read_input = ReadInformation()
+        name = read_input.read_name(3)
+        location = read_input.read_name(4)
+        date = read_input.read_date(0)
+        time_control = read_input.read_time_control()
+        comments = read_input.read_comments()
+        os.system('clear')
+        print("Please enter id for each player, a number between 1 and 100:\n")
 
         contest_list = []
         # Create a contest
         faker = Faker()
-        name = faker.name()
+        # name = faker.name()
         contest_list.append(name)
-        location = faker.address()
+        # location = faker.address()
         contest_list.append(location)
-        date = faker.date_of_birth()
+        # date = faker.date_of_birth()
         contest_list.append(date)
-        time_control = faker.random_int(1, 3)
+        # time_control = faker.random_int(1, 3)
         contest_list.append(time_control)
-        comments = faker.text()
+        # comments = faker.text()
         contest_list.append(comments)
 
         db = TinyDB('db.json', indent=4)
