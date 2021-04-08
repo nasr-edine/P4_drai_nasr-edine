@@ -94,11 +94,11 @@ def start():
                     player2 = players_table.get(
                         doc_id=contest.rounds[current_round].matches[n][1][0])
                     print(
-                        f"|1: {player1['firstname']} \
-                            {player1['lastname']}".ljust(20), end='')
+                        f"|1: {player1['firstname']} "
+                        f"{player1['lastname']}".ljust(20), end='')
                     print(
-                        f"|2: {player2['firstname']} \
-                            {player2['lastname']}".ljust(20), "|")
+                        f"|2: {player2['firstname']} "
+                        f"{player2['lastname']}".ljust(20), "|")
                     result_matches.append(ReadInformation.read_score())
                     print('')
                 view.clear_screen()
@@ -154,8 +154,8 @@ def start():
                 contest.players = Player.sort_players_by_point(contest.players)
                 current_round += 1
             else:
-                print('you have reached the maximum \
-                    possible of round for a contest')
+                print("you have reached the maximum "
+                      "possible of round for a contest")
         contest.serialization_contest()
         contest.save()
         # players_ids = []
@@ -169,16 +169,15 @@ def start():
                 # print(player)
                 player_dict = players_table.get(doc_id=player.id_player)
                 print(
-                    f"player: {player_dict['firstname']} \
-                        {player_dict['lastname']} current ranking: \
-                            {player_dict['ranking']}")
+                    f"player: {player_dict['firstname']} "
+                    f"{player_dict['lastname']} current ranking: "
+                    f"{player_dict['ranking']}")
 
                 input_control = ReadInformation()
                 player.ranking = input_control.read_ranking()
                 print(
-                    f"The new ranking for player: {player_dict['firstname']} \
-                        {player_dict['lastname']} is updated")
-                # print(player.view_player())
+                    f"The new ranking for player: {player_dict['firstname']} "
+                    f"{player_dict['lastname']} is updated")
                 print(player.__str__())
                 print('\n')
                 players_table.update(
@@ -187,7 +186,6 @@ def start():
         view.clear_screen()
         return contest
     created_contest = 0
-    # contest_saved = 0
     while True:
 
         view.print_menu()
@@ -198,7 +196,6 @@ def start():
             if not contest:
                 continue
             created_contest = 1
-            # contest_saved = 0
         elif choice == '2':
             add_player()
         elif choice == '3':

@@ -38,7 +38,8 @@ def print_menu_time_control():       # Your menu design here
 
 def showAllView(list):
     print("firstname".ljust(15), "|lastname".ljust(15),
-          " |birthdate".ljust(15), "  |sex".ljust(15), "   |ranking".ljust(15), "    |", sep='', end='\n\n')
+          " |birthdate".ljust(15), "  |sex".ljust(15),
+          "   |ranking".ljust(15), "    |", sep='', end='\n\n')
     for item in list:
         print(item.firstname.ljust(15), '|', sep='', end='')
         print(item.lastname.ljust(15), '|', sep='', end='')
@@ -58,8 +59,8 @@ def print_contests_list(contests):
     string += newline
     # string += row
     # print(string)
-    a = f'| number'.ljust(15)
-    b = f'| name'.ljust(25)+'|'
+    a = '| number'.ljust(15)
+    b = '| name'.ljust(25)+'|'
     string += a + b + row
     # print(string)
     for contest in contests:
@@ -90,7 +91,7 @@ def infos_contest(contest):
     print(f"date:     {contest.date}\n")
     print(f"location: {contest.location}\n")
     print(f"comments: {contest.comments}\n")
-    print(f"players:")
+    print("players:")
     print_players_list(contest.players)
     # for player in contest.players:
     # print(player.view_player())
@@ -102,7 +103,8 @@ def infos_round(round):
 
 
 def print_player_updated(player):
-    string = f"The new ranking for player {player.firstname} {player.lastname} is updated\n"
+    string = "The new ranking for player "\
+        f"{player.firstname} {player.lastname} is updated\n"
     string += player.__str__()
     print(string)
 
@@ -140,14 +142,14 @@ def print_msg_error_5():
     print('there is no current contest')
 
 
-def print_rounds(rounds):
-    # print(11 * "-", "ROUNDS LIST", 13 * "-")
-    for round in rounds:
-        print(36 * "-",)
-        print(round.display_round())
-        print(36 * "-",)
-        clear_screen()
-    # print(36 * "-", '\n')
+# def print_rounds(rounds):
+#     # print(11 * "-", "ROUNDS LIST", 13 * "-")
+#     for round in rounds:
+#         print(36 * "-",)
+#         print(round.display_round())
+#         print(36 * "-",)
+#         clear_screen()
+#     # print(36 * "-", '\n')
 
 
 def print_matches(rounds):

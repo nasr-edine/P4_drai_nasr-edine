@@ -1,12 +1,14 @@
-import random
+# import random
 import datetime
-from tinydb import TinyDB, Query, where
-from faker import Faker
+from tinydb import TinyDB
+# from faker import Faker
 # from controller.read_input import ReadInformation
 
 
 class Player(object):
-    def __init__(self, id_player=None, firstname=None, lastname=None, birthdate=None, sex=None, ranking=None, point=0):
+    def __init__(self, id_player=None, firstname=None,
+                 lastname=None, birthdate=None,
+                 sex=None, ranking=None, point=0):
         self.id_player = id_player
         self.firstname = firstname
         self.lastname = lastname
@@ -38,17 +40,26 @@ class Player(object):
         string += "\n" + row + "\n"
         return string
 
-    def __repr__(self):
-        return "name: {:10} {:10} id: {}   ranking: {}   point: {}\n".format(self.firstname, self.lastname, self.id_player, self.ranking, self.point)
+    # def __repr__(self):
+    #     return "name: {:10} {:10} id: {}   ranking: {}
+    # point: {}\n".format(self.firstname, self.lastname,
+    # self.id_player, self.ranking, self.point)
 
-    def view_player(self):
-        # return ("name: %s %s id: %s ranking: %s point: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.id_player).ljust(2), str(self.ranking).ljust(2), str(self.point).ljust(2)))
-        # print(f'+Player{10 * "-"}+{10 * "-"}+{10 * "-"}+')
-        # print("|name".ljust(16), "|birthdate".ljust(10), "|ranking|".ljust(10))
-        return ("name: %s %s birthdate: %s ranking: %s" % (self.lastname.ljust(10), self.firstname.ljust(10), str(self.birthdate).ljust(2), str(self.ranking).ljust(2)))
+    # def view_player(self):
+    #     # return ("name: %s %s id: %s ranking: %s point: %s" %
+    #     # (self.lastname.ljust(10), self.firstname.ljust(10),
+    #     # str(self.id_player).ljust(2),
+    #     # str(self.ranking).ljust(2), str(self.point).ljust(2)))
+    #     # print(f'+Player{10 * "-"}+{10 * "-"}+{10 * "-"}+')
+    #     # print("|name".ljust(16), "|birthdate".ljust(10),
+    #     # "|ranking|".ljust(10))
+    #     return ("name: %s %s birthdate: %s ranking: %s" %
+    # (self.lastname.ljust(10), self.firstname.ljust(10),
+    # str(self.birthdate).ljust(2), str(self.ranking).ljust(2)))
 
-    def display_player(self):
-        return "|firstname: {:15} |lastname: {:10} |ranking: {}|".format(self.firstname, self.lastname, self.ranking)
+    # def display_player(self):
+    #     return "|firstname: {:15} |lastname: {:10} |ranking: {}
+    # |".format(self.firstname, self.lastname, self.ranking)
 
     def get_serialized_player(self):
         return self.serialized_player
@@ -58,7 +69,7 @@ class Player(object):
         players_table = db.table('players')
         print()
         ret = players_table.contains(doc_id=id)
-        if(ret == True):
+        if ret is True:
             player_dict = players_table.get(doc_id=id)
             self.deserializing_player(player_dict)
             self.ranking = ranking

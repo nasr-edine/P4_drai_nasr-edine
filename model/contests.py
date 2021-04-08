@@ -1,16 +1,16 @@
-import json
+# import json
 import random
 import datetime
 
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB, where
 
 from model.tours import Tour
 from model.player import Player
 
 
 class Contest(object):
-    def __init__(self, name=None, location=None, date=None, time_control=None, comments=None, players=None, nb_turns=4):
-        # def __init__(self, name, location, date, time_control, comments, players, nb_turns=4):
+    def __init__(self, name=None, location=None, date=None,
+                 time_control=None, comments=None, players=None, nb_turns=4):
         self.name = name
         self.location = location
         self.date = date
@@ -20,11 +20,18 @@ class Contest(object):
         self.rounds = []
         self.players = players
 
-    def __str__(self):
-        return "name: {self.name}, \nlocation: {self.location}, \ndate: {self.date}, \nnb turns: {self.nb_turns}, \ntime control: {self.time_control}, \ncomments: {self.comments}, \nplayers: \n {self.players}".format(self=self)
+    # def __str__(self):
+    #     return "name: {self.name}, \nlocation: {self.location},
+    # \ndate: {self.date}, \nnb turns: {self.nb_turns},
+    # \ntime control: {self.time_control}, \ncomments:
+    # {self.comments}, \nplayers: \n
+    # {self.players}".format(self=self)
 
-    def __repr__(self):
-        return "name: {self.name},\nlocation: {self.location},\ndate: {self.date},\nnb turns: {self.nb_turns},\ntime control: {self.time_control},\ncomments: {self.comments},\nplayers:\n{self.players}\n\n".format(self=self)
+    # def __repr__(self):
+    #     return "name: {self.name},\nlocation:
+    # {self.location},\ndate: {self.date},\nnb turns:
+    # {self.nb_turns},\ntime control: {self.time_control},\ncomments:
+    # {self.comments},\nplayers:\n{self.players}\n\n".format(self=self)
 
     def add_rounds(self, round):
         self.rounds.append(round)
@@ -58,8 +65,8 @@ class Contest(object):
             'nb_turns': self.nb_turns,
             'time_control': self.time_control,
             'comments': self.comments,
-            # "rounds":   self.rounds.serialization_round(),
-            "rounds":   {round.round_name: round.serialization_round() for round in self.rounds},
+            "rounds":   {round.round_name:
+                         round.serialization_round() for round in self.rounds},
             'players': self.serialization_players()
         }
 
@@ -81,7 +88,8 @@ class Contest(object):
             players_table.update({'id_player': id}, doc_ids=[id])
             item['id_player'] = id
             for player in players:
-                if player.lastname == item['lastname'] and player.firstname == item['firstname']:
+                if player.lastname == item['lastname'] and \
+                        player.firstname == item['firstname']:
                     player.id_player = id
             n += 1
 
@@ -97,8 +105,8 @@ class Contest(object):
             players_table.update({'id_player': id}, doc_ids=[id])
             item['id_player'] = id
             for player in self.players:
-                # if player.lastname == item['lastname']:
-                if player.lastname == item['lastname'] and player.firstname == item['firstname']:
+                if player.lastname == item['lastname'] and \
+                        player.firstname == item['firstname']:
 
                     player.id_player = id
             n += 1
@@ -152,10 +160,10 @@ class Contest(object):
         self.deserializing_rounds(contest['rounds'])
         self.deserializing_players_list(contest['players'])
 
-    def get_contest(self, id):
-        db = TinyDB('db.json', indent=4)
-        contests_table = db.table('contests')
-        deserialize_contest = contests_table.get(doc_id=id)
+    # def get_contest(self, id):
+    #     db = TinyDB('db.json', indent=4)
+    #     contests_table = db.table('contests')
+    #     deserialize_contest = contests_table.get(doc_id=id)
 
     @ classmethod
     def get_contests_data(self):
@@ -188,70 +196,79 @@ class Contest(object):
     def display_scores_matches(self, nb_round, total_nb_matches, cond):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
-        User = Query()
+        # User = Query()
         print(f'Round {nb_round + 1}:\n')
         if cond == 1:
             string = self.rounds[nb_round].start_datetime
             date = datetime.datetime.strptime(string, "%Y-%m-%d  %H:%M:%S.%f")
             print(
-                f"start: {date.year}/{date.month}/{date.day} {date.hour}:{date.minute}:{date.second}\n")
+                f"start: {date.year}/{date.month}/{date.day} "
+                f"{date.hour}:{date.minute}:{date.second}\n")
             string = self.rounds[nb_round].end_datetime
             date = datetime.datetime.strptime(string, "%Y-%m-%d  %H:%M:%S.%f")
             print(
-                f"end  : {date.year}/{date.month}/{date.day} {date.hour}:{date.minute}:{date.second}\n")
+                f"end  : {date.year}/{date.month}/{date.day} "
+                f"{date.hour}:{date.minute}:{date.second}\n")
         print()
         print(65 * "-")
         print(
-            f"| match{3 * ' '}| Player 1{11 * ' '}| Player 2{10 * ' '}| scores{5 * ' '}|")
+            f"| match{3 * ' '}| Player 1{11 * ' '}| "
+            f"Player 2{10 * ' '}| scores{5 * ' '}|")
         print(65 * "-")
         for match in range(total_nb_matches):
             id_player = self.rounds[nb_round].matches[match][0][0]
             score1 = self.rounds[nb_round].matches[match][0][1]
             player_dict = players_table.get(doc_id=id_player)
             print(
-                f"| {match + 1} {6 * ' '}| {player_dict['firstname']} {player_dict['lastname']} ".ljust(31), end='|')
+                f"| {match + 1} {6 * ' '}| {player_dict['firstname']} "
+                f"{player_dict['lastname']} ".ljust(31), end='|')
 
             id_player = self.rounds[nb_round].matches[match][1][0]
             score2 = self.rounds[nb_round].matches[match][1][1]
             player_dict = players_table.get(doc_id=id_player)
             print(
-                f" {player_dict['firstname']} {player_dict['lastname']}".ljust(19), end='|')
+                f" {player_dict['firstname']} "
+                f"{player_dict['lastname']}".ljust(19), end='|')
             print(f" {score1}".ljust(4),   f"- {score2}".ljust(6), "|")
             print(65 * "-")
 
     def display_assignement_players(self, nb_round, total_nb_matches):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
-        User = Query()
+        # User = Query()
         print(50 * "-")
         for match in range(total_nb_matches):
             id_player = self.rounds[nb_round].matches[match][0][0]
             player_dict = players_table.get(doc_id=id_player)
             print(
-                f"|match: {match + 1} | {player_dict['firstname']} {player_dict['lastname']} ".ljust(33), end='|')
+                f"|match: {match + 1} | {player_dict['firstname']} "
+                f"{player_dict['lastname']} ".ljust(33), end='|')
 
             id_player = self.rounds[nb_round].matches[match][1][0]
             player_dict = players_table.get(doc_id=id_player)
             print(
-                f" {player_dict['firstname']} {player_dict['lastname']}".ljust(15), end='|\n')
+                f" {player_dict['firstname']} "
+                f"{player_dict['lastname']}".ljust(15), end='|\n')
             print(50 * "-")
 
     # display matches
     def display_round(self, nb_round, total_nb_matches):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
-        User = Query()
+        # User = Query()
         for match in range(total_nb_matches):
             id_player = self.rounds[nb_round].matches[match][0][0]
             player_dict = players_table.get(doc_id=id_player)
             print(
-                f"{player_dict['firstname']} {player_dict['lastname']}: ".ljust(20), end=' ')
+                f"{player_dict['firstname']} "
+                f"{player_dict['lastname']}: ".ljust(20), end=' ')
             print(f'{self.rounds[nb_round].matches[match][0][1]}')
 
             id_player = self.rounds[nb_round].matches[match][1][0]
             player_dict = players_table.get(doc_id=id_player)
             print(
-                f"{player_dict['firstname']} {player_dict['lastname']}: ".ljust(20), end=' ')
+                f"{player_dict['firstname']} "
+                f"{player_dict['lastname']}: ".ljust(20), end=' ')
             print(f'{self.rounds[nb_round].matches[match][1][1]}\n')
 
     # save scores for matches in Round 0
@@ -264,7 +281,8 @@ class Contest(object):
             score1 = random.choice([win, lose, draw])
             self.rounds[nb_round].matches[nb_match][0][1] = score1
             for x in self.players:
-                if x.id_player == self.rounds[nb_round].matches[nb_match][0][0]:
+                if x.id_player == \
+                        self.rounds[nb_round].matches[nb_match][0][0]:
                     if nb_round == 0:
                         x.point = score1
                     else:
@@ -279,7 +297,8 @@ class Contest(object):
             # attribute score for player 2
             self.rounds[nb_round].matches[nb_match][1][1] = score2
             for y in self.players:
-                if y.id_player == self.rounds[nb_round].matches[nb_match][1][0]:
+                if y.id_player == \
+                        self.rounds[nb_round].matches[nb_match][1][0]:
                     if nb_round == 0:
                         y.point = score2
                     else:
@@ -303,11 +322,12 @@ class Contest(object):
             else:
                 score1 = draw
                 score2 = draw
-            id_player1 = 0
-            id_player2 = 0
+            # id_player1 = 0
+            # id_player2 = 0
             self.rounds[nb_round].matches[nb_match][0][1] = score1
             for x in self.players:
-                if x.id_player == self.rounds[nb_round].matches[nb_match][0][0]:
+                if x.id_player == \
+                        self.rounds[nb_round].matches[nb_match][0][0]:
                     # player1 = x
                     # id_player1 = x.id_player
                     if nb_round == 0:
@@ -318,7 +338,8 @@ class Contest(object):
             # attribute score for player 2
             self.rounds[nb_round].matches[nb_match][1][1] = score2
             for y in self.players:
-                if y.id_player == self.rounds[nb_round].matches[nb_match][1][0]:
+                if y.id_player == \
+                        self.rounds[nb_round].matches[nb_match][1][0]:
                     # player2 = y
                     # id_player2 = y.id_player
                     if nb_round == 0:

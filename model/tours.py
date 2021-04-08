@@ -1,11 +1,6 @@
-from tinydb import TinyDB, Query
-from faker import Faker
-
-import numpy as np
-
-
 class Tour(object):
-    def __init__(self, round_name='Round X', start_datetime='0000-00-00', end_datetime='0000-00-00'):
+    def __init__(self, round_name='Round X',
+                 start_datetime='0000-00-00', end_datetime='0000-00-00'):
         self.round_name = round_name  # Round 1 - N
         self.matches = []
         self.start_datetime = start_datetime
@@ -14,12 +9,7 @@ class Tour(object):
     def add_matches(self, match):
         self.matches.append(match)
 
-    def __str__(self):
-        return 'round nb: {self.round_name} match: {self.matches}'.format(self=self)
     # Serialize a round
-
-    def print_matches(self):
-        return "{:10} {:10} {}\n".format(self.firstname, self.lastname, self.ranking)
 
     def display_matches(self):
         string = ""
@@ -35,13 +25,15 @@ class Tour(object):
                 9 * ' ', match[1][0], match[1][1], 5 * ' ')
         return string
 
-    def display_round(self):
-        return "|name   : {:25} |\n\n|{:35}|\n\n|start  : {:20}|\n\n|end    : {:24}|\n\n|matches:{:27}|\n{}|".format(
-            self.round_name, "", self.start_datetime, self.end_datetime, '', self.display_matches())
+    # def display_round(self):
+    #     return "|name   : {:25} |\n\n|{:35}|\n\n|start
+    # : {:20}\"|\n\n|end    : {:24}|\n\n|matches:{:27}|\n{}|".format(
+    #         self.round_name, "", self.start_datetime,
+    # self.end_datetime, '', self.display_matches())
 
     def serialize_match(self):
         pair = self.matches
-        n = 0
+        # n = 0
         serialized_match = {
             "match " + str(n): pair[n] for n in range(4)
         }
@@ -56,9 +48,10 @@ class Tour(object):
         return serialized_round
 
     @ classmethod
-    def create_pair_matches(self, id_player1, id_player2, nb_match, players, contest, round_nb):
+    def create_pair_matches(self, id_player1, id_player2,
+                            nb_match, players, contest, round_nb):
         # faker = Faker()
-        list_matchs = []
+        # list_matchs = []
 
         score1 = 0
         score2 = 0
@@ -93,7 +86,9 @@ class Tour(object):
                 i += 2
 
     # @ classmethod
-    # def create_pair_matches(self, id_player1, id_player2, nb_match, contest, round_nb, list_players, list_players_already_assigned):
+    # def create_pair_matches(self, id_player1, id_player2,
+    # nb_match, contest, round_nb, list_players,
+    # list_players_already_assigned):
     #     # faker = Faker()
     #     list_matchs = []
     #     first_round = 0
@@ -145,10 +140,13 @@ class Tour(object):
     #         if round_nb == first_round:
 
     #             ret_list = Tour.create_pair_matches(
-    #                 list_players[nb_player], list_players[nb_player + 4], nb_player, contest, round_nb, list_players, list_players_already_assigned)
+    #                 list_players[nb_player], list_players[nb_player + 4],
+    # nb_player, contest, round_nb, list_players,
+    # list_players_already_assigned)
     #             list_players_already_assigned += ret_list
     #         else:
     #             ret_list = Tour.create_pair_matches(
-    #                 list_players[i], list_players[i + 1], nb_player, contest, round_nb, list_players, list_players_already_assigned)
+    #                 list_players[i], list_players[i + 1], nb_player,
+    # contest, round_nb, list_players, list_players_already_assigned)
     #             list_players_already_assigned += ret_list
     #             i += 2

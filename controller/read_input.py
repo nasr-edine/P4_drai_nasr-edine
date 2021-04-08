@@ -1,15 +1,16 @@
-import re
+# import re
 import datetime
 import random
 import os
 from faker import Faker
 
-import json
+# import json
 
-import simpleFaker
-from tinydb import TinyDB, Query, where
+# import simpleFaker
+from tinydb import TinyDB
 
 # import view.view as view
+import view.view as view
 
 from model.player import Player
 # from model.contests import Contest
@@ -53,7 +54,8 @@ class ReadInformation(object):
                 if time_control >= 1 and time_control <= 3:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between 1 and 3.  Try again...")
+                    print("Oops!  the number is not between"
+                          "1 and 3.  Try again...")
                     continue
             except ValueError:
                 print("Oops!  That was no valid number.  Try again...")
@@ -64,12 +66,14 @@ class ReadInformation(object):
         while switch == 1:
             try:
                 ranking = int(
-                    input("Please enter ranking, a number between 1 and 100: "))
+                    input("Please enter ranking, "
+                          "a number between 1 and 100: "))
                 print()
                 if ranking >= 1 and ranking <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between 1 and 100.  Try again...")
+                    print("Oops!  the number is not "
+                          "between 1 and 100.  Try again...")
                     os.system('clear')
                     continue
             except ValueError:
@@ -83,11 +87,12 @@ class ReadInformation(object):
             try:
                 # os.system('clear')
                 id = int(
-                    input(f"Enter player id: "))
+                    input("Enter player id: "))
                 if id >= 1 and id <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between 1 and 100.  Try again...\n")
+                    print("Oops!  the number is not"
+                          "between 1 and 100.  Try again...\n")
                     # os.system('clear')
                     continue
             except ValueError:
@@ -105,7 +110,8 @@ class ReadInformation(object):
                 if id >= 1 and id <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between 1 and 100.  Try again...\n")
+                    print("Oops!  the number is not "
+                          "between 1 and 100.  Try again...\n")
                     continue
             except ValueError:
                 print("Oops!  That was no valid number.  Try again...\n")
@@ -121,7 +127,8 @@ class ReadInformation(object):
                 if result >= 1 and result <= 3:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between 1 and 3.  Try again...\n")
+                    print("Oops!  the number is not "
+                          "between 1 and 3.  Try again...\n")
                     continue
             except ValueError:
                 print("Oops!  That was no valid number.  Try again...\n")
@@ -149,7 +156,8 @@ class ReadInformation(object):
         switch = 1
         while switch == 1:
             comments = input(
-                'Do you want to add any comments \(max:1000 characters\): ')
+                'Do you want to add any comments \
+                    (max:1000 characters): ')
             if len(comments) > 1000:
                 print('Please try again the limit characters is 1000')
             else:
@@ -164,7 +172,7 @@ class ReadInformation(object):
         random_list = (list(range(1, 9)))
         random.shuffle(random_list)
 
-        faker = Faker()
+        # faker = Faker()
         # create rounds
         for n in range(0, 1):
 
@@ -191,7 +199,7 @@ class ReadInformation(object):
             player = Player(n, firstname, lastname,
                             birthdate, sex, ranking)
             # serialize a player
-            serialized_player = player.serialization_player()
+            # serialized_player = player.serialization_player()
             # Add all serialized players in a list
             players.append(player)
         return(players)
@@ -221,12 +229,10 @@ class ReadInformation(object):
         db = TinyDB('db.json', indent=4)
         players_table = db.table('players')
 
-        # print(type(players_table))
-        # print(len(players_table))
-        # print(players_table)
         if len(players_table) < 8:
             print(
-                "you cannot create a contest because there are not enough registered players")
+                "you cannot create a contest because "
+                "there are not enough registered players")
             return None,
         players_ids = []
         players_obj = []
@@ -235,16 +241,18 @@ class ReadInformation(object):
             id = ReadInformation.read_id(len(players_ids))
             # os.system('clear')
             ret = players_table.contains(doc_id=id)
-            if(ret == False):
+            if ret is False:
                 print(
-                    "this player doesn't exist in dataBase. Please, try another Id !\n")
+                    "this player doesn't exist in"
+                    "dataBase. Please, try another Id !\n")
             elif id in players_ids:
                 print("You have already saved this player for this contest\n")
             else:
                 players_ids.append(id)
                 player_dict = players_table.get(doc_id=id)
                 print(
-                    f"{player_dict['firstname']} {player_dict['lastname']} is added to contest.\n")
+                    f"{player_dict['firstname']}"
+                    f" {player_dict['lastname']} is added to contest.\n")
                 player = Player()
                 player.deserializing_player(player_dict)
                 players_obj.append(player)
