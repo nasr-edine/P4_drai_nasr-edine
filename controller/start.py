@@ -1,13 +1,13 @@
-import re
+# import re
 import datetime
-import random
-import json
-import simpleFaker
+# import random
+# import json
+# import simpleFaker
 import os
-from tinydb import TinyDB, Query, where
-from faker import Faker
+from tinydb import TinyDB
+# from faker import Faker
 
-import controller.start
+# import controller.start
 import view.view as view
 
 from model.player import Player
@@ -71,8 +71,10 @@ def start():
                 # Generate all matches for first round
                 first_round = 0
                 print(f'{print_round_nb[first_round]} round:\n')
-                contest.rounds[first_round].start_datetime = datetime.datetime.now()
-                contest.rounds[first_round].end_datetime = contest.rounds[first_round].start_datetime + \
+                contest.rounds[first_round].start_datetime = \
+                    datetime.datetime.now()
+                contest.rounds[first_round].end_datetime = \
+                    contest.rounds[first_round].start_datetime + \
                     datetime.timedelta(hours=1)
                 Tour.matches_generator(contest, first_round)
 
@@ -92,9 +94,11 @@ def start():
                     player2 = players_table.get(
                         doc_id=contest.rounds[current_round].matches[n][1][0])
                     print(
-                        f"|1: {player1['firstname']} {player1['lastname']}".ljust(20), end='')
+                        f"|1: {player1['firstname']} \
+                            {player1['lastname']}".ljust(20), end='')
                     print(
-                        f"|2: {player2['firstname']} {player2['lastname']}".ljust(20), "|")
+                        f"|2: {player2['firstname']} \
+                            {player2['lastname']}".ljust(20), "|")
                     result_matches.append(ReadInformation.read_score())
                     print('')
                 view.clear_screen()
@@ -108,8 +112,10 @@ def start():
                 current_round += 1
             elif current_round < 4:
                 nb_round = current_round
-                contest.rounds[nb_round].start_datetime = datetime.datetime.now()
-                contest.rounds[nb_round].end_datetime = contest.rounds[nb_round].start_datetime + \
+                contest.rounds[nb_round].start_datetime = \
+                    datetime.datetime.now()
+                contest.rounds[nb_round].end_datetime = \
+                    contest.rounds[nb_round].start_datetime + \
                     datetime.timedelta(hours=1)
                 Tour.matches_generator(contest, nb_round)
 
@@ -131,9 +137,11 @@ def start():
                     player2 = players_table.get(
                         doc_id=contest.rounds[current_round].matches[n][1][0])
                     print(
-                        f"|1: {player1['firstname']} {player1['lastname']}".ljust(20), end='')
+                        f"|1: {player1['firstname']} \
+                            {player1['lastname']}".ljust(20), end='')
                     print(
-                        f"|2: {player2['firstname']} {player2['lastname']}".ljust(20), "|")
+                        f"|2: {player2['firstname']} \
+                            {player2['lastname']}".ljust(20), "|")
                     result_matches.append(ReadInformation.read_score())
                     print('')
                 view.clear_screen()
@@ -146,11 +154,12 @@ def start():
                 contest.players = Player.sort_players_by_point(contest.players)
                 current_round += 1
             else:
-                print('you have reached the maximum possible of round for a contest')
+                print('you have reached the maximum \
+                    possible of round for a contest')
         contest.serialization_contest()
         contest.save()
-        players_ids = []
-        players_obj = []
+        # players_ids = []
+        # players_obj = []
 
         def update_ranking():
             db = TinyDB('db.json', indent=4)
@@ -160,12 +169,15 @@ def start():
                 # print(player)
                 player_dict = players_table.get(doc_id=player.id_player)
                 print(
-                    f"player: {player_dict['firstname']} {player_dict['lastname']} current ranking: {player_dict['ranking']}")
+                    f"player: {player_dict['firstname']} \
+                        {player_dict['lastname']} current ranking: \
+                            {player_dict['ranking']}")
 
                 input_control = ReadInformation()
                 player.ranking = input_control.read_ranking()
                 print(
-                    f"The new ranking for player: {player_dict['firstname']} {player_dict['lastname']} is updated")
+                    f"The new ranking for player: {player_dict['firstname']} \
+                        {player_dict['lastname']} is updated")
                 # print(player.view_player())
                 print(player.__str__())
                 print('\n')
@@ -175,7 +187,7 @@ def start():
         view.clear_screen()
         return contest
     created_contest = 0
-    contest_saved = 0
+    # contest_saved = 0
     while True:
 
         view.print_menu()
@@ -186,7 +198,7 @@ def start():
             if not contest:
                 continue
             created_contest = 1
-            contest_saved = 0
+            # contest_saved = 0
         elif choice == '2':
             add_player()
         elif choice == '3':
