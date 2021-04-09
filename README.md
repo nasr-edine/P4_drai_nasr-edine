@@ -44,6 +44,14 @@ python main.py
 
 ##### Consulting HTML reports of flake8 violations
 
+To generate flake8 report, type command below
+> :warning: **If you use this command**: exclude virtual environment from flake8
+
+```bash
+flake8 --format=html --htmldir=flake-report --exclude=env
+```
+
+
 * open flake-report/index.html file with your browser
  
 * click on the link below to consult the last report:
