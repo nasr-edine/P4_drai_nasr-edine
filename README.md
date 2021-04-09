@@ -44,9 +44,9 @@ python main.py
 
 ##### Consulting HTML reports of flake8 violations
 
-open flake-report/index.html file with your browser
-or 
-click on the link below to consult the last report:
+* open flake-report/index.html file with your browser
+ 
+* click on the link below to consult the last report:
 [Flake8 report](https://htmlpreview.github.io/?https://github.com/nasr-edine/P4_drai_nasr-edine/blob/master/flake-report/index.html)
 
 ##### In command line
