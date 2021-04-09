@@ -40,13 +40,16 @@ python main.py
     ├── requirements.txt           # for install all dependencies necessary for this project
     └── README.md
 
-## How to check style code ?
+### How to check style code ?
 
-### Consulting HTML reports of flake8 violations
-```bash
-open file flake-report/index.html with your browser
-```
-### In command line
+##### Consulting HTML reports of flake8 violations
+
+open flake-report/index.html file with your browser
+or 
+click on the link below to consult the last report:
+[Flake8 report](https://htmlpreview.github.io/?https://github.com/nasr-edine/P4_drai_nasr-edine/blob/master/flake-report/index.html)
+
+##### In command line
 ```bash 
 flake8 main.py controller model view 
 ```
