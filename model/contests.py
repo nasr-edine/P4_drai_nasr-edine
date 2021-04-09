@@ -95,21 +95,21 @@ class Contest(object):
 
     # Save players table in database
 
-    def save_players(self):
-        n = 0
-        db = TinyDB('db.json', indent=4)
-        players_table = db.table('players')
-        for item in self.serialized_contest['players']:
-            print(item)
-            id = players_table.insert(item)
-            players_table.update({'id_player': id}, doc_ids=[id])
-            item['id_player'] = id
-            for player in self.players:
-                if player.lastname == item['lastname'] and \
-                        player.firstname == item['firstname']:
+    # def save_players(self):
+    #     n = 0
+    #     db = TinyDB('db.json', indent=4)
+    #     players_table = db.table('players')
+    #     for item in self.serialized_contest['players']:
+    #         print(item)
+    #         id = players_table.insert(item)
+    #         players_table.update({'id_player': id}, doc_ids=[id])
+    #         item['id_player'] = id
+    #         for player in self.players:
+    #             if player.lastname == item['lastname'] and \
+    #                     player.firstname == item['firstname']:
 
-                    player.id_player = id
-            n += 1
+    #                 player.id_player = id
+    #         n += 1
 
     # Save a contest table in database
     def save(self):

@@ -7,7 +7,8 @@ import os
 # import json
 
 # import simpleFaker
-from tinydb import TinyDB
+# from tinydb import TinyDB
+from tinydb import TinyDB, Query
 
 # import view.view as view
 import view.view as view
@@ -171,9 +172,9 @@ class ReadInformation(object):
     def create_players(self):
         read_input = ReadInformation()
         players = []
-        random_list = []
-        random_list = (list(range(1, 9)))
-        random.shuffle(random_list)
+        # random_list = []
+        # random_list = (list(range(1, 9)))
+        # random.shuffle(random_list)
 
         # faker = Faker()
         # create rounds
@@ -189,6 +190,24 @@ class ReadInformation(object):
             sex = read_input.read_sex()
             print()
             ranking = read_input.read_ranking()
+
+            def contains_player(firstname, lastname, birthdate, sex):
+                db = TinyDB('db.json')
+                players_table = db.table('players')
+                User = Query()
+                ret = players_table.contains(User.lastname == lastname and
+                                             User.firstname == firstname and
+                                             User.birthdate == birthdate and
+                                             User.sex == sex)
+                # print(ret)
+                if ret is True:
+                    # input('test2')
+                    return None
+
+            ret = contains_player(firstname, lastname, birthdate, sex)
+            if not ret:
+                return None
+
             # profile = faker.simple_profile()
             # name = profile['name'].split()
             # firstname = name[0]

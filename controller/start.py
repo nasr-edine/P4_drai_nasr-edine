@@ -30,16 +30,31 @@ def start():
     def add_player():
         print("Please enter informations about player:\n")
         players = ReadInformation.create_players()
+        # print(type(players))
+        # print(players)
+        # print(players)
+        # print('test')
+        # input()
         os.system('clear')
-        print("New player:\n")
-        print(players[0].__str__())
 
-        print('Good, the player is added.')
-        view.clear_screen()
-        ret = Player.serialization_players(players)
-        Contest.save_players2(ret, players)
-        # Sorting players list by ranking
-        Player.sort_players_by_ranking(players)
+        if not players:
+            print('You cannot add this player because it is already registered\n')
+            view.clear_screen()
+            # input()
+            return
+
+        def add_player2():
+            # os.system('clear')
+            print("New player:\n")
+            print(players[0].__str__())
+
+            print('Good, the player is added.')
+            view.clear_screen()
+            ret = Player.serialization_players(players)
+            Contest.save_players2(ret, players)
+            # Sorting players list by ranking
+            Player.sort_players_by_ranking(players)
+        add_player2()
 
     # create a contest
     def create_contest():

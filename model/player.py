@@ -40,6 +40,21 @@ class Player(object):
         string += "\n" + row + "\n"
         return string
 
+        # def add_player2(self):
+        #     os.system('clear')
+        #     print("New player:\n")
+        #     print(self.__str__())
+
+        #     print('Good, the player is added.')
+        #     view.clear_screen()
+        #     serialized_player = self.serialization_player()
+        #     # ret = Player.serialization_players(players)
+        #     players = []
+        #     players.append()
+        #     Contest.save_players2(serialized_player, players)
+        #     # Sorting players list by ranking
+        #     # Player.sort_players_by_ranking(players)
+
     # def __repr__(self):
     #     return "name: {:10} {:10} id: {}   ranking: {}
     # point: {}\n".format(self.firstname, self.lastname,
