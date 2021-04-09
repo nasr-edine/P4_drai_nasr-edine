@@ -2,7 +2,7 @@
 import datetime
 import random
 import os
-from faker import Faker
+# from faker import Faker
 
 # import json
 
@@ -144,9 +144,10 @@ class ReadInformation(object):
                 name = input('Enter tournament name: ')
             else:
                 name = input('Enter the tournament location: ')
+            name = name.strip()
+            if not name:
+                print("Please enter at least 1 character")
             if not all(x.isalpha() or x.isspace() for x in name):
-
-                # if not name.isalpha():
                 print("Please enter characters A-Z only")
             elif len(name) > 40:
                 print("Error! Only 40 characters maximum allowed!")
@@ -214,7 +215,7 @@ class ReadInformation(object):
 
         contest_list = []
         # Create a contest
-        faker = Faker()
+        # faker = Faker()
         # name = faker.name()
         contest_list.append(name)
         # location = faker.address()
