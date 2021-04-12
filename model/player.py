@@ -1,6 +1,7 @@
 # import random
 import datetime
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
+
 # from faker import Faker
 # from controller.read_input import ReadInformation
 
@@ -76,6 +77,20 @@ class Player(object):
     #     return "|firstname: {:15} |lastname: {:10} |ranking: {}
     # |".format(self.firstname, self.lastname, self.ranking)
 
+    def contains_player(self):
+        db = TinyDB('db.json')
+        players = db.table('players')
+        User = Query()
+        birthdate = self.birthdate.strftime('%m/%d/%Y')
+        ret = players.contains((User.lastname == self.lastname.lower())
+                               & (User.firstname == self.firstname.lower())
+                               & (User.birthdate == birthdate)
+                               & (User.sex == self.sex.lower()))
+        if ret is True:
+            return True
+        else:
+            return False
+
     def get_serialized_player(self):
         return self.serialized_player
 
@@ -125,6 +140,17 @@ class Player(object):
         players = Player.get_players_data()
         return players
 
+    # @ classmethod
+    # def save_player(self, serialized_player):
+    def save_player(self):
+        serialized_player = self.serialization_player()
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        id = players_table.insert(serialized_player)
+        players_table.update({'id_player': id}, doc_ids=[id])
+        serialized_player['id_player'] = id
+        self.id_player = id
+
     @ classmethod
     def serialization_players(self, players):
         serialized_players = []
@@ -138,10 +164,10 @@ class Player(object):
     def serialization_player(self):
         self.serialized_player = {
             'id_player': self.id_player,
-            'firstname': self.firstname,
-            'lastname': self.lastname,
+            'firstname': self.firstname.lower(),
+            'lastname': self.lastname.lower(),
             'birthdate': self.birthdate.strftime('%d/%m/%Y'),
-            'sex': self.sex,
+            'sex': self.sex.lower(),
             'ranking': self.ranking,
             'point': self.point
         }

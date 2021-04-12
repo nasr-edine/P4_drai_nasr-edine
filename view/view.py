@@ -7,6 +7,10 @@ def clear_screen():
     os.system('clear')
 
 
+def clear_screen_without_msg():
+    os.system('clear')
+
+
 def wrong_menu():
     input("Wrong menu selection. Type enter to try again..")
     os.system('clear')
@@ -142,6 +146,11 @@ def print_msg_error_5():
     print('there is no current contest')
 
 
+def print_msg_error_6():
+    print('You cannot add this player because it is already registered\n')
+    clear_screen()
+
+
 # def print_rounds(rounds):
 #     # print(11 * "-", "ROUNDS LIST", 13 * "-")
 #     for round in rounds:
@@ -158,6 +167,17 @@ def print_matches(rounds):
         print(round.display_matches())
         print(36 * "-",)
     print(36 * "-", '\n')
+
+
+def infos_1():
+    print("Please enter informations about player:\n")
+
+
+def infos_2(player):
+    print("New player:\n")
+    print(player.__str__())
+    print('Good, the player is added.')
+    clear_screen()
 
 
 def print_msg_error_1():

@@ -94,7 +94,6 @@ class Contest(object):
             n += 1
 
     # Save players table in database
-
     # def save_players(self):
     #     n = 0
     #     db = TinyDB('db.json', indent=4)

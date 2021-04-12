@@ -44,7 +44,7 @@ class ReadInformation(object):
                 switch = 0
             else:
                 print('Unrecognized gender format, please try again\n')
-        return sex
+        return sex.lower()
 
     def read_time_control(self):
         switch = 1
@@ -139,12 +139,16 @@ class ReadInformation(object):
         while True:
             if type_name == 1:
                 name = input("Enter player firstname: ")
+                print()
             elif type_name == 2:
                 name = input('Enter player lastname: ')
+                print()
             elif type_name == 3:
                 name = input('Enter tournament name: ')
+                print()
             else:
-                name = input('Enter the tournament location: ')
+                name = input('Enter the contest location: ')
+                print()
             name = name.strip()
             if not name:
                 print("Please enter at least 1 character")
@@ -154,7 +158,7 @@ class ReadInformation(object):
                 print("Error! Only 40 characters maximum allowed!")
             else:
                 break
-        return name
+        return name.lower()
 
     def read_comments(self):
         switch = 1
@@ -168,58 +172,16 @@ class ReadInformation(object):
                 switch = 0
         return comments
 
-    @ classmethod
-    def create_players(self):
-        read_input = ReadInformation()
-        players = []
-        # random_list = []
-        # random_list = (list(range(1, 9)))
-        # random.shuffle(random_list)
-
-        # faker = Faker()
-        # create rounds
-        for n in range(0, 1):
-
-            # Enter informations about a player
-            firstname = read_input.read_name(1)
-            print()
-            lastname = read_input.read_name(2)
-            print()
-            birthdate = read_input.read_date(1)
-            print()
-            sex = read_input.read_sex()
-            print()
-            ranking = read_input.read_ranking()
-
-            def contains_player(firstname, lastname, birthdate, sex):
-                db = TinyDB('db.json')
-                players_table = db.table('players')
-                User = Query()
-                ret = players_table.contains(User.lastname == lastname and
-                                             User.firstname == firstname and
-                                             User.birthdate == birthdate and
-                                             User.sex == sex)
-                # print(ret)
-                if ret is True:
-                    # input('test2')
-                    return None
-
-            ret = contains_player(firstname, lastname, birthdate, sex)
-            if not ret:
-                return None
-
-            # profile = faker.simple_profile()
-            # name = profile['name'].split()
-            # firstname = name[0]
-            # lastname = name[1]
-            # birthdate = profile['birthdate']
-            # sex = profile['sex']
-            # ranking = random_list[n]
-            # Create an instance of a player
-            player = Player(n, firstname, lastname,
-                            birthdate, sex, ranking)
-            players.append(player)
-        return(players)
+    def check_input_player(self):
+        player = Player()
+        player.firstname = self.read_name(1)
+        player.lastname = self.read_name(2)
+        player.birthdate = self.read_date(1)
+        player.sex = self.read_sex()
+        player.ranking = self.read_ranking()
+        if player.contains_player() is True:
+            return None
+        return player
 
     @ classmethod
     def read_contest_information(self):

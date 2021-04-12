@@ -1,61 +1,28 @@
-# import re
 import datetime
-# import random
-# import json
-# import simpleFaker
 import os
+
 from tinydb import TinyDB
-# from faker import Faker
 
-# import controller.start
 import view.view as view
-
 from model.player import Player
 from model.contests import Contest
 from model.tours import Tour
 from controller.read_input import ReadInformation
 
 
-def showAll():
-    result = Player.getAll()
-    return view.showAllView(result)
-
-    result = Player.getAll2()
-    return view.showAllView(result)
+def add_new_player():
+    player_infos = ReadInformation()
+    view.infos_1()
+    player = player_infos.check_input_player()
+    view.clear_screen_without_msg()
+    if not player:
+        view.print_msg_error_6()
+        return
+    view.infos_2(player)
+    player.save_player()
 
 
 def start():
-
-    # create a player
-    def add_player():
-        print("Please enter informations about player:\n")
-        players = ReadInformation.create_players()
-        # print(type(players))
-        # print(players)
-        # print(players)
-        # print('test')
-        # input()
-        os.system('clear')
-
-        if not players:
-            print('You cannot add this player because it is already registered\n')
-            view.clear_screen()
-            # input()
-            return
-
-        def add_player2():
-            # os.system('clear')
-            print("New player:\n")
-            print(players[0].__str__())
-
-            print('Good, the player is added.')
-            view.clear_screen()
-            ret = Player.serialization_players(players)
-            Contest.save_players2(ret, players)
-            # Sorting players list by ranking
-            Player.sort_players_by_ranking(players)
-        add_player2()
-
     # create a contest
     def create_contest():
         contest_list = ReadInformation.read_contest_information()
@@ -169,8 +136,6 @@ def start():
                       "possible of round for a contest")
         contest.serialization_contest()
         contest.save()
-        # players_ids = []
-        # players_obj = []
 
         def update_ranking():
             db = TinyDB('db.json', indent=4)
@@ -208,7 +173,7 @@ def start():
                 continue
             created_contest = 1
         elif choice == '2':
-            add_player()
+            add_new_player()
         elif choice == '3':
             input_control = ReadInformation()
             id_player = input_control.read_id2()
