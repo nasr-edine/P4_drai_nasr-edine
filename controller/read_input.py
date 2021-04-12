@@ -1,6 +1,6 @@
 # import re
 import datetime
-import random
+# import random
 import os
 # from faker import Faker
 
@@ -8,7 +8,7 @@ import os
 
 # import simpleFaker
 # from tinydb import TinyDB
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 
 # import view.view as view
 import view.view as view
@@ -29,21 +29,25 @@ class ReadInformation(object):
             else:
                 date = input(
                     'Enter  contest date in  DD/MM/YEAR format: ')
+            date = date.strip()
             try:
                 date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
                 switch = 0
             except ValueError:
                 print('Unrecognized date format, please try again\n')
+                view.clear_screen()
         return date
 
     def read_sex(self):
         switch = 1
         while switch == 1:
             sex = (input('Enter your gender M or F: ')).upper()
+            sex = sex.strip()
             if sex == 'M' or sex == 'F':
                 switch = 0
             else:
                 print('Unrecognized gender format, please try again\n')
+                view.clear_screen()
         return sex.lower()
 
     def read_time_control(self):
@@ -75,11 +79,11 @@ class ReadInformation(object):
                 else:
                     print("Oops!  the number is not "
                           "between 1 and 100.  Try again...")
-                    os.system('clear')
+                    view.clear_screen()
                     continue
             except ValueError:
                 print("Oops!  That was no valid number.  Try again...")
-                os.system('clear')
+                view.clear_screen()
         return ranking
 
     def read_id2(self):
@@ -152,10 +156,13 @@ class ReadInformation(object):
             name = name.strip()
             if not name:
                 print("Please enter at least 1 character")
-            if not all(x.isalpha() or x.isspace() for x in name):
+                view.clear_screen()
+            elif not all(x.isalpha() for x in name):
                 print("Please enter characters A-Z only")
+                view.clear_screen()
             elif len(name) > 40:
                 print("Error! Only 40 characters maximum allowed!")
+                view.clear_screen()
             else:
                 break
         return name.lower()
