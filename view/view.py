@@ -180,6 +180,11 @@ def infos_2(player):
     clear_screen()
 
 
+def infos_3():
+    print("Please enter id for each player, a number between 1 and 100:\n")
+    clear_screen()
+
+
 def print_msg_error_1():
     print('there are none contests recorded !')
 
@@ -190,6 +195,58 @@ def print_msg_error_2():
 
 def print_msg_error_3():
     print("there are no players registered in the database.")
+
+
+def print_msg_error_7():
+    print('Unrecognized date format, please try again\n')
+    clear_screen()
+
+
+def print_msg_error_8():
+    print('Unrecognized gender format, please try again\n')
+    clear_screen()
+
+
+def print_msg_error_9():
+    print("Oops!  the number is not between"
+          " 1 and 3.  Try again...")
+    clear_screen()
+
+
+def print_msg_error_10():
+    print("Oops!  That was no valid number.  Try again...")
+    clear_screen()
+
+
+def print_msg_error_11():
+    print("Oops!  the number is not "
+          "between 1 and 100.  Try again...")
+    clear_screen()
+
+
+def print_msg_error_12():
+    print("Oops!  That was no valid number.  Try again...")
+    clear_screen()
+
+
+def print_msg_error_13():
+    print("Please enter at least 1 character")
+    clear_screen()
+
+
+def print_msg_error_14():
+    print("Please enter characters A-Z only")
+    clear_screen()
+
+
+def print_msg_error_15():
+    print("Error! Only 40 characters maximum allowed!")
+    clear_screen()
+
+
+def print_msg_error_15():
+    print('Please try again the limit characters is 1000')
+    clear_screen()
 
 
 def endView():

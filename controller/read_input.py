@@ -1,21 +1,11 @@
-# import re
 import datetime
-# import random
 import os
-# from faker import Faker
 
-# import json
-
-# import simpleFaker
-# from tinydb import TinyDB
 from tinydb import TinyDB
 
-# import view.view as view
 import view.view as view
 
 from model.player import Player
-# from model.contests import Contest
-# from model.tours import Tour
 
 
 class ReadInformation(object):
@@ -34,8 +24,7 @@ class ReadInformation(object):
                 date = datetime.datetime.strptime(date, '%d/%m/%Y').date()
                 switch = 0
             except ValueError:
-                print('Unrecognized date format, please try again\n')
-                view.clear_screen()
+                view.print_msg_error_7()
         return date
 
     def read_sex(self):
@@ -46,8 +35,7 @@ class ReadInformation(object):
             if sex == 'M' or sex == 'F':
                 switch = 0
             else:
-                print('Unrecognized gender format, please try again\n')
-                view.clear_screen()
+                view.print_msg_error_8()
         return sex.lower()
 
     def read_time_control(self):
@@ -59,11 +47,10 @@ class ReadInformation(object):
                 if time_control >= 1 and time_control <= 3:
                     switch = 0
                 else:
-                    print("Oops!  the number is not between"
-                          "1 and 3.  Try again...")
+                    view.print_msg_error_9()
                     continue
             except ValueError:
-                print("Oops!  That was no valid number.  Try again...")
+                view.print_msg_error_10()
         return time_control
 
     def read_ranking(self):
@@ -77,32 +64,25 @@ class ReadInformation(object):
                 if ranking >= 1 and ranking <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not "
-                          "between 1 and 100.  Try again...")
-                    view.clear_screen()
+                    view.print_msg_error_11()
                     continue
             except ValueError:
-                print("Oops!  That was no valid number.  Try again...")
-                view.clear_screen()
+                view.print_msg_error_12()
         return ranking
 
     def read_id2(self):
         switch = 1
         while switch == 1:
             try:
-                # os.system('clear')
                 id = int(
                     input("Enter player id: "))
                 if id >= 1 and id <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not"
-                          "between 1 and 100.  Try again...\n")
-                    # os.system('clear')
+                    view.print_msg_error_11()
                     continue
             except ValueError:
-                print("Oops!  That was no valid number.  Try again...\n")
-                # os.system('clear')
+                view.print_msg_error_12()
         return id
 
     @classmethod
@@ -115,11 +95,10 @@ class ReadInformation(object):
                 if id >= 1 and id <= 100:
                     switch = 0
                 else:
-                    print("Oops!  the number is not "
-                          "between 1 and 100.  Try again...\n")
+                    view.print_msg_error_11()
                     continue
             except ValueError:
-                print("Oops!  That was no valid number.  Try again...\n")
+                view.print_msg_error_12()
         return id
 
     @classmethod
@@ -132,11 +111,10 @@ class ReadInformation(object):
                 if result >= 1 and result <= 3:
                     switch = 0
                 else:
-                    print("Oops!  the number is not "
-                          "between 1 and 3.  Try again...\n")
+                    view.print_msg_error_9()
                     continue
             except ValueError:
-                print("Oops!  That was no valid number.  Try again...\n")
+                view.print_msg_error_12()
         return result
 
     def read_name(self, type_name):
@@ -155,14 +133,11 @@ class ReadInformation(object):
                 print()
             name = name.strip()
             if not name:
-                print("Please enter at least 1 character")
-                view.clear_screen()
+                view.print_msg_error_13()
             elif not all(x.isalpha() for x in name):
-                print("Please enter characters A-Z only")
-                view.clear_screen()
+                view.print_msg_error_14()
             elif len(name) > 40:
-                print("Error! Only 40 characters maximum allowed!")
-                view.clear_screen()
+                view.print_msg_error_15()
             else:
                 break
         return name.lower()
@@ -171,10 +146,10 @@ class ReadInformation(object):
         switch = 1
         while switch == 1:
             comments = input('Do you want to add any comments'
-                             '(max: 1000 characters): ')
+                             ' (max: 1000 characters): ')
             # = input(')
             if len(comments) > 1000:
-                print('Please try again the limit characters is 1000')
+                view.print_msg_error_16()
             else:
                 switch = 0
         return comments
@@ -198,21 +173,13 @@ class ReadInformation(object):
         date = read_input.read_date(0)
         time_control = read_input.read_time_control()
         comments = read_input.read_comments()
-        os.system('clear')
-        print("Please enter id for each player, a number between 1 and 100:\n")
-
+        view.clear_screen_without_msg()
+        view.infos_3()
         contest_list = []
-        # Create a contest
-        # faker = Faker()
-        # name = faker.name()
         contest_list.append(name)
-        # location = faker.address()
         contest_list.append(location)
-        # date = faker.date_of_birth()
         contest_list.append(date)
-        # time_control = faker.random_int(1, 3)
         contest_list.append(time_control)
-        # comments = faker.text()
         contest_list.append(comments)
 
         db = TinyDB('db.json', indent=4)
