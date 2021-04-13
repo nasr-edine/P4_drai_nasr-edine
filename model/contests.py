@@ -93,36 +93,10 @@ class Contest(object):
                     player.id_player = id
             n += 1
 
-    # Save players table in database
-    # def save_players(self):
-    #     n = 0
-    #     db = TinyDB('db.json', indent=4)
-    #     players_table = db.table('players')
-    #     for item in self.serialized_contest['players']:
-    #         print(item)
-    #         id = players_table.insert(item)
-    #         players_table.update({'id_player': id}, doc_ids=[id])
-    #         item['id_player'] = id
-    #         for player in self.players:
-    #             if player.lastname == item['lastname'] and \
-    #                     player.firstname == item['firstname']:
-
-    #                 player.id_player = id
-    #         n += 1
-
-    # Save a contest table in database
     def save(self):
         db = TinyDB('db.json', indent=4)
         contests_table = db.table('contests')
-        # contests_table.truncate()  # clear the table first
         contests_table.insert(self.serialized_contest)
-        # players_table = db.table('players')
-        # print(self.serialized_contest['players'][0])
-        # for item in self.serialized_contest['players']:
-        #     print(item)
-        #     # print(f"nb: {players_table.insert(item)}")
-        #     id = players_table.insert(item)
-        #     self.players
 
     def deserializing_players_list(self, players_dict):
         self.players = []
@@ -140,7 +114,6 @@ class Contest(object):
                 list2 = []
 
                 if not value2:
-                    # print('there are no match in this contest')
                     pass
                 else:
                     list1 = [value2[0][0], value2[0][1]]
@@ -158,11 +131,6 @@ class Contest(object):
         self.comments = contest['comments']
         self.deserializing_rounds(contest['rounds'])
         self.deserializing_players_list(contest['players'])
-
-    # def get_contest(self, id):
-    #     db = TinyDB('db.json', indent=4)
-    #     contests_table = db.table('contests')
-    #     deserialize_contest = contests_table.get(doc_id=id)
 
     @ classmethod
     def get_contests_data(self):
@@ -348,3 +316,12 @@ class Contest(object):
                     break
             # player1.history_match.append(id_player2)
             # player2.history_match.append(id_player1)
+
+    @ classmethod
+    def get_size_players_table(self):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        if len(players_table) < 8:
+            return None,
+        else:
+            return players_table

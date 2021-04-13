@@ -108,21 +108,6 @@ class Player(object):
             return 1
         else:
             return 0
-    # @ classmethod
-    # # create a player
-    # def add_player(self):
-    #     # Create a list of players
-    #     print("Please enter informations about player:\n")
-    #     players = ReadInformation.create_players()
-    #     os.system('clear')
-    #     print(players[0].view_player())
-    #     print('Good, the player is added.')
-    #     input('Press any touch to continue.')
-
-    #     ret = Player.serialization_players(players)
-    #     Contest.save_players2(ret, players)
-    #     # Sorting players list by ranking
-    #     Player.sort_players_by_ranking(players)
 
     @ classmethod
     def get_players_data(self):
@@ -141,7 +126,6 @@ class Player(object):
         return players
 
     # @ classmethod
-    # def save_player(self, serialized_player):
     def save_player(self):
         serialized_player = self.serialization_player()
         db = TinyDB('db.json', indent=4)
@@ -198,38 +182,12 @@ class Player(object):
         players.sort(key=lambda x: x.lastname.lower())
         return (players)
 
-    # @ classmethod
-    # def create_players(self):
-    #     read_input = ReadInformation()
-    #     players = []
-    #     random_list = []
-    #     random_list = (list(range(1, 9)))
-    #     random.shuffle(random_list)
+    @ classmethod
+    def player_exists(self, players_table, id):
+        return players_table.contains(doc_id=id)
 
-    #     faker = Faker()
-    #     # create rounds
-    #     for n in range(0, 8):
-
-    #         # Enter informations about a player
-    #         # firstname = read_input.read_name(1)
-    #         # lastname = read_input.read_name(2)
-    #         # birthdate = read_input.read_date(1)
-    #         # sex = read_input.read_sex()
-    #         # ranking = read_input.read_ranking()
-
-    #         # create a fake list of 8 players
-    #         profile = faker.simple_profile()
-    #         name = profile['name'].split()
-    #         firstname = name[0]
-    #         lastname = name[1]
-    #         birthdate = profile['birthdate']
-    #         sex = profile['sex']
-    #         ranking = random_list[n]
-    #         # Create an instance of a player
-    #         player = Player(n, firstname, lastname,
-    #                         birthdate, sex, ranking)
-    #         # serialize a player
-    #         serialized_player = player.serialization_player()
-    #         # Add all serialized players in a list
-    #         players.append(player)
-    #     return(players)
+    def get_player_from_id(self, id):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        player_dict = players_table.get(doc_id=id)
+        return player_dict

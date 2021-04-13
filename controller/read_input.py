@@ -1,11 +1,9 @@
 import datetime
-import os
-
-from tinydb import TinyDB
 
 import view.view as view
 
 from model.player import Player
+from model.contests import Contest
 
 
 class ReadInformation(object):
@@ -168,52 +166,36 @@ class ReadInformation(object):
     @ classmethod
     def read_contest_information(self):
         read_input = ReadInformation()
-        name = read_input.read_name(3)
-        location = read_input.read_name(4)
-        date = read_input.read_date(0)
-        time_control = read_input.read_time_control()
-        comments = read_input.read_comments()
-        view.clear_screen_without_msg()
-        view.infos_3()
         contest_list = []
-        contest_list.append(name)
-        contest_list.append(location)
-        contest_list.append(date)
-        contest_list.append(time_control)
-        contest_list.append(comments)
+        contest_list.append(read_input.read_name(3))
+        contest_list.append(read_input.read_name(4))
+        contest_list.append(read_input.read_date(0))
+        contest_list.append(read_input.read_time_control())
+        contest_list.append(read_input.read_comments())
+        view.clear_screen_without_msg()
 
-        db = TinyDB('db.json', indent=4)
-        players_table = db.table('players')
-
-        if len(players_table) < 8:
-            print(
-                "you cannot create a contest because "
-                "there are not enough registered players")
-            return None,
+        players_table = Contest.get_size_players_table()
+        if not players_table:
+            view.print_msg_error_17()
+            return None
+        view.infos_3()
         players_ids = []
         players_obj = []
         while len(players_ids) != 8:
-            # id = int(input('Enter player Id: '))
             id = ReadInformation.read_id(len(players_ids))
-            # os.system('clear')
-            ret = players_table.contains(doc_id=id)
+
+            ret = Player.player_exists(players_table, id)
             if ret is False:
-                print(
-                    "this player doesn't exist in"
-                    "dataBase. Please, try another Id !\n")
+                view.print_msg_error_18()
             elif id in players_ids:
-                print("You have already saved this player for this contest\n")
+                view.print_msg_error_19()
             else:
                 players_ids.append(id)
-                player_dict = players_table.get(doc_id=id)
-                print(
-                    f"{player_dict['firstname']}"
-                    f" {player_dict['lastname']} is added to contest.\n")
                 player = Player()
+                player_dict = player.get_player_from_id(id)
                 player.deserializing_player(player_dict)
+                view.infos_5(player)
                 players_obj.append(player)
-        print('The players are now full for this contest\n')
-        print('\nType enter to continue...')
-        os.system('clear')
+        view.infos_4()
         contest_list.append(players_obj)
         return contest_list

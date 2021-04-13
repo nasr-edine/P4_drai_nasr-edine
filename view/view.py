@@ -185,6 +185,18 @@ def infos_3():
     clear_screen()
 
 
+def infos_4():
+    print('The players are now full for this contest\n')
+    clear_screen()
+
+
+def infos_5(player):
+    print(
+        f"{player.firstname}"
+        f" {player.lastname} is added to contest.\n"
+    )
+
+
 def print_msg_error_1():
     print('there are none contests recorded !')
 
@@ -244,9 +256,25 @@ def print_msg_error_15():
     clear_screen()
 
 
-def print_msg_error_15():
+def print_msg_error_16():
     print('Please try again the limit characters is 1000')
     clear_screen()
+
+
+def print_msg_error_17():
+    print(
+        "you cannot create a contest because "
+        "there are not enough registered players")
+
+
+def print_msg_error_18():
+    print(
+        "this player doesn't exist in"
+        "dataBase. Please, try another Id !\n")
+
+
+def print_msg_error_19():
+    print("You have already saved this player for this contest\n")
 
 
 def endView():
