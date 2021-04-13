@@ -10,7 +10,7 @@ from model.tours import Tour
 from controller.read_input import ReadInformation
 
 
-def add_new_player():
+def choice_add_new_player():
     player_infos = ReadInformation()
     view.infos_1()
     player = player_infos.check_input_player()
@@ -22,9 +22,83 @@ def add_new_player():
     player.save_player()
 
 
+def choice_update_rank_player():
+    input_control = ReadInformation()
+    id_player = input_control.read_id2()
+    ranking = input_control.read_ranking()
+    player = Player()
+    ret = player.update_ranking2(id_player, ranking)
+    if ret == 1:
+        view.print_player_updated(player)
+    else:
+        view.print_msg_error_4()
+    view.clear_screen()
+
+
+def choice_display_contests():
+    # display contests list
+    contests_list = Contest.get_contests()
+    if not contests_list:
+        view.print_msg_error_1()
+    else:
+        view.print_contests_list(contests_list)
+        view.clear_screen()
+
+
+def choice_display_players():
+    players_list = Player.get_players()
+    if not players_list:
+        view.print_msg_error_3()
+    else:
+        view.print_players_sorting_by_name(players_list)
+        view.clear_screen()
+        view.print_players_sorting_by_ranking(players_list)
+        view.clear_screen()
+
+
+def choice_display_players_for_a_contest():
+    contest_query = Contest()
+    contest_name = input('Enter the contest name: ')
+    view.clear_screen_without_msg()
+    if contest_query.get_players_contest(contest_name) == 0:
+        view.print_players_sorting_by_name(contest_query.players)
+        view.clear_screen()
+        view.print_players_sorting_by_ranking(
+            contest_query.players)
+        view.clear_screen()
+    else:
+        view.print_msg_error_2()
+
+
+def choice_display_rounds():
+    contest_query = Contest()
+    contest_name = input('Enter the contest name: ')
+    view.clear_screen_without_msg()
+    if contest_query.get_players_contest(contest_name) == 0:
+        for round in range(4):
+            contest_query.display_scores_matches(round, 4, 1)
+            view.clear_screen()
+    else:
+        view.print_msg_error_2()
+        view.clear_screen()
+
+
+def choice_display_matches():
+    contest_query = Contest()
+    contest_name = input('Enter the contest name: ')
+    view.clear_screen_without_msg()
+    if contest_query.get_players_contest(contest_name) == 0:
+        for round in range(4):
+            contest_query.display_scores_matches(round, 4, 0)
+            view.clear_screen()
+    else:
+        view.print_msg_error_2()
+        view.clear_screen()
+
+
 def start():
     # create a contest
-    def create_contest():
+    def choice_add_new_contest():
         contest_list = ReadInformation.read_contest_information()
         if not contest_list[0]:
             return None
@@ -163,28 +237,18 @@ def start():
         return contest
     created_contest = 0
     while True:
-
         view.print_menu()
         choice = input("Enter your choice [1-10]: ")
-        os.system('clear')
+        view.clear_screen_without_msg()
         if choice == '1':
-            contest = create_contest()
+            contest = choice_add_new_contest()
             if not contest:
                 continue
             created_contest = 1
         elif choice == '2':
-            add_new_player()
+            choice_add_new_player()
         elif choice == '3':
-            input_control = ReadInformation()
-            id_player = input_control.read_id2()
-            ranking = input_control.read_ranking()
-            player = Player()
-            ret = player.update_ranking2(id_player, ranking)
-            if ret == 1:
-                view.print_player_updated(player)
-            else:
-                view.print_msg_error_4()
-            view.clear_screen()
+            choice_update_rank_player()
         elif choice == '4':
             if created_contest == 0:
                 view.print_msg_error_5()
@@ -193,61 +257,18 @@ def start():
                 view.print_players_list(contest.players)
             view.clear_screen()
         elif choice == '5':
-            # display contests list
-            contests_list = Contest.get_contests()
-            if not contests_list:
-                view.print_msg_error_1()
-            else:
-                view.print_contests_list(contests_list)
-                view.clear_screen()
+            choice_display_contests()
         elif choice == '6':
-            # display playersList
-            players_list = Player.get_players()
-            if not players_list:
-                view.print_msg_error_3()
-            else:
-                view.print_players_sorting_by_name(players_list)
-                view.clear_screen()
-                view.print_players_sorting_by_ranking(players_list)
-                view.clear_screen()
+            choice_display_players()
         elif choice == '7':
-            # display players list for a given contest
-            contest_query = Contest()
-            contest_name = input('Enter the contest name: ')
-            os.system('clear')
-            if contest_query.get_players_contest(contest_name) == 0:
-                view.print_players_sorting_by_name(contest_query.players)
-                view.clear_screen()
-                view.print_players_sorting_by_ranking(contest_query.players)
-                view.clear_screen()
-            else:
-                view.print_msg_error_2()
+            choice_display_players_for_a_contest()
         elif choice == '8':
-            contest_query = Contest()
-            contest_name = input('Enter the contest name: ')
-            os.system('clear')
-            if contest_query.get_players_contest(contest_name) == 0:
-                # display roundsList
-                for round in range(4):
-                    contest_query.display_scores_matches(round, 4, 1)
-                    view.clear_screen()
-            else:
-                view.print_msg_error_2()
-                view.clear_screen()
+            choice_display_rounds()
         elif choice == '9':
-            contest_query = Contest()
-            contest_name = input('Enter the contest name: ')
-            os.system('clear')
-            if contest_query.get_players_contest(contest_name) == 0:
-                for round in range(4):
-                    contest_query.display_scores_matches(round, 4, 0)
-                    view.clear_screen()
-            else:
-                view.print_msg_error_2()
-                view.clear_screen()
+            choice_display_matches()
         elif choice == '10':
             view.endView()
-            exit()
+
         else:
             view.wrong_menu()
 

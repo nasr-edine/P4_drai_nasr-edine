@@ -250,4 +250,4 @@ def print_msg_error_15():
 
 
 def endView():
-    print('end')
+    exit()
