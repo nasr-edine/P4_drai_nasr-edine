@@ -109,7 +109,6 @@ def start():
         # Create rounds
         nb_rounds = 4
         contest.create_rounds(nb_rounds)
-
         # Create matches
         nb_matches = 4
         contest.create_matches(nb_matches, nb_matches)
@@ -124,6 +123,7 @@ def start():
                 print(f'{print_round_nb[first_round]} round:\n')
                 contest.rounds[first_round].start_datetime = \
                     datetime.datetime.now()
+
                 contest.rounds[first_round].end_datetime = \
                     contest.rounds[first_round].start_datetime + \
                     datetime.timedelta(hours=1)
@@ -131,19 +131,20 @@ def start():
 
                 contest.display_assignement_players(first_round, nb_matches)
                 view.clear_screen()
-                print("Record the scores\n")
-                print("type 1: The first player wins the match")
-                print("type 2: The second player wins the match")
-                print("type 3: Draw\n")
+                view.infos_6()
+
+                # TODO refactor code
                 db = TinyDB('db.json', indent=4)
                 players_table = db.table('players')
                 result_matches = []
                 for n in range(4):
+
                     print(f"match {n + 1}:")
                     player1 = players_table.get(
                         doc_id=contest.rounds[current_round].matches[n][0][0])
                     player2 = players_table.get(
                         doc_id=contest.rounds[current_round].matches[n][1][0])
+
                     print(
                         f"|1: {player1['firstname']} "
                         f"{player1['lastname']}".ljust(20), end='')
@@ -173,11 +174,11 @@ def start():
                 print(f'{print_round_nb[current_round]} round:\n')
                 contest.display_assignement_players(nb_round, nb_matches)
                 view.clear_screen()
-                print("Record the scores\n")
-                print("type 1: The first player wins the match")
-                print("type 2: The second player wins the match")
-                print("type 3: Draw\n")
-
+                # print("Record the scores\n")
+                # print("type 1: The first player wins the match")
+                # print("type 2: The second player wins the match")
+                # print("type 3: Draw\n")
+                view.infos_6()
                 db = TinyDB('db.json', indent=4)
                 players_table = db.table('players')
                 result_matches = []
@@ -205,8 +206,7 @@ def start():
                 contest.players = Player.sort_players_by_point(contest.players)
                 current_round += 1
             else:
-                print("you have reached the maximum "
-                      "possible of round for a contest")
+                view.print_msg_error_20()
         contest.serialization_contest()
         contest.save()
 
@@ -234,6 +234,7 @@ def start():
         update_ranking()
         view.clear_screen()
         return contest
+
     created_contest = 0
     while True:
         view.print_menu()

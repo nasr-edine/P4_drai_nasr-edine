@@ -197,6 +197,13 @@ def infos_5(player):
     )
 
 
+def infos_6():
+    print("Record the scores\n")
+    print("type 1: The first player wins the match")
+    print("type 2: The second player wins the match")
+    print("type 3: Draw\n")
+
+
 def print_msg_error_1():
     print('there are none contests recorded !')
 
@@ -275,6 +282,11 @@ def print_msg_error_18():
 
 def print_msg_error_19():
     print("You have already saved this player for this contest\n")
+
+
+def print_msg_error_20():
+    print("you have reached the maximum "
+          "possible of round for a contest")
 
 
 def endView():
