@@ -57,9 +57,9 @@ class ReadInformation(object):
             try:
                 ranking = int(
                     input("Please enter ranking, "
-                          "a number between 1 and 100: "))
+                          "a number between 0 and 100: "))
                 print()
-                if ranking >= 1 and ranking <= 100:
+                if ranking >= 0 and ranking <= 100:
                     switch = 0
                 else:
                     view.print_msg_error_11()
@@ -168,8 +168,6 @@ class ReadInformation(object):
     @ classmethod
     def read_contest_information(self):
         players_table = Contest.get_size_players_table()
-        # print(type(players_table))
-        # print(players_table)
         if not players_table:
             view.print_msg_error_17()
             view.clear_screen()

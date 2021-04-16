@@ -120,9 +120,9 @@ def choice_add_new_contest():
         Tour.matches_generator(contest, current_round)
         contest.display_assignement_players(current_round, nb_matches)
         view.clear_screen()
-        view.infos_6()
         result_matches = []
         for n in range(4):
+            view.infos_6()
             view.infos_10(n)
             name_player_1 = Player.get_name_player(
                 contest.rounds[current_round].matches[n][0][0])
@@ -130,8 +130,7 @@ def choice_add_new_contest():
                 contest.rounds[current_round].matches[n][1][0])
             view.infos_11(name_player_1, name_player_2)
             result_matches.append(ReadInformation.read_score())
-            view.clear_screen()
-        view.clear_screen()
+            view.clear_screen_without_msg()
         contest.save_scores2(current_round, nb_matches, result_matches)
         view.display_round(contest, current_round, nb_matches)
         view.clear_screen()
@@ -140,10 +139,12 @@ def choice_add_new_contest():
     contest.serialization_contest()
     contest.save()
     for player in contest.players:
+        view.display_players(contest.players)
         view.infos_7(player)
         input_control = ReadInformation()
         player.ranking = input_control.read_ranking()
         player.update_ranking()
+        view.clear_screen_without_msg()
         view.infos_8()
         view.infos_7(player)
         view.clear_screen()

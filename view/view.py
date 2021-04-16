@@ -198,6 +198,35 @@ def infos_6():
     print("3: Draw\n")
 
 
+def display_players(players):
+    string = ""
+    row = 121 * "-"
+    string += row + "\n"
+    a = "| id player".ljust(20)
+    b = "| firstname".ljust(20)
+    c = "| lastname".ljust(20)
+    d = "| birthdate".ljust(20)
+    e = "| ranking".ljust(20)
+    f = "| point".ljust(20)
+    g = "|"
+    string += a + b + c + d + e + f + g
+    string += "\n" + row + "\n"
+    print(string, end='')
+    for player in players:
+        string = ""
+        a = "| "+str(player.id_player).ljust(18)
+        b = "| "+player.firstname.ljust(18)
+        c = "| "+player.lastname.ljust(18)
+        d = "| "+str(player.birthdate).ljust(18)
+        e = "| "+str(player.ranking).ljust(18)
+        f = "| "+str(player.point).ljust(18)
+        g = "|"
+        string += a + b + c + d + e + f + g
+        string += "\n" + row + "\n"
+        print(string, end='')
+    print()
+
+
 def infos_7(player):
     print(player.__str__())
 
