@@ -41,7 +41,7 @@ class ReadInformation(object):
         while switch == 1:
             try:
                 view.print_menu_time_control()
-                time_control = int(input())
+                time_control = int(input("tape a number: "))
                 if time_control >= 1 and time_control <= 3:
                     switch = 0
                 else:
@@ -89,7 +89,7 @@ class ReadInformation(object):
         while switch == 1:
             try:
                 id = int(
-                    input(f"Type id for player {number_player + 1}: "))
+                    input(f"Tape id number for player {number_player + 1}: "))
                 if id >= 1 and id <= 100:
                     switch = 0
                 else:
@@ -124,7 +124,7 @@ class ReadInformation(object):
                 name = input('Enter player lastname: ')
                 print()
             elif type_name == 3:
-                name = input('Enter tournament name: ')
+                name = input('Enter the contest name: ')
                 print()
             else:
                 name = input('Enter the contest location: ')
@@ -132,6 +132,8 @@ class ReadInformation(object):
             name = name.strip()
             if not name:
                 view.print_msg_error_13()
+            elif type_name == 3 or type_name == 4:
+                break
             elif not all(x.isalpha() for x in name):
                 view.print_msg_error_14()
             elif len(name) > 40:
@@ -165,6 +167,13 @@ class ReadInformation(object):
 
     @ classmethod
     def read_contest_information(self):
+        players_table = Contest.get_size_players_table()
+        # print(type(players_table))
+        # print(players_table)
+        if not players_table:
+            view.print_msg_error_17()
+            view.clear_screen()
+            return None
         read_input = ReadInformation()
         contest_list = []
         contest_list.append(read_input.read_name(3))
@@ -174,10 +183,6 @@ class ReadInformation(object):
         contest_list.append(read_input.read_comments())
         view.clear_screen_without_msg()
 
-        players_table = Contest.get_size_players_table()
-        if not players_table:
-            view.print_msg_error_17()
-            return None
         view.infos_3()
         players_ids = []
         players_obj = []

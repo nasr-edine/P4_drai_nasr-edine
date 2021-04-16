@@ -22,60 +22,26 @@ class Player(object):
 
     def __str__(self):
         string = ""
-        row = 81 * "-"
+        row = 101 * "-"
         string += row + "\n"
+        a = "| id player".ljust(20)
         b = "| firstname".ljust(20)
         c = "| lastname".ljust(20)
         d = "| birthdate".ljust(20)
         e = "| ranking".ljust(20)
         f = "|"
-        string += b + c + d + e + f
+        string += a + b + c + d + e + f
         string += "\n" + row + "\n"
 
+        a = "| "+str(self.id_player).ljust(18)
         b = "| "+self.firstname.ljust(18)
         c = "| "+self.lastname.ljust(18)
         d = "| "+str(self.birthdate).ljust(18)
         e = "| "+str(self.ranking).ljust(18)
         f = "|"
-        string += b + c + d + e + f
+        string += a + b + c + d + e + f
         string += "\n" + row + "\n"
         return string
-
-        # def add_player2(self):
-        #     os.system('clear')
-        #     print("New player:\n")
-        #     print(self.__str__())
-
-        #     print('Good, the player is added.')
-        #     view.clear_screen()
-        #     serialized_player = self.serialization_player()
-        #     # ret = Player.serialization_players(players)
-        #     players = []
-        #     players.append()
-        #     Contest.save_players2(serialized_player, players)
-        #     # Sorting players list by ranking
-        #     # Player.sort_players_by_ranking(players)
-
-    # def __repr__(self):
-    #     return "name: {:10} {:10} id: {}   ranking: {}
-    # point: {}\n".format(self.firstname, self.lastname,
-    # self.id_player, self.ranking, self.point)
-
-    # def view_player(self):
-    #     # return ("name: %s %s id: %s ranking: %s point: %s" %
-    #     # (self.lastname.ljust(10), self.firstname.ljust(10),
-    #     # str(self.id_player).ljust(2),
-    #     # str(self.ranking).ljust(2), str(self.point).ljust(2)))
-    #     # print(f'+Player{10 * "-"}+{10 * "-"}+{10 * "-"}+')
-    #     # print("|name".ljust(16), "|birthdate".ljust(10),
-    #     # "|ranking|".ljust(10))
-    #     return ("name: %s %s birthdate: %s ranking: %s" %
-    # (self.lastname.ljust(10), self.firstname.ljust(10),
-    # str(self.birthdate).ljust(2), str(self.ranking).ljust(2)))
-
-    # def display_player(self):
-    #     return "|firstname: {:15} |lastname: {:10} |ranking: {}
-    # |".format(self.firstname, self.lastname, self.ranking)
 
     def contains_player(self):
         db = TinyDB('db.json')
@@ -93,6 +59,12 @@ class Player(object):
 
     def get_serialized_player(self):
         return self.serialized_player
+
+    def update_ranking(self):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        players_table.update(
+            {'ranking': self.ranking}, doc_ids=[self.id_player])
 
     def update_ranking2(self, id, ranking):
         db = TinyDB('db.json', indent=4)
@@ -118,6 +90,7 @@ class Player(object):
             player = Player()
             player.deserializing_player(item)
             players.append(player)
+        # print("len: ", len(players))
         return players
 
     @ classmethod
@@ -141,9 +114,22 @@ class Player(object):
         for player in players:
             # serialize a player
             serialized_player = player.serialization_player()
+            # serialized_player = player.serialization_player2()
             # Add all serialized players in a list
             serialized_players.append(serialized_player)
         return serialized_players
+
+    def serialization_player2(self):
+        self.serialized_player = {
+            'id_player': self.id_player,
+            # 'firstname': self.firstname.lower(),
+            # 'lastname': self.lastname.lower(),
+            # 'birthdate': self.birthdate.strftime('%d/%m/%Y'),
+            # 'sex': self.sex.lower(),
+            # 'ranking': self.ranking,
+            # 'point': self.point
+        }
+        return self.serialized_player
 
     def serialization_player(self):
         self.serialized_player = {
@@ -191,3 +177,10 @@ class Player(object):
         players_table = db.table('players')
         player_dict = players_table.get(doc_id=id)
         return player_dict
+
+    @ classmethod
+    def get_name_player(self, id):
+        db = TinyDB('db.json', indent=4)
+        players_table = db.table('players')
+        player = players_table.get(doc_id=id)
+        return player['firstname'] + " " + player['lastname']
