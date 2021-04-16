@@ -25,12 +25,6 @@ class Tour(object):
                 9 * ' ', match[1][0], match[1][1], 5 * ' ')
         return string
 
-    # def display_round(self):
-    #     return "|name   : {:25} |\n\n|{:35}|\n\n|start
-    # : {:20}\"|\n\n|end    : {:24}|\n\n|matches:{:27}|\n{}|".format(
-    #         self.round_name, "", self.start_datetime,
-    # self.end_datetime, '', self.display_matches())
-
     def serialize_match(self):
         pair = self.matches
         # n = 0

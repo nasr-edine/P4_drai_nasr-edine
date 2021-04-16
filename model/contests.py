@@ -90,14 +90,11 @@ class Contest(object):
 
         # TODO update rank and point in players table
         for player in self.players:
-            ret = players_table.update_multiple([
-                # ({'firstname': firstname}, where('id_player') == id_player),
-                # ({'lastname': lastname}, where('id_player') == id_player),
-                # ({'birthdate': birthdate}, where('id_player') == id_player),
-                # ({'sex': sex}, where('id_player') == id_player),
+            players_table.update_multiple([
                 ({'ranking': player.ranking}, where(
                     'id_player') == player.id_player),
-                ({'point': player.point}, where('id_player') == player.id_player),
+                ({'point': player.point},
+                    where('id_player') == player.id_player),
             ])
 
     def deserializing_players_list(self, players_dict):
@@ -105,11 +102,7 @@ class Contest(object):
         player_table = db.table('players')
         self.players = []
         for player_item in players_dict:
-            # print(player_item)
-            # print(player_item['id_player'])
             player_dict = player_table.get(doc_id=player_item['id_player'])
-            # print(f"test:[{player_dict}]")
-            # input()
             player = Player()
             player.deserializing_player(player_dict)
             self.players.append(player)
@@ -228,36 +221,6 @@ class Contest(object):
                 f"{player_dict['lastname']}".ljust(15), end='|\n')
             print(50 * "-")
 
-    # display matches
-    def display_round(self, nb_round, total_nb_matches):
-        # db = TinyDB('db.json', indent=4)
-        # players_table = db.table('players')
-        for match in range(total_nb_matches):
-            id_player = self.rounds[nb_round].matches[match][0][0]
-            # contest.players
-
-            value = [x for x in self.players if x.id_player == id_player]
-            print(
-                f"player 1: {value[0].firstname} {value[0].lastname}: {self.rounds[nb_round].matches[match][0][1]}")
-            # print(f"value: {value}")
-            # player_dict = players_table.get(doc_id=id_player)
-            # print(
-            #     f"{player_dict['firstname']} "
-            #     f"{player_dict['lastname']}: ".ljust(20), end=' ')
-            # print(f'{self.rounds[nb_round].matches[match][0][1]}')
-
-            id_player = self.rounds[nb_round].matches[match][1][0]
-            value = [x for x in self.players if x.id_player == id_player]
-            print(
-                f"player 2: {value[0].firstname} {value[0].lastname}: {self.rounds[nb_round].matches[match][1][1]}")
-
-            # player_dict = players_table.get(doc_id=id_player)
-            # print(
-            #     f"{player_dict['firstname']} "
-            #     f"{player_dict['lastname']}: ".ljust(20), end=' ')
-            # print(f'{self.rounds[nb_round].matches[match][1][1]}\n')
-
-    # save scores for matches in Round 0
     def save_scores(self, nb_round, nb_matches):
         win = 1
         lose = 0

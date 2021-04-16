@@ -267,14 +267,17 @@ def display_round(contest, nb_round, total_nb_matches):
 
 def print_msg_error_1():
     print('there are none contests recorded !')
+    clear_screen()
 
 
 def print_msg_error_2():
     print("this contest name don't exists. Try again...")
+    clear_screen()
 
 
 def print_msg_error_3():
     print("there are no players registered in the database.")
+    clear_screen()
 
 
 def print_msg_error_7():
