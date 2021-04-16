@@ -89,7 +89,7 @@ class ReadInformation(object):
         while switch == 1:
             try:
                 id = int(
-                    input(f"Tape id number for player {number_player + 1}: "))
+                    input(f"Type the player id {number_player + 1}: "))
                 if id >= 1 and id <= 100:
                     switch = 0
                 else:
@@ -184,9 +184,16 @@ class ReadInformation(object):
         view.infos_3()
         players_ids = []
         players_obj = []
-        while len(players_ids) != 8:
-            id = ReadInformation.read_id(len(players_ids))
 
+        players = []
+        for player_item in players_table:
+            player = Player()
+            player.deserializing_player(player_item)
+            players.append(player)
+
+        while len(players_ids) != 8:
+            view.display_players(players)
+            id = ReadInformation.read_id(len(players_ids))
             ret = Player.player_exists(players_table, id)
             if ret is False:
                 view.print_msg_error_18()
@@ -199,6 +206,7 @@ class ReadInformation(object):
                 player.deserializing_player(player_dict)
                 view.infos_5(player)
                 players_obj.append(player)
+            view.clear_screen()
         view.infos_4()
         contest_list.append(players_obj)
         return contest_list
