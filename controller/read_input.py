@@ -163,7 +163,8 @@ class ReadInformation(object):
         player.ranking = self.read_ranking()
         if player.contains_player() is True:
             return None
-        return player
+        else:
+            return player
 
     @ classmethod
     def read_contest_information(self):

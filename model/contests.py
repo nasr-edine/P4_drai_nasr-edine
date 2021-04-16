@@ -84,11 +84,8 @@ class Contest(object):
     def save(self):
         db = TinyDB('db.json', indent=4)
         contests_table = db.table('contests')
-        players_table = db.table('players')
         contests_table.insert(self.serialized_contest)
-        # TODO insert id_player in contests table
-
-        # TODO update rank and point in players table
+        players_table = db.table('players')
         for player in self.players:
             players_table.update_multiple([
                 ({'ranking': player.ranking}, where(

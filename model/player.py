@@ -1,9 +1,5 @@
-# import random
 import datetime
-from tinydb import TinyDB, Query
-
-# from faker import Faker
-# from controller.read_input import ReadInformation
+from tinydb import TinyDB, Query, where
 
 
 class Player(object):
@@ -47,13 +43,16 @@ class Player(object):
         db = TinyDB('db.json')
         players = db.table('players')
         User = Query()
-        birthdate = self.birthdate.strftime('%m/%d/%Y')
-        ret = players.contains((User.lastname == self.lastname.lower())
-                               & (User.firstname == self.firstname.lower())
-                               & (User.birthdate == birthdate)
-                               & (User.sex == self.sex.lower()))
+        birthdate = self.birthdate.strftime('%d/%m/%Y')
+        ret = players.contains((User.lastname == self.lastname.lower()))
+        player_dict = players.search(
+            where('lastname') == self.lastname.lower())
         if ret is True:
-            return True
+            for player_item in player_dict:
+                if player_item['firstname'] == self.firstname.lower() \
+                    and player_item['sex'] == self.sex.lower() and \
+                        player_item['birthdate'] == birthdate:
+                    return True
         else:
             return False
 
