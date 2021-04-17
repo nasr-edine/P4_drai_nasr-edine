@@ -81,6 +81,20 @@ class Contest(object):
                     player.id_player = id
             n += 1
 
+    def update_contest(self):
+        db = TinyDB('db.json', indent=4)
+        contests_table = db.table('contests')
+        contests_table.update(self.serialized_contest,
+                              where('name') == self.name)
+        players_table = db.table('players')
+        for player in self.players:
+            players_table.update_multiple([
+                ({'ranking': player.ranking}, where(
+                    'id_player') == player.id_player),
+                ({'point': player.point},
+                    where('id_player') == player.id_player),
+            ])
+
     def save(self):
         db = TinyDB('db.json', indent=4)
         contests_table = db.table('contests')

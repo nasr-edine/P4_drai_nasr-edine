@@ -21,8 +21,8 @@ def print_menu():       # Your menu design here
     print(30 * "-", "MENU", 30 * "-")
     print("| 1. Create a player".ljust(64), "|")
     print("| 2. Create a new contest".ljust(64), "|")
-    print("| 3. Update players ranking".ljust(64), "|")
-    print("| 4. Display players statistics for current contest".ljust(64), "|")
+    print("| 3. Restore a contest".ljust(64), "|")
+    print("| 4. Update players ranking".ljust(64), "|")
     print("| 5. Display contests".ljust(64), "|")
     print("| 6. Display players sorting by name".ljust(64), "|")
     print("| 7. Display players sorting by rank".ljust(64), "|")
@@ -98,7 +98,7 @@ def infos_contest(contest):
     print(f"location: {contest.location}\n")
     print(f"comments: {contest.comments}\n")
     print("players:")
-    print_players_list(contest.players)
+    print_players_list2(contest.players)
     # for player in contest.players:
     # print(player.view_player())
 
@@ -112,6 +112,31 @@ def print_player_updated(player):
     string = "The new ranking for player "\
         f"{player.firstname} {player.lastname} is updated\n"
     string += player.__str__()
+    print(string)
+
+
+def print_players_list2(players):
+
+    string = ""
+    row = 101 * "-"
+    string += row + "\n"
+    a = "| id player".ljust(20)
+    b = "| firstname".ljust(20)
+    c = "| lastname".ljust(20)
+    d = "| birthdate".ljust(20)
+    e = "| ranking".ljust(20)
+    g = "|"
+    string += a + b + c + d + e + g
+    string += "\n" + row + "\n"
+    for player in players:
+        a = "| "+str(player.id_player).ljust(18)
+        b = "| "+player.firstname.ljust(18)
+        c = "| "+player.lastname.ljust(18)
+        d = "| "+str(player.birthdate).ljust(18)
+        e = "| "+str(player.ranking).ljust(18)
+        g = "|"
+        string += a + b + c + d + e + g
+        string += "\n" + row + "\n"
     print(string)
 
 
@@ -380,6 +405,11 @@ def print_msg_error_19():
 def print_msg_error_20():
     print("you have reached the maximum "
           "possible of round for a contest")
+
+
+def print_msg_error_21():
+    print('Unrecognized  format, please try again\n')
+    clear_screen()
 
 
 def endView():

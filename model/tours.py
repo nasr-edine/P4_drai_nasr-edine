@@ -44,24 +44,46 @@ class Tour(object):
     @ classmethod
     def create_pair_matches(self, id_player1, id_player2,
                             nb_match, players, contest, round_nb):
-        # faker = Faker()
-        # list_matchs = []
 
         score1 = 0
         score2 = 0
         # print(f'player1: {players[id_player1].id_player}')
         list1 = [players[id_player1].id_player, score1]
+        # print("test 2")
         if round_nb == 0:
             players[id_player1].point = score1
+        # print("test 3")
 
         # print(f'player2: {players[id_player2].id_player}')
 
         list2 = [players[id_player2].id_player, score2]
+        # print("test 4")
         if round_nb == 0:
             players[id_player2].point = score2
-
+        # print("test 5")
         tuple_match = (list1, list2)
+        # print("test 6")
+        # print("round_nb:", round_nb)
+        # print("nb_match:", nb_match)
+        # print("tuple_match:", tuple_match)
+        # print("len rounds:", len(contest.rounds))
+        # print("len rounds[0]:", len(contest.rounds[0]))
+        # print("len rounds[1]:", len(contest.rounds[1]))
+        # print("len rounds[2]:", len(contest.rounds[2]))
+        # print("len rounds[3]:", len(contest.rounds[3]))
+        # print("type rounds[0].matches:", type(contest.rounds[0].matches))
+        # print("len rounds[0].matches:", len(contest.rounds[0].matches))
+        # print("len rounds[1].matches:", len(contest.rounds[1].matches))
+        # print("len rounds[2].matches:", len(contest.rounds[2].matches))
+        # print("len rounds[3].matches:", len(contest.rounds[3].matches))
+
+        # print(" rounds[0].matches:", contest.rounds[0].matches)
+        # print("rounds[1].matches:", contest.rounds[1].matches)
+        # print("rounds[2].matches:", contest.rounds[2].matches)
+        # print("rounds[3].matches:", contest.rounds[3].matches)
+        # input()
         contest.rounds[round_nb].matches[nb_match] = tuple_match
+        # print("test 7")
 
     @ classmethod
     def matches_generator(self, contest, round_nb):
@@ -74,7 +96,7 @@ class Tour(object):
                 Tour.create_pair_matches(
                     n, n + 4, n, contest.players, contest, round_nb)
             else:
-                # print(contest.players)
+                # print("test")
                 Tour.create_pair_matches(
                     i, i + 1, n, contest.players, contest, round_nb)
                 i += 2

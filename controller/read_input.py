@@ -193,7 +193,8 @@ class ReadInformation(object):
             players.append(player)
 
         while len(players_ids) != 8:
-            view.display_players(players)
+            # view.display_players(players)
+            view.print_players_list2(players)
             id = ReadInformation.read_id(len(players_ids))
             ret = Player.player_exists(players_table, id)
             if ret is False:
@@ -211,3 +212,20 @@ class ReadInformation(object):
         view.infos_4()
         contest_list.append(players_obj)
         return contest_list
+
+    @ classmethod
+    def read_choice_exit_contest(self):
+        switch = 1
+        while switch == 1:
+            print("Please choose among these 3 possibilities ? ")
+            print('1: continue')
+            print('2: return to menu')
+            print('3: exit')
+            ret = input('Enter: ')
+            ret = ret.strip()
+            if ret == '1' or ret == '2' or ret == '3':
+                switch = 0
+            else:
+                # view.print_msg_error_8()
+                view.print_msg_error_21()
+        return ret
